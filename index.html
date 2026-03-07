@@ -5,134 +5,146 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
-    <title>Azure Digital | Eremby</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,700;1,900&display=swap" rel="stylesheet">
+    <title>Azure Digital | EREMBY System</title>
     <style>
-        :root { --bg: #050505; --card: #0d0d0d; --border: #1a1a1a; --accent: #2563eb; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; }
+        :root { --bg: #050505; --card: #080808; --border: #111; --accent: #2563eb; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 1.25rem; transition: 0.2s; }
-        .card:hover { border-color: var(--accent); }
+        /* Fontes EREMBY */
+        .font-eremby { font-family: 'Inter', sans-serif; font-weight: 900; font-style: italic; text-transform: uppercase; letter-spacing: -0.05em; }
         
-        /* Botão Carrinho com Bolinha */
-        .cart-btn { position: relative; background: #fff; color: #000; padding: 10px 24px; border-radius: 0.8rem; font-weight: 800; font-size: 0.75rem; display: flex; align-items: center; gap: 8px; cursor: pointer; border: none; }
-        .cart-badge { position: absolute; top: -5px; right: -5px; background: #fff; color: #000; border: 2px solid #050505; min-width: 20px; height: 20px; border-radius: 50%; display: flex; items-center: center; justify-content: center; font-size: 10px; font-weight: 900; }
-        
-        .btn-entrar { background: #1a1a1a; color: #fff; padding: 10px 24px; border-radius: 0.8rem; font-weight: 600; font-size: 0.8rem; border: 1px solid transparent; transition: 0.2s; cursor: pointer; }
-        .btn-entrar:hover { background: #222; }
+        /* Navbar */
+        .nav-link { background: #1a1a1a; padding: 8px 20px; border-radius: 0.6rem; font-weight: 700; font-size: 13px; transition: 0.2s; }
+        .cart-pill { position: relative; background: #fff; color: #000; padding: 8px 20px; border-radius: 0.6rem; font-weight: 700; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+        .cart-dot { position: absolute; top: -6px; right: -6px; background: #fff; color: #000; border: 2px solid #050505; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 900; }
 
-        /* Modal Login */
-        #modal-login { background: rgba(0,0,0,0.95); backdrop-blur: 8px; }
-        .login-card { background: #080808; border: 1px solid #111; width: 100%; max-w-md; padding: 40px; border-radius: 2rem; text-align: center; }
-        .social-btn { background: #0d0d0d; border: 1px solid #1a1a1a; padding: 14px; border-radius: 1rem; width: 100%; display: flex; items-center: center; justify-content: center; gap: 10px; font-weight: 600; font-size: 0.85rem; margin-bottom: 12px; transition: 0.2s; }
-        .social-btn:hover { border-color: var(--accent); }
-        
-        .input-email { background: #eef2ff; color: #000; border-radius: 1rem; padding: 16px; width: 100%; outline: none; font-weight: 600; margin-bottom: 20px; }
-        .btn-submit { background: #1a1a1a; color: #888; padding: 16px; border-radius: 1rem; width: 100%; font-weight: 900; font-style: italic; text-transform: uppercase; cursor: pointer; }
+        /* Cards */
+        .product-card { background: #0a0a0a; border: 1px solid #111; border-radius: 1.5rem; padding: 30px; text-align: center; transition: 0.3s; }
+        .product-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .btn-comprar { background: #fff; color: #000; width: 100%; padding: 12px; border-radius: 0.8rem; font-weight: 900; text-transform: uppercase; font-size: 12px; margin-top: 20px; }
+
+        /* Checkout */
+        .checkout-box { background: #0a0a0a; border: 1px solid #111; border-radius: 1rem; padding: 25px; }
+        .input-dark { background: #0d0d0d; border: 1px solid #161616; border-radius: 0.8rem; padding: 14px; width: 100%; color: #fff; font-size: 13px; outline: none; }
+        .btn-gerar { background: #fff; color: #000; width: 100%; padding: 16px; border-radius: 0.8rem; font-weight: 900; text-transform: uppercase; font-size: 14px; }
+
+        /* Modal */
+        .modal-overlay { background: rgba(0,0,0,0.9); backdrop-blur: 10px; }
+        .modal-content { background: #080808; border: 1px solid #111; border-radius: 2rem; padding: 50px; width: 100%; max-w-[450px]; text-align: center; }
+        .btn-social { background: #0d0d0d; border: 1px solid #161616; padding: 15px; border-radius: 1rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 700; font-size: 14px; margin-bottom: 12px; }
+        .input-login { background: #eef2ff; color: #000; border-radius: 1rem; padding: 18px; width: 100%; font-weight: 700; text-align: center; margin-bottom: 20px; outline: none; }
+        .btn-entrar-modal { background: #1c1c1e; color: #444; width: 100%; padding: 18px; border-radius: 1rem; font-weight: 900; font-style: italic; text-transform: uppercase; font-size: 18px; }
 
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <nav class="sticky top-0 z-50 bg-[#050505] border-b border-[#111] px-6 py-4">
+    <nav class="sticky top-0 z-50 bg-[#050505]/90 border-b border-[#111] px-8 py-5">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3 cursor-pointer" onclick="navigate('home')">
-                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
-                    <i class="fa-solid fa-bolt text-white"></i>
+                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(37,99,235,0.3)]">
+                    <i class="fa-solid fa-bolt text-white text-xl"></i>
                 </div>
-                <span class="text-2xl font-black italic uppercase italic">Azure <span class="text-blue-600">Digital</span></span>
+                <span class="text-2xl font-eremby italic">Azure <span class="text-blue-600">Digital</span></span>
             </div>
-            <div class="flex items-center gap-4">
-                <i class="fa-solid fa-headset text-zinc-400 text-lg"></i>
-                <div onclick="navigate('cart')" class="cart-btn">
+            <div class="flex items-center gap-5">
+                <i class="fa-solid fa-headset text-zinc-500 text-xl"></i>
+                <div onclick="navigate('cart')" class="cart-pill cursor-pointer">
                     <i class="fa-solid fa-bag-shopping"></i> Carrinho
-                    <div id="badge" class="cart-badge">0</div>
+                    <div id="cart-count" class="cart-dot">0</div>
                 </div>
-                <button onclick="openLogin()" class="btn-entrar">Entrar</button>
+                <button onclick="openLogin()" class="nav-link text-white hover:bg-zinc-800">Entrar</button>
             </div>
         </div>
     </nav>
 
-    <div id="modal-login" class="fixed inset-0 z-[100] flex items-center justify-center hidden p-6">
-        <div class="login-card relative">
-            <button onclick="closeLogin()" class="absolute top-6 right-6 text-zinc-600 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-            <h2 class="text-5xl font-black italic uppercase mb-2">ENTRAR</h2>
-            <p class="text-zinc-500 text-sm mb-8">Faça login com seu endereço de e-mail</p>
+    <div id="login-modal" class="fixed inset-0 z-[100] modal-overlay flex items-center justify-center hidden p-6">
+        <div class="modal-content relative">
+            <button onclick="closeLogin()" class="absolute top-8 right-8 text-zinc-600 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h2 class="text-5xl font-eremby mb-2">ENTRAR</h2>
+            <p class="text-zinc-500 text-sm mb-10">Faça login com seu endereço de e-mail</p>
             
-            <button class="social-btn"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5"> Conectar com Google</button>
-            <button class="social-btn text-blue-500"><i class="fa-brands fa-discord text-xl"></i> Conectar com Discord</button>
+            <button class="btn-social"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5"> Conectar com Google</button>
+            <button class="btn-social text-blue-500"><i class="fa-brands fa-discord text-2xl"></i> Conectar com Discord</button>
             
-            <div class="my-8 flex items-center gap-4 text-zinc-700 text-[10px] font-black uppercase tracking-widest">
-                <div class="h-[1px] bg-zinc-800 flex-1"></div> ou continuar com <div class="h-[1px] bg-zinc-800 flex-1"></div>
+            <div class="my-10 flex items-center gap-4 text-zinc-800 text-[10px] font-black uppercase tracking-[0.2em]">
+                <div class="h-[1px] bg-zinc-900 flex-1"></div> ou continuar com <div class="h-[1px] bg-zinc-900 flex-1"></div>
             </div>
 
             <div class="relative">
-                <i class="fa-regular fa-envelope absolute left-5 top-5 text-zinc-900"></i>
-                <input type="email" id="user-email" placeholder="natanaelpereira1541@gmail.com" class="input-email pl-12">
+                <i class="fa-regular fa-envelope absolute left-6 top-6 text-zinc-900"></i>
+                <input type="email" placeholder="natanaelpereira1541@gmail.com" class="input-login pl-14">
             </div>
-            <button onclick="doLogin()" class="btn-submit">ENTRAR</button>
+            <button class="btn-entrar-modal">ENTRAR</button>
         </div>
     </div>
 
     <div id="view-home">
-        <div class="max-w-7xl mx-auto px-6 py-16">
-            <h1 class="text-6xl font-black italic uppercase tracking-tighter mb-12">DESTAQUES</h1>
-            <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-        </div>
+        <header class="max-w-7xl mx-auto px-8 pt-20 pb-12">
+            <h1 class="text-7xl font-eremby mb-12">DESTAQUES</h1>
+            <div id="grid-produtos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        </header>
     </div>
 
     <div id="view-cart" class="hidden">
-        <div class="max-w-7xl mx-auto px-6 py-16">
-            <h2 class="text-3xl font-black uppercase italic mb-10">Carrinhos de compras</h2>
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-4 card p-8">
-                    <p class="text-[0.6rem] font-black uppercase tracking-widest text-zinc-500 mb-6">Informações de pagamento</p>
-                    <div class="flex items-center gap-4 p-4 bg-blue-600/5 border border-blue-600/20 rounded-xl mb-6">
-                        <i class="fa-brands fa-pix text-emerald-400 text-xl"></i>
+        <div class="max-w-7xl mx-auto px-8 py-20">
+            <h2 class="text-4xl font-eremby mb-2">Carrinhos de compras</h2>
+            <p class="text-zinc-500 text-sm mb-12 uppercase font-bold tracking-widest">Nesta página, você encontra os produtos adicionados ao seu carrinho.</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <div class="lg:col-span-4 checkout-box">
+                    <p class="text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-8">Informações de pagamento</p>
+                    <div class="flex items-center gap-4 p-5 bg-blue-600/5 border border-blue-600/20 rounded-2xl mb-8">
+                        <i class="fa-brands fa-pix text-emerald-400 text-2xl"></i>
                         <span class="text-sm font-bold uppercase">Pix</span>
                     </div>
-                    <input type="email" placeholder="Informe o seu e-mail" class="bg-[#0d0d0d] border border-[#1a1a1a] rounded-xl p-4 w-full text-sm mb-4">
-                    <input type="email" placeholder="Informe novamente o seu e-mail" class="bg-[#0d0d0d] border border-[#1a1a1a] rounded-xl p-4 w-full text-sm">
+                    <p class="text-[10px] font-black text-zinc-500 uppercase mb-3">Informe o seu e-mail</p>
+                    <input type="email" placeholder="Insira seu email" class="input-dark mb-6">
+                    <p class="text-[10px] font-black text-zinc-500 uppercase mb-3">Informe novamente o seu e-mail</p>
+                    <input type="email" placeholder="Insira seu email" class="input-dark">
                 </div>
-                <div class="lg:col-span-5 card p-8">
-                    <p class="text-[0.6rem] font-black uppercase tracking-widest text-zinc-500 mb-6">Produtos no carrinho</p>
-                    <div id="cart-list" class="space-y-4"></div>
+
+                <div class="lg:col-span-5 checkout-box">
+                    <p class="text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-8">Produtos no carrinho <span id="cart-qty-label" class="bg-zinc-900 px-2 py-1 rounded ml-2">0 itens</span></p>
+                    <div id="lista-carrinho" class="space-y-4"></div>
                 </div>
-                <div class="lg:col-span-3 card p-8 h-fit">
-                    <p class="text-[0.6rem] font-black uppercase tracking-widest text-zinc-500 mb-6">Resumo da compra</p>
-                    <div class="flex justify-between text-xs text-zinc-500 mb-2"><span>Subtotal</span><span id="sub-price">R$ 0,00</span></div>
-                    <div class="flex justify-between text-xs text-zinc-500 mb-6"><span>Método</span><span class="text-emerald-400 font-bold">Pix</span></div>
-                    <div class="flex justify-between pt-4 border-t border-[#111] mb-8">
-                        <span class="font-black italic">TOTAL</span>
-                        <span id="final-price" class="text-2xl font-black italic">R$ 0,00</span>
+
+                <div class="lg:col-span-3 checkout-box">
+                    <p class="text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-8">Resumo da compra</p>
+                    <div class="flex justify-between text-zinc-500 text-xs mb-3"><span>Subtotal</span><span id="sub-val">R$ 0,00</span></div>
+                    <div class="flex justify-between text-zinc-500 text-xs mb-8"><span>Método</span><span class="text-emerald-400 font-bold">Pix</span></div>
+                    <div class="flex justify-between pt-6 border-t border-zinc-900 mb-10">
+                        <span class="font-eremby text-xl">TOTAL</span>
+                        <span id="total-val" class="font-eremby text-3xl text-blue-500">R$ 0,00</span>
                     </div>
-                    <button class="w-full bg-white text-black font-black py-4 rounded-xl uppercase" onclick="alert('Gerando Pix...')">Gerar Pagamento</button>
+                    <button class="btn-gerar" onclick="alert('Gerando Pix...')">Gerar Pagamento</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const products = [
-            { id: 1, name: "Youtube Premium", price: 1.50, color: "red" },
-            { id: 2, name: "Google Veo 3", price: 4.99, color: "blue" },
-            { id: 3, name: "Chat GPT Plus", price: 2.30, color: "green" }
+        const db = [
+            { id: 1, name: "YOUTUBE PREMIUM", price: 1.50, cat: "Streaming" },
+            { id: 2, name: "GOOGLE VEO 3", price: 4.99, cat: "IA Tools" },
+            { id: 3, name: "CHAT GPT PLUS", price: 2.30, cat: "IA Tools" }
         ];
 
         let cart = [];
 
-        function renderHome() {
-            const grid = document.getElementById('grid');
-            grid.innerHTML = products.map(p => `
-                <div class="card p-8 flex flex-col h-full text-center">
-                    <div class="w-full h-32 bg-[#050505] rounded-2xl mb-8 border border-[#111]"></div>
+        function renderProducts() {
+            const grid = document.getElementById('grid-produtos');
+            grid.innerHTML = db.map(p => `
+                <div class="product-card">
+                    <div class="w-full h-40 bg-zinc-950 rounded-3xl mb-8 border border-zinc-900/50"></div>
                     <div class="flex items-center justify-center gap-2 mb-2">
-                        <div class="w-2 h-2 rounded-full bg-${p.color}-500"></div>
-                        <span class="text-[0.6rem] font-black text-zinc-500 uppercase tracking-widest">${p.name}</span>
+                        <div class="w-2 h-2 rounded-full bg-blue-600"></div>
+                        <span class="text-[10px] font-black text-zinc-500 tracking-[0.2em]">${p.name}</span>
                     </div>
-                    <p class="text-3xl font-black italic mb-8">R$ ${p.price.toFixed(2).replace('.', ',')}</p>
-                    <button onclick="addToCart(${p.id})" class="w-full bg-white text-black font-black py-3 rounded-xl uppercase text-xs">Comprar</button>
+                    <p class="font-eremby text-4xl italic">R$ ${p.price.toFixed(2).replace('.', ',')}</p>
+                    <button onclick="addToCart(${p.id})" class="btn-comprar">COMPRAR</button>
                 </div>
             `).join('');
         }
@@ -140,52 +152,54 @@
         function addToCart(id) {
             const item = cart.find(i => i.id === id);
             if(item) item.qty++;
-            else cart.push({...products.find(p => p.id === id), qty: 1});
+            else cart.push({...db.find(p => p.id === id), qty: 1});
             updateUI();
             navigate('cart');
         }
 
         function updateUI() {
             let total = 0; let count = 0;
-            const list = document.getElementById('cart-list');
+            const list = document.getElementById('lista-carrinho');
             list.innerHTML = cart.map((item, i) => {
                 total += (item.price * item.qty); count += item.qty;
                 return `
-                <div class="flex justify-between items-center p-4 bg-[#050505] border border-[#111] rounded-2xl">
+                <div class="flex justify-between items-center p-5 bg-[#050505] border border-zinc-900 rounded-2xl">
                     <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-[#0d0d0d] rounded-lg"></div>
-                        <div><p class="text-[0.7rem] font-black uppercase italic">${item.name}</p></div>
+                        <div class="w-12 h-12 bg-zinc-900 rounded-xl"></div>
+                        <div><p class="font-eremby text-xs italic">${item.name}</p></div>
                     </div>
                     <div class="flex items-center gap-4">
-                        <div class="flex items-center bg-[#0d0d0d] border border-[#1a1a1a] rounded-lg">
-                            <button class="px-3 py-1 text-zinc-500" onclick="changeQty(${i}, -1)">-</button>
-                            <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
-                            <button class="px-3 py-1 text-zinc-500" onclick="changeQty(${i}, 1)">+</button>
+                        <div class="flex items-center bg-zinc-900 border border-zinc-800 rounded-lg">
+                            <button class="px-3 py-1 text-zinc-600" onclick="updateQty(${i}, -1)">-</button>
+                            <span class="text-xs font-bold w-6 text-center">${item.qty}</span>
+                            <button class="px-3 py-1 text-zinc-600" onclick="updateQty(${i}, 1)">+</button>
                         </div>
-                        <span class="text-xs font-bold">R$ ${(item.price * item.qty).toFixed(2)}</span>
+                        <span class="font-eremby text-sm">R$ ${(item.price * item.qty).toFixed(2).replace('.', ',')}</span>
+                        <i class="fa-solid fa-trash-can text-zinc-800 cursor-pointer hover:text-red-500" onclick="updateQty(${i}, -99)"></i>
                     </div>
                 </div>`;
             }).join('');
-            document.getElementById('badge').innerText = count;
-            document.getElementById('final-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
-            document.getElementById('sub-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            document.getElementById('cart-count').innerText = count;
+            document.getElementById('cart-qty-label').innerText = `${count} itens`;
+            document.getElementById('total-val').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            document.getElementById('sub-val').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
         }
 
-        function changeQty(idx, delta) {
-            cart[idx].qty += delta;
+        function updateQty(idx, d) {
+            cart[idx].qty += d;
             if(cart[idx].qty <= 0) cart.splice(idx, 1);
             updateUI();
         }
 
-        function openLogin() { document.getElementById('modal-login').classList.remove('hidden'); }
-        function closeLogin() { document.getElementById('modal-login').classList.add('hidden'); }
-        function navigate(view) {
-            document.getElementById('view-home').classList.toggle('hidden', view !== 'home');
-            document.getElementById('view-cart').classList.toggle('hidden', view !== 'cart');
+        function openLogin() { document.getElementById('login-modal').classList.remove('hidden'); }
+        function closeLogin() { document.getElementById('login-modal').classList.add('hidden'); }
+        function navigate(v) {
+            document.getElementById('view-home').classList.toggle('hidden', v !== 'home');
+            document.getElementById('view-cart').classList.toggle('hidden', v !== 'cart');
             window.scrollTo(0,0);
         }
 
-        window.onload = renderHome;
+        window.onload = renderProducts;
     </script>
 </body>
 </html>
