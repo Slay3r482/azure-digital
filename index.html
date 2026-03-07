@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <title>Azure Digital</title>
     <style>
-        /* Cores extraídas do CSS original do site */
         :root { 
             --bg: #08090B; 
             --header: #0D0E11; 
@@ -21,100 +20,127 @@
             color: #fff; 
             font-family: 'Inter', sans-serif; 
             margin: 0;
-            -webkit-font-smoothing: antialiased;
         }
 
-        /* Banner de fundo fixo como no original */
+        /* Banner de fundo fixo */
         .hero-mask {
             position: fixed; top: 47px; left: 0; width: 100%; height: 100%; 
             max-height: 700px; z-index: -1; pointer-events: none;
-            object-fit: cover; opacity: 0.5;
-            mask-image: linear-gradient(black, rgba(0,0,0,0.39), transparent);
-            -webkit-mask-image: linear-gradient(black, rgba(0,0,0,0.39), transparent);
+            object-fit: cover; opacity: 0.4;
+            mask-image: linear-gradient(black, rgba(0,0,0,0.4), transparent);
+            -webkit-mask-image: linear-gradient(black, rgba(0,0,0,0.4), transparent);
         }
 
-        /* CARD COMPACTO - Estilo Nexus/Eremby */
+        /* Card Compacto - Máximo 220px para não ficar gigante */
         .card-nexus {
-            background: rgba(88, 88, 105, 0.1);
+            background: rgba(88, 88, 105, 0.08);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 12px;
+            border-radius: 12px;
+            padding: 14px;
             transition: 0.3s;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(10px);
             display: flex;
             flex-direction: column;
-            max-width: 220px; /* Garante que o card nunca fique gigante */
+            width: 100%;
+            max-width: 220px;
             margin: 0 auto;
         }
-        .card-nexus:hover { border-color: var(--accent); transform: translateY(-4px); }
+        .card-nexus:hover { border-color: #585869; transform: translateY(-4px); }
 
         .img-container {
-            background: #0D0E11; border-radius: 8px; width: 100%; aspect-ratio: 1/1;
-            display: flex; align-items: center; justify-content: center; margin-bottom: 10px;
-            overflow: hidden;
+            background: #0D0E11; border-radius: 10px; width: 100%; aspect-ratio: 1/1;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 12px;
         }
-        .img-container img { width: 60%; object-fit: contain; }
+        .img-container img { width: 55%; object-fit: contain; }
 
-        .price-tag {
-            font-size: 18px; font-weight: 800; font-style: italic; color: #fff; text-align: center;
+        /* Barra de Pesquisa Estilo Eremby */
+        .search-box {
+            background: #0D0E11;
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            max-width: 400px;
+        }
+        .search-box input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #8C8C8C;
+            font-size: 13px;
+            width: 100%;
         }
 
         .btn-buy {
-            background: #fff; color: #000; width: 100%; padding: 8px;
-            border-radius: 6px; font-weight: 800; font-size: 10px;
-            text-transform: uppercase; margin-top: 10px; transition: 0.2s;
+            background: #fff; color: #000; width: 100%; padding: 10px;
+            border-radius: 8px; font-weight: 900; font-size: 11px;
+            text-transform: uppercase; margin-top: 12px; transition: 0.2s;
         }
         .btn-buy:hover { background: var(--accent); }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
     </style>
 </head>
 <body>
 
     <img src="https://cdn.ereemby.com/attachments/17715554716225022imagem.png" class="hero-mask">
 
-    <header class="sticky top-0 z-50 bg-[#0D0E11] border-b border-[#201e1e] px-6 py-3">
-        <div class="max-w-[1320px] mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <img src="https://cdn.ereemby.com/attachments/17706209715176161imagem.jpeg" class="w-8 h-8 rounded-md">
-                <span class="font-bold text-sm tracking-tight">Azure Digital</span>
+    <header class="sticky top-0 z-50 bg-[#0D0E11]/95 border-b border-[#201e1e] px-8 py-4">
+        <div class="max-w-[1400px] mx-auto flex justify-between items-center gap-8">
+            
+            <div class="flex items-center gap-3 flex-shrink-0">
+                <img src="https://cdn.ereemby.com/attachments/17706209715176161imagem.jpeg" class="w-9 h-9 rounded-lg">
+                <span class="font-black text-sm uppercase italic tracking-tighter">Azure Digital</span>
             </div>
 
-            <div class="flex items-center gap-4">
-                <a href="/cart" class="bg-white text-black px-4 py-2 rounded-md font-bold text-[12px] uppercase flex items-center gap-2">
+            <div class="hidden md:flex flex-1 justify-center">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass text-[#8C8C8C] text-sm"></i>
+                    <input type="text" placeholder="O que você está procurando?">
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4 flex-shrink-0">
+                <div class="relative bg-white text-black px-5 py-2 rounded-lg font-black text-[11px] uppercase cursor-pointer flex items-center gap-2">
                     <i class="fa-solid fa-bag-shopping"></i> Carrinho
-                </a>
-                <button class="text-white font-medium text-[13px] bg-[#ffffff20] px-4 py-2 rounded-md">Entrar</button>
+                    <div class="absolute -top-2 -right-2 bg-white text-black border-2 border-[#0D0E11] w-5 h-5 rounded-full flex items-center justify-center text-[9px]">0</div>
+                </div>
+                <button class="bg-[#1a1a1a] px-5 py-2 rounded-lg text-white font-bold text-[11px] uppercase border border-[#201e1e]">Entrar</button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-[1320px] mx-auto px-6 py-10">
-        <div class="mb-8">
-            <h2 class="inline-block bg-[#0D0E1140] backdrop-blur-md border-2 border-[#0D0E1140] px-4 py-1 rounded-lg text-xs font-bold uppercase tracking-widest">
-                Assinaturas
-            </h2>
+    <main class="max-w-[1400px] mx-auto px-8 py-12">
+        
+        <div class="mb-12">
+            <h2 class="text-4xl font-black italic uppercase tracking-tighter">Produtos</h2>
         </div>
         
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
             
             <div class="card-nexus">
                 <div class="img-container">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png">
                 </div>
-                <span class="text-[10px] text-zinc-400 font-bold uppercase text-center truncate">Youtube Premium</span>
-                <p class="price-tag">R$ 1,50</p>
+                <span class="text-[10px] text-zinc-500 font-bold uppercase text-center truncate">Youtube Premium</span>
+                <p class="text-xl font-black italic mt-1 text-center">R$ 1,50</p>
                 <button class="btn-buy">Comprar</button>
             </div>
 
             <div class="card-nexus">
                 <div class="img-container">
-                    <i class="fa-brands fa-discord text-4xl text-indigo-500/50"></i>
+                    <i class="fa-brands fa-discord text-4xl text-indigo-500/40"></i>
                 </div>
-                <span class="text-[10px] text-zinc-400 font-bold uppercase text-center truncate">Discord Nitro</span>
-                <p class="price-tag">R$ 15,90</p>
+                <span class="text-[10px] text-zinc-500 font-bold uppercase text-center truncate">Discord Nitro</span>
+                <p class="text-xl font-black italic mt-1 text-center">R$ 15,90</p>
                 <button class="btn-buy">Comprar</button>
             </div>
 
-            </div>
+        </div>
     </main>
 
 </body>
