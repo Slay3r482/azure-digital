@@ -9,84 +9,102 @@
     <title>Azure Digital | EREMBY System</title>
     <style>
         :root { --bg: #050505; --card: #080808; --border: #111; --blue: #2563eb; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         .font-eremby { font-family: 'Inter', sans-serif; font-weight: 900; font-style: italic; text-transform: uppercase; }
         
-        /* Navbar com Pesquisa */
-        .search-bar { background: #080808; border: 1px solid #111; border-radius: 0.8rem; padding: 10px 20px; width: 400px; display: flex; align-items: center; gap: 10px; }
-        .search-bar input { background: transparent; border: none; outline: none; color: #fff; width: 100%; font-size: 14px; }
+        /* NAVBAR */
+        .search-container { background: #080808; border: 1px solid #111; border-radius: 0.8rem; padding: 12px 20px; width: 450px; display: flex; align-items: center; gap: 12px; }
+        .search-container input { background: transparent; border: none; outline: none; color: #fff; width: 100%; font-size: 14px; }
         
-        .cart-pill { position: relative; background: #fff; color: #000; padding: 10px 22px; border-radius: 0.8rem; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
-        .cart-dot { position: absolute; top: -5px; right: -5px; background: #fff; color: #000; border: 2px solid #050505; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; }
+        .cart-pill { position: relative; background: #fff; color: #000; padding: 10px 24px; border-radius: 0.8rem; font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .cart-dot { position: absolute; top: -6px; right: -6px; background: #fff; color: #000; border: 3px solid #050505; min-width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; }
 
-        /* Banner */
-        .banner-azure { background: #0c0e14; border: 1px solid #1a1d26; border-radius: 3rem; padding: 60px; margin-bottom: 50px; }
+        /* REDES SOCIAIS FLUTUANTES */
+        .social-sidebar { position: fixed; right: 20px; top: 50%; transform: translateY(-50%); background: #080808; border: 1px solid #111; border-radius: 1.5rem; padding: 15px; display: flex; flex-direction: column; gap: 20px; z-index: 100; }
+        .social-sidebar i { font-size: 20px; color: #fff; cursor: pointer; transition: 0.3s; opacity: 0.8; }
+        .social-sidebar i:hover { color: var(--blue); opacity: 1; }
 
-        /* Cards de Produto Grandes */
-        .product-card { background: #080808; border: 1px solid #111; border-radius: 2rem; padding: 40px; text-align: center; transition: 0.3s; }
-        .img-container { background: #050505; border: 1px solid #111; border-radius: 2rem; height: 220px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; overflow: hidden; }
-        .img-container img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
+        /* SUPORTE WIDGET */
+        .support-widget { position: fixed; bottom: 30px; left: 30px; background: #080808; border: 1px solid #111; border-radius: 1.2rem; padding: 12px 20px; display: flex; align-items: center; gap: 12px; z-index: 100; box-shadow: 0 0 30px rgba(255,255,255,0.05); }
+        .support-icon { width: 35px; height: 35px; background: #fff; color: #000; border-radius: 0.8rem; display: flex; align-items: center; justify-content: center; font-size: 18px; }
 
-        /* Checkout Pix */
-        .pix-box { background: #080808; border: 1px solid #111; border-radius: 1.5rem; padding: 40px; text-align: center; }
-        .pix-code-box { background: #050505; border: 1px solid #111; padding: 15px; border-radius: 10px; font-family: monospace; font-size: 12px; color: #555; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        /* PRODUTOS */
+        .product-card { background: #080808; border: 1px solid #111; border-radius: 2.5rem; padding: 40px; text-align: center; }
+        .product-img-box { background: #050505; border: 1px solid #111; border-radius: 2rem; width: 100%; height: 240px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; }
+        .product-img-box img { max-width: 140px; opacity: 0.9; }
+
+        /* CHECKOUT */
+        .status-bar { background: #080808; border: 1px solid #111; border-radius: 1.5rem; padding: 30px 40px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .pix-main-box { background: #080808; border: 1px solid #111; border-radius: 2.5rem; padding: 60px; text-align: center; }
 
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <nav class="bg-[#050505] border-b border-[#111] px-10 py-5 flex justify-between items-center sticky top-0 z-[100]">
-        <div class="flex items-center gap-3 cursor-pointer" onclick="showView('home')">
-            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/30">
-                <i class="fa-solid fa-bolt text-white text-xl"></i>
+    <div class="social-sidebar">
+        <i class="fa-brands fa-discord"></i>
+        <i class="fa-brands fa-instagram"></i>
+        <i class="fa-brands fa-tiktok"></i>
+    </div>
+
+    <div class="support-widget">
+        <div class="support-icon"><i class="fa-solid fa-chart-line"></i></div>
+        <div class="text-[11px] font-bold">
+            <span class="text-zinc-500">Suporte online:</span> <span class="text-white">Resposta em menos de 5 min.</span>
+        </div>
+    </div>
+
+    <nav class="bg-[#050505] border-b border-[#111] px-12 py-6 flex justify-between items-center sticky top-0 z-[100]">
+        <div class="flex items-center gap-4 cursor-pointer" onclick="show('home')">
+            <div class="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center">
+                <i class="fa-solid fa-bolt text-white text-2xl"></i>
             </div>
-            <span class="text-2xl font-eremby">Azure <span class="text-blue-600">Digital</span></span>
+            <span class="text-3xl font-eremby italic">Azure <span class="text-blue-600">Digital</span></span>
         </div>
 
-        <div class="search-bar">
+        <div class="search-container">
             <i class="fa-solid fa-magnifying-glass text-zinc-600"></i>
             <input type="text" placeholder="Pesquisar produto">
         </div>
 
         <div class="flex items-center gap-6">
-            <i class="fa-solid fa-headset text-zinc-500 text-xl cursor-pointer"></i>
-            <div onclick="showView('cart')" class="cart-pill">
+            <i class="fa-solid fa-headset text-zinc-500 text-2xl cursor-pointer"></i>
+            <div onclick="show('cart')" class="cart-pill">
                 <i class="fa-solid fa-bag-shopping"></i> Carrinho
-                <div id="badge-count" class="cart-dot">0</div>
+                <div id="badge" class="cart-dot">0</div>
             </div>
-            <button class="bg-[#1a1a1a] px-6 py-2.5 rounded-xl font-black text-xs uppercase text-white">Entrar</button>
+            <button class="bg-[#1a1a1a] px-8 py-3 rounded-xl font-black text-xs uppercase text-white">Entrar</button>
         </div>
     </nav>
 
     <div id="view-home">
-        <div class="max-w-7xl mx-auto px-10 py-16">
-            <div class="banner-azure">
-                <h2 class="text-6xl font-eremby italic">NOVIDADES <span class="text-blue-500">AZURE</span></h2>
-                <p class="text-zinc-500 font-bold uppercase text-xs tracking-[0.3em] mt-3">Os melhores preços do mercado digital</p>
+        <div class="max-w-[1500px] mx-auto px-12 py-16">
+            <div class="bg-[#0c0e14] border border-[#1a1d26] rounded-[3rem] p-16 mb-16">
+                <h2 class="text-7xl font-eremby italic mb-4">NOVIDADES <span class="text-blue-500">AZURE</span></h2>
+                <p class="text-zinc-500 font-bold uppercase text-xs tracking-[0.4em]">Os melhores preços do mercado digital</p>
             </div>
 
-            <div class="flex gap-12">
-                <aside class="w-64 flex-shrink-0">
-                    <p class="text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-6">Categorias</p>
-                    <button class="w-full bg-white text-black py-4 rounded-2xl font-black text-xs uppercase mb-3 text-left px-6">Todos os produtos</button>
-                    <button class="w-full bg-[#080808] border border-[#111] text-zinc-600 py-4 rounded-2xl font-black text-xs uppercase mb-3 text-left px-6">Streaming</button>
-                    <button class="w-full bg-[#080808] border border-[#111] text-zinc-600 py-4 rounded-2xl font-black text-xs uppercase text-left px-6">Ferramentas IA</button>
+            <div class="flex gap-16">
+                <aside class="w-72 flex-shrink-0">
+                    <p class="text-[11px] font-black text-zinc-700 uppercase tracking-widest mb-8">Categorias</p>
+                    <button class="w-full bg-white text-black py-4 rounded-2xl font-black text-xs uppercase mb-3 text-left px-8">Todos os produtos</button>
+                    <button class="w-full bg-[#080808] border border-[#111] text-zinc-600 py-4 rounded-2xl font-black text-xs uppercase mb-3 text-left px-8">Streaming</button>
                 </aside>
 
                 <div class="flex-1">
-                    <h1 class="text-6xl font-eremby mb-12 italic">TODOS</h1>
-                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                    <h1 class="text-7xl font-eremby mb-16 italic">TODOS</h1>
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
                         <div class="product-card">
-                            <div class="img-container">
+                            <div class="product-img-box">
                                 <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png">
                             </div>
-                            <div class="flex items-center justify-center gap-2 mb-2">
-                                <div class="w-2 h-2 rounded-full bg-red-600"></div>
-                                <span class="text-[11px] font-black text-zinc-500 tracking-widest uppercase italic">Youtube Premium</span>
+                            <div class="flex items-center justify-center gap-3 mb-3">
+                                <div class="w-2.5 h-2.5 rounded-full bg-red-600"></div>
+                                <span class="text-xs font-black text-zinc-500 tracking-widest uppercase italic">Youtube Premium</span>
                             </div>
-                            <p class="font-eremby text-4xl italic mb-8">R$ 1,50</p>
-                            <button onclick="add(1, 'Youtube Premium', 1.50)" class="w-full bg-white text-black font-eremby py-4 rounded-2xl text-sm">COMPRAR</button>
+                            <p class="font-eremby text-5xl italic mb-10">R$ 1,50</p>
+                            <button onclick="comprar()" class="w-full bg-white text-black font-eremby py-5 rounded-2xl text-sm">COMPRAR</button>
                         </div>
                     </div>
                 </div>
@@ -94,60 +112,62 @@
         </div>
     </div>
 
-    <div id="view-pix" class="hidden">
-        <div class="max-w-4xl mx-auto px-10 py-20">
-            <div class="flex items-center gap-2 text-zinc-500 text-xs uppercase font-bold mb-6">
+    <div id="view-pay" class="hidden">
+        <div class="max-w-6xl mx-auto px-12 py-20">
+            <div class="flex items-center gap-3 text-zinc-600 text-[11px] uppercase font-black mb-8">
                 <span>Inicio</span> <i class="fa-solid fa-chevron-right text-[8px]"></i> <span class="text-white">Pagamento</span>
             </div>
-            <h2 class="text-3xl font-eremby italic mb-2">Aguardando pagamento</h2>
-            <p class="text-zinc-500 text-xs mb-10">7, Mar 2026 17:03</p>
+            
+            <h2 class="text-4xl font-eremby italic mb-2">Aguardando pagamento</h2>
+            <p class="text-zinc-600 text-xs mb-12">7, Mar 2026 17:03</p>
 
-            <div class="bg-[#080808] border border-[#111] rounded-2xl p-8 mb-8 flex justify-between items-center">
+            <div class="status-bar">
                 <div>
-                    <p class="text-[10px] font-bold text-zinc-600 uppercase mb-2">Produtos</p>
-                    <p class="text-sm font-bold uppercase italic"><span class="text-orange-500">1x</span> Youtube Premium</p>
+                    <p class="text-[10px] font-black text-zinc-700 uppercase mb-2">Produtos</p>
+                    <p class="text-sm font-black italic uppercase"><span class="text-orange-500">1x</span> Youtube Premium</p>
                 </div>
                 <div>
-                    <p class="text-[10px] font-bold text-zinc-600 uppercase mb-2">Total</p>
-                    <p class="text-xl font-black text-yellow-500">R$ 1,50</p>
+                    <p class="text-[10px] font-black text-zinc-700 uppercase mb-2">Total</p>
+                    <p class="text-2xl font-black text-yellow-500">R$ 1,50</p>
                 </div>
                 <div>
-                    <p class="text-[10px] font-bold text-zinc-600 uppercase mb-2">Email</p>
-                    <p class="text-sm font-bold text-zinc-400">natanaelpereira1541@gmail.com</p>
+                    <p class="text-[10px] font-black text-zinc-700 uppercase mb-2">Email</p>
+                    <p class="text-sm font-black text-zinc-400">natanaelpereira1541@gmail.com</p>
                 </div>
                 <div>
-                    <p class="text-[10px] font-bold text-zinc-600 uppercase mb-2">Metodo</p>
-                    <p class="text-sm font-bold flex items-center gap-2"><i class="fa-brands fa-pix text-emerald-400 text-lg"></i> Pix</p>
+                    <p class="text-[10px] font-black text-zinc-700 uppercase mb-2">Metodo</p>
+                    <p class="text-sm font-black flex items-center gap-2 uppercase italic"><i class="fa-brands fa-pix text-emerald-400 text-xl"></i> Pix</p>
                 </div>
             </div>
 
-            <div class="pix-box">
-                <p class="text-zinc-500 text-[10px] uppercase font-bold mb-2">Tempo restante</p>
-                <p class="text-2xl font-black italic mb-6">24:00:00</p>
-                <p class="text-zinc-600 text-[10px] uppercase font-bold mb-6 italic">QR code</p>
-                <div class="w-48 h-48 bg-white mx-auto p-4 rounded-xl mb-10">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=AZURE_PIX_EXEMPLO" class="w-full">
+            <div class="pix-main-box">
+                <p class="text-zinc-600 text-[11px] uppercase font-black mb-3 italic">Tempo restante</p>
+                <p class="text-3xl font-eremby italic mb-10">24:00:42</p>
+                
+                <div class="bg-white w-56 h-56 mx-auto mb-10 p-4 rounded-2xl flex items-center justify-center shadow-2xl">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=AZURE_PAYMENT" class="w-full">
                 </div>
-                <div class="max-w-md mx-auto">
-                    <p class="text-zinc-600 text-[10px] uppercase font-bold mb-4 italic">Ou pague com</p>
-                    <div class="pix-code-box mb-4">00020126850014br.gov.bcb.pix2563pix.onlyup.com.br/qr/v3/at/105d00ac...</div>
-                    <button class="w-full bg-white text-black font-black py-4 rounded-xl uppercase text-xs" onclick="alert('Copiado!')">Copiar Código Pix</button>
+
+                <div class="max-w-xl mx-auto">
+                    <p class="text-zinc-600 text-[11px] uppercase font-black mb-6 italic">Ou pague com</p>
+                    <div class="bg-[#050505] border border-[#111] p-5 rounded-xl font-mono text-[11px] text-zinc-700 overflow-hidden mb-6 text-left">
+                        00020126850014br.gov.bcb.pix2563pix.onlyup.com.br/qr/v3/at/105d00ac...
+                    </div>
+                    <button class="w-full bg-white text-black font-black py-5 rounded-2xl uppercase text-xs" onclick="alert('Código copiado!')">Copiar Código Pix</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        let cart = [];
-        function showView(v) {
+        function show(v) {
             document.getElementById('view-home').classList.toggle('hidden', v !== 'home');
-            document.getElementById('view-pix').classList.toggle('hidden', v !== 'pix');
+            document.getElementById('view-pay').classList.toggle('hidden', v !== 'pay');
             window.scrollTo(0,0);
         }
-        function add(id, name, price) {
-            cart.push({id, name, price});
-            document.getElementById('badge-count').innerText = cart.length;
-            showView('pix');
+        function comprar() {
+            document.getElementById('badge').innerText = "1";
+            show('pay');
         }
     </script>
 </body>
