@@ -17,6 +17,12 @@
         .category-btn.active { background: #fff; color: #000; border-color: #fff; }
         .input-dark { background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 0.8rem; padding: 12px; width: 100%; color: #fff; outline: none; font-size: 12px; }
         .hidden { display: none !important; }
+        
+        /* Estilo do Seletor de Quantidade */
+        .qty-box { background: #121212; border: 1px solid #1a1a1a; border-radius: 0.6rem; display: flex; align-items: center; overflow: hidden; }
+        .qty-btn { padding: 4px 10px; font-size: 14px; font-weight: bold; color: #666; transition: 0.2s; }
+        .qty-btn:hover { color: #fff; background: #1a1a1a; }
+        .qty-val { width: 30px; text-align: center; font-size: 12px; font-weight: 900; border-left: 1px solid #1a1a1a; border-right: 1px solid #1a1a1a; }
     </style>
 </head>
 <body>
@@ -41,16 +47,15 @@
         </div>
     </nav>
 
-    <header id="home-header" class="max-w-7xl mx-auto px-6 pt-12 pb-6 text-center md:text-left">
+    <header id="home-header" class="max-w-7xl mx-auto px-6 pt-12 pb-6">
         <h1 class="text-6xl font-black italic uppercase tracking-tighter mb-4">AZURE <span class="text-blue-600">DIGITAL!</span></h1>
-        <p class="text-zinc-500 text-sm max-w-md mb-8">Sua loja premium de produtos digitais. Entrega 100% automática via Discord e E-mail.</p>
+        <p class="text-zinc-500 text-sm max-w-md mb-8">Sua loja premium de produtos digitais. Entrega 100% automática.</p>
         
-        <div class="flex flex-wrap gap-3 mb-10" id="category-filters">
+        <div class="flex flex-wrap gap-3 mb-10">
             <button class="category-btn active" onclick="filterCategory('todos')">Todos</button>
             <button class="category-btn" onclick="filterCategory('IA Tools')">IA Tools</button>
             <button class="category-btn" onclick="filterCategory('Streaming')">Streaming</button>
             <button class="category-btn" onclick="filterCategory('Games')">Games</button>
-            <button class="category-btn" onclick="filterCategory('Design')">Design</button>
         </div>
     </header>
 
@@ -74,66 +79,46 @@
                             <i class="fa-brands fa-pix text-emerald-400"></i>
                             <span class="text-sm font-bold">Pix</span>
                         </div>
-                        <div class="space-y-2">
-                            <label class="text-[10px] font-bold text-zinc-500 uppercase">Informe o seu e-mail</label>
-                            <input type="email" placeholder="seuemail@gmail.com" class="input-dark">
-                        </div>
+                        <input type="email" placeholder="seuemail@gmail.com" class="input-dark">
                     </div>
                 </div>
             </div>
 
             <div class="lg:col-span-5 space-y-4">
                 <div class="nexus-box p-6">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Produtos no carrinho</h3>
-                        <span id="item-count-badge" class="bg-zinc-900 text-[10px] px-2 py-1 rounded-md">0 itens</span>
-                    </div>
+                    <h3 class="text-[10px] font-black uppercase text-zinc-500 mb-6 tracking-widest">Produtos no carrinho</h3>
                     <div id="checkout-list" class="space-y-4"></div>
                 </div>
             </div>
 
-            <div class="lg:col-span-3 space-y-6">
+            <div class="lg:col-span-3">
                 <div class="nexus-box p-6">
-                    <h3 class="text-[10px] font-black uppercase text-zinc-500 mb-6 tracking-widest">Resumo da compra</h3>
-                    <div class="space-y-3 mb-8">
-                        <div class="flex justify-between text-xs text-zinc-400"><span>Subtotal</span><span id="subtotal-val">R$ 0,00</span></div>
-                        <div class="flex justify-between text-xs text-zinc-400"><span>Método</span><span class="text-emerald-400">Pix</span></div>
-                        <div class="pt-4 border-t border-zinc-900 flex justify-between items-baseline">
-                            <span class="text-sm font-black italic">TOTAL</span>
-                            <span id="final-total" class="text-2xl font-black italic">R$ 0,00</span>
-                        </div>
+                    <h3 class="text-[10px] font-black uppercase text-zinc-500 mb-6 tracking-widest">Resumo</h3>
+                    <div class="flex justify-between items-baseline mb-8">
+                        <span class="text-sm font-black italic">TOTAL</span>
+                        <span id="final-total" class="text-2xl font-black italic text-blue-500">R$ 0,00</span>
                     </div>
-                    <button class="btn-white !py-4" onclick="alert('Gerando QR Code...')">Gerar Pagamento</button>
+                    <button class="btn-white !py-4" onclick="alert('Iniciando pagamento...')">Gerar Pagamento</button>
                 </div>
             </div>
         </div>
     </section>
 
     <div id="login-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6 bg-black/95">
-        <div class="nexus-box w-full max-w-md p-10 !rounded-[2.5rem] text-center border-zinc-800">
+        <div class="nexus-box w-full max-w-md p-10 !rounded-[2.5rem] border-zinc-800 text-center">
             <h2 class="text-4xl font-black italic uppercase mb-2">ENTRAR</h2>
-            <p class="text-zinc-500 text-xs mb-10">Faça login com seu endereço de e-mail</p>
-            <div class="space-y-4 mb-8">
-                <button class="w-full bg-zinc-900 border border-zinc-800 py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3">
-                    <i class="fa-brands fa-google text-red-500"></i> Conectar com Google
-                </button>
-                <button class="w-full bg-zinc-900 border border-zinc-800 py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3">
-                    <i class="fa-brands fa-discord text-blue-500"></i> Conectar com Discord
-                </button>
-            </div>
-            <input type="email" id="login-email" placeholder="exemplo@gmail.com" class="input-dark mb-4 text-center">
-            <button onclick="doLogin()" class="btn-white !bg-zinc-800 !text-white">Entrar</button>
-            <button onclick="closeModal()" class="mt-4 text-[10px] text-zinc-600 uppercase font-black block w-full">Cancelar</button>
+            <p class="text-zinc-500 text-xs mb-8">Acesse sua conta</p>
+            <input type="email" id="login-email" placeholder="seuemail@gmail.com" class="input-dark mb-4 text-center">
+            <button onclick="doLogin()" class="btn-white !bg-blue-600 !text-white">Acessar</button>
+            <button onclick="closeModal()" class="mt-4 text-[10px] text-zinc-600 uppercase font-black block w-full">Voltar</button>
         </div>
     </div>
 
     <script>
         const products = [
-            { id: 1, name: "Youtube Premium - 30 Dias", price: 1.50, stock: 45, img: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png", category: "Streaming" },
-            { id: 2, name: "Google Veo 3 - Acesso", price: 4.99, stock: 12, img: "https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_Gemini_logo.svg", category: "IA Tools" },
-            { id: 3, name: "ChatGPT Plus Shared", price: 2.30, stock: 8, img: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg", category: "IA Tools" },
-            { id: 4, name: "Xbox Game Pass Ult.", price: 9.90, stock: 22, img: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Xbox_one_logo.svg", category: "Games" },
-            { id: 5, name: "Canva Pro Vitalício", price: 5.00, stock: 99, img: "https://upload.wikimedia.org/wikipedia/commons/0/0e/Canva_logo_2021.svg", category: "Design" }
+            { id: 1, name: "Youtube Premium - 30 Dias", price: 1.50, img: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png", category: "Streaming" },
+            { id: 2, name: "Google Veo 3 - Acesso", price: 4.99, img: "https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_Gemini_logo.svg", category: "IA Tools" },
+            { id: 3, name: "Xbox Game Pass Ult.", price: 9.90, img: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Xbox_one_logo.svg", category: "Games" }
         ];
 
         let cart = [];
@@ -141,74 +126,59 @@
         function renderProducts(filter = 'todos') {
             const grid = document.getElementById('product-grid');
             const filtered = filter === 'todos' ? products : products.filter(p => p.category === filter);
-            
             grid.innerHTML = filtered.map(p => `
                 <div class="nexus-box product-card p-5 flex flex-col">
-                    <div class="w-full h-32 bg-zinc-900 rounded-2xl mb-4 flex items-center justify-center p-6">
-                        <img src="${p.img}" class="max-h-full object-contain">
-                    </div>
-                    <div class="flex justify-between text-[8px] font-black uppercase text-blue-500 mb-2">
-                        <span>${p.category}</span>
-                        <span class="text-zinc-500">${p.stock} em estoque</span>
-                    </div>
-                    <h3 class="text-xs font-bold mb-4 line-clamp-1">${p.name}</h3>
-                    <div class="mt-auto">
-                        <div class="text-xl font-black italic mb-4">R$ ${p.price.toFixed(2).replace('.', ',')}</div>
-                        <button onclick="addToCart(${p.id})" class="btn-white">Comprar</button>
-                    </div>
+                    <div class="w-full h-32 bg-zinc-900 rounded-2xl mb-4 flex items-center justify-center p-6"><img src="${p.img}" class="max-h-full"></div>
+                    <span class="text-[8px] font-black uppercase text-blue-500 mb-2">${p.category}</span>
+                    <h3 class="text-xs font-bold mb-4">${p.name}</h3>
+                    <div class="text-xl font-black italic mb-4">R$ ${p.price.toFixed(2).replace('.', ',')}</div>
+                    <button onclick="addToCart(${p.id})" class="btn-white">Comprar</button>
                 </div>
             `).join('');
         }
 
-        function filterCategory(cat) {
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.innerText.toLowerCase() === cat.toLowerCase() || (cat === 'todos' && btn.innerText === 'Todos'));
-            });
-            renderProducts(cat);
-        }
-
         function addToCart(id) {
-            const item = products.find(p => p.id === id);
-            cart.push(item);
+            const existing = cart.find(item => item.id === id);
+            if(existing) existing.quantity++;
+            else cart.push({...products.find(p => p.id === id), quantity: 1});
             updateCartUI();
             showView('cart');
         }
 
-        function removeFromCart(index) {
-            cart.splice(index, 1);
+        function changeQty(index, delta) {
+            cart[index].quantity += delta;
+            if(cart[index].quantity <= 0) cart.splice(index, 1);
             updateCartUI();
         }
 
         function updateCartUI() {
-            document.getElementById('cart-badge').innerText = cart.length;
-            document.getElementById('item-count-badge').innerText = `${cart.length} itens`;
-            
+            let total = 0; let count = 0;
             const list = document.getElementById('checkout-list');
-            let total = 0;
-
+            
             list.innerHTML = cart.map((item, index) => {
-                total += item.price;
+                total += (item.price * item.quantity); count += item.quantity;
                 return `
                 <div class="flex justify-between items-center p-4 bg-zinc-900/30 border border-zinc-900 rounded-xl">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-zinc-900 rounded-lg flex items-center justify-center p-2">
-                            <img src="${item.img}" class="max-h-full">
-                        </div>
+                        <div class="w-10 h-10 bg-zinc-900 rounded-lg flex items-center justify-center p-2"><img src="${item.img}" class="max-h-full"></div>
                         <div>
                             <div class="text-[10px] font-black italic">${item.name}</div>
-                            <div class="text-[8px] text-zinc-500 uppercase">Entrega Automática</div>
+                            <div class="text-[8px] text-zinc-500 uppercase">R$ ${item.price.toFixed(2).replace('.', ',')} / un</div>
                         </div>
                     </div>
                     <div class="flex items-center gap-4">
-                        <span class="text-xs font-black italic">R$ ${item.price.toFixed(2).replace('.', ',')}</span>
-                        <button onclick="removeFromCart(${index})" class="text-zinc-600 hover:text-red-500"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                        <div class="qty-box">
+                            <button onclick="changeQty(${index}, -1)" class="qty-btn">-</button>
+                            <span class="qty-val">${item.quantity}</span>
+                            <button onclick="changeQty(${index}, 1)" class="qty-btn">+</button>
+                        </div>
+                        <button onclick="changeQty(${index}, -999)" class="text-zinc-600 hover:text-red-500 transition"><i class="fa-solid fa-trash-can text-xs"></i></button>
                     </div>
                 </div>`;
             }).join('');
 
-            const formattedTotal = `R$ ${total.toFixed(2).replace('.', ',')}`;
-            document.getElementById('subtotal-val').innerText = formattedTotal;
-            document.getElementById('final-total').innerText = formattedTotal;
+            document.getElementById('cart-badge').innerText = count;
+            document.getElementById('final-total').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
         }
 
         function showView(v) {
@@ -216,17 +186,12 @@
             if(v === 'home') {
                 document.getElementById('home-view').classList.remove('hidden');
                 document.getElementById('home-header').classList.remove('hidden');
-            } else {
-                document.getElementById(v + '-view').classList.remove('hidden');
-            }
+            } else { document.getElementById(v + '-view').classList.remove('hidden'); }
         }
 
         function doLogin() {
             const email = document.getElementById('login-email').value;
-            if(email) {
-                localStorage.setItem('azure_user', email.split('@')[0].toUpperCase());
-                location.reload();
-            }
+            if(email) { localStorage.setItem('azure_user', email.split('@')[0].toUpperCase()); location.reload(); }
         }
 
         function logout() { localStorage.removeItem('azure_user'); location.reload(); }
@@ -240,7 +205,7 @@
                 document.getElementById('auth-section').innerHTML = `
                     <div class="flex items-center gap-2">
                         <span class="bg-zinc-900 border border-zinc-800 px-4 py-2.5 rounded-xl font-black text-[10px] text-blue-500 italic">${user}</span>
-                        <button onclick="logout()" class="text-zinc-600 hover:text-red-500"><i class="fa-solid fa-right-from-bracket"></i></button>
+                        <button onclick="logout()" class="text-zinc-600 hover:text-red-500 transition ml-1"><i class="fa-solid fa-power-off text-xs"></i></button>
                     </div>`;
             }
         };
