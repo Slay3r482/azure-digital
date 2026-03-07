@@ -4,139 +4,137 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <title>Azure Digital | EREMBY</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <title>Azure Digital | Eremby System</title>
     <style>
-        body { background-color: #050505; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        :root { --bg: #050505; --card: #0d0d0d; --border: #1a1a1a; --accent: #2563eb; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; }
         
-        /* EREMBY UI Kit */
-        .eremby-card { background: #0d0d0d; border: 1px solid #161616; border-radius: 1.2rem; transition: 0.3s; }
-        .eremby-card:hover { border-color: #2563eb; transform: translateY(-3px); }
+        /* Estilo Eremby Cards */
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 1.25rem; transition: 0.2s; }
+        .card:hover { border-color: var(--accent); }
         
-        .btn-main { background: #fff; color: #000; padding: 14px; border-radius: 1rem; font-weight: 900; text-transform: uppercase; font-size: 11px; width: 100%; transition: 0.2s; cursor: pointer; text-align: center; border: none; }
-        .btn-main:hover { background: #e5e5e5; }
+        /* Botões */
+        .btn-buy { background: #fff; color: #000; font-weight: 800; text-transform: uppercase; font-size: 0.7rem; padding: 12px; border-radius: 0.75rem; width: 100%; transition: 0.2s; }
+        .btn-buy:hover { opacity: 0.8; transform: scale(1.02); }
         
-        .tab-eremby { background: #0d0d0d; border: 1px solid #161616; padding: 12px 24px; border-radius: 1rem; font-size: 11px; font-weight: 900; text-transform: uppercase; cursor: pointer; color: #555; transition: 0.3s; }
-        .tab-eremby.active { background: #fff; color: #000; border-color: #fff; box-shadow: 0 0 15px rgba(255,255,255,0.1); }
+        /* Abas de Categorias */
+        .tab { padding: 10px 20px; border-radius: 0.75rem; background: var(--card); border: 1px solid var(--border); color: #666; font-weight: 800; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; transition: 0.2s; }
+        .tab.active { background: #fff; color: #000; border-color: #fff; }
 
-        .input-eremby { background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 1rem; padding: 16px; width: 100%; color: #fff; outline: none; font-size: 12px; }
-        .input-eremby:focus { border-color: #2563eb; }
+        /* Controles de Quantidade no Carrinho */
+        .qty-ctrl { display: flex; align-items: center; background: #151515; border: 1px solid var(--border); border-radius: 0.5rem; overflow: hidden; }
+        .qty-btn { padding: 5px 12px; color: #fff; font-weight: bold; transition: 0.2s; cursor: pointer; border: none; background: transparent; }
+        .qty-btn:hover { background: #202020; }
+        .qty-num { width: 30px; text-align: center; font-size: 0.8rem; font-weight: 800; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
 
-        .qty-controls { background: #121212; border: 1px solid #1a1a1a; border-radius: 0.8rem; display: flex; align-items: center; }
-        .qty-btn { padding: 6px 12px; font-weight: bold; color: #444; transition: 0.2s; }
-        .qty-btn:hover { color: #fff; }
-        
+        .input-eremby { background: var(--card); border: 1px solid var(--border); border-radius: 0.75rem; padding: 15px; width: 100%; color: #fff; font-size: 0.8rem; outline: none; }
+        .input-eremby:focus { border-color: var(--accent); }
+
         .hidden { display: none !important; }
-        
-        /* Scrollbar Estilo Dark */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: #050505; }
-        ::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <nav class="sticky top-0 z-50 py-5 px-6 bg-[#050505]/95 backdrop-blur-md border-b border-zinc-900">
+    <nav class="sticky top-0 z-50 bg-[#050505]/80 backdrop-blur-md border-b border-[#111] px-6 py-4">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="navigate('home')">
-                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(37,99,235,0.4)]">
-                    <i class="fa-solid fa-bolt text-white text-xl"></i>
+            <div class="flex items-center gap-3 cursor-pointer" onclick="showView('home')">
+                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/20">
+                    <i class="fa-solid fa-bolt text-white"></i>
                 </div>
-                <span class="font-black italic uppercase text-2xl tracking-tighter">Azure <span class="text-blue-500">Digital</span></span>
+                <span class="text-2xl font-black italic uppercase tracking-tighter italic">Azure <span class="text-blue-600">Digital</span></span>
             </div>
-
             <div class="flex items-center gap-4">
-                <button onclick="navigate('cart')" class="bg-white text-black px-6 py-2.5 rounded-2xl font-black text-xs flex items-center gap-2">
-                    <i class="fa-solid fa-cart-shopping"></i> Carrinho <span id="cart-badge" class="bg-black text-white px-2 py-0.5 rounded-lg text-[10px]">0</span>
+                <button onclick="showView('cart')" class="bg-white text-black px-5 py-2 rounded-xl font-black text-[0.7rem] uppercase flex items-center gap-2">
+                    <i class="fa-solid fa-cart-shopping"></i> Carrinho (<span id="cart-count">0</span>)
                 </button>
-                <div id="auth-box">
-                    <button class="bg-zinc-900 border border-zinc-800 px-6 py-2.5 rounded-2xl font-black uppercase italic text-xs hover:bg-zinc-800 transition">Entrar</button>
-                </div>
             </div>
         </div>
     </nav>
 
     <div id="view-home">
-        <header class="max-w-7xl mx-auto px-6 pt-16 pb-12">
-            <h1 class="text-7xl font-black italic uppercase tracking-tighter leading-none mb-4">EREMBY <span class="text-blue-600">SYSTEM</span></h1>
-            <p class="text-zinc-500 text-lg max-w-sm mb-12">Entrega automática via e-mail e Discord. Qualidade garantida.</p>
+        <div class="max-w-7xl mx-auto px-6 py-12">
+            <h1 class="text-6xl font-black italic uppercase tracking-tighter mb-2">EREMBY <span class="text-blue-600">STORE</span></h1>
+            <p class="text-zinc-500 text-sm mb-10">Entrega automática e imediata via e-mail.</p>
             
-            <div class="flex flex-wrap gap-3" id="eremby-tabs">
-                <div class="tab-eremby active" onclick="filterItems('Todos')">Todos</div>
-                <div class="tab-eremby" onclick="filterItems('Streaming')">Streaming</div>
-                <div class="tab-eremby" onclick="filterItems('IA Tools')">IA Tools</div>
-                <div class="tab-eremby" onclick="filterItems('Games')">Games</div>
+            <div class="flex flex-wrap gap-3 mb-12">
+                <button class="tab active" onclick="filter('Todos', this)">Todos</button>
+                <button class="tab" onclick="filter('Streaming', this)">Streaming</button>
+                <button class="tab" onclick="filter('IA Tools', this)">IA Tools</button>
+                <button class="tab" onclick="filter('Games', this)">Games</button>
             </div>
-        </header>
 
-        <main class="max-w-7xl mx-auto px-6 pb-24">
-            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6"></div>
-        </main>
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                </div>
+        </div>
     </div>
 
     <div id="view-cart" class="hidden">
-        <section class="max-w-7xl mx-auto px-6 py-16">
-            <div class="mb-12">
-                <h2 class="text-3xl font-black italic uppercase italic">Carrinho de Compras</h2>
-                <p class="text-zinc-500 text-sm">Finalize seu pedido de forma segura.</p>
+        <div class="max-w-7xl mx-auto px-6 py-16">
+            <div class="mb-10">
+                <h2 class="text-3xl font-black uppercase italic italic">Finalizar Pedido</h2>
+                <p class="text-zinc-500 text-xs uppercase font-bold tracking-widest">Passo Final</p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                <div class="lg:col-span-4 eremby-card p-8">
-                    <h3 class="text-[10px] font-black uppercase text-zinc-600 mb-8 tracking-widest">Informações de Pagamento</h3>
-                    <div class="space-y-5">
-                        <div class="flex items-center gap-3 p-5 bg-blue-600/5 border border-blue-600/20 rounded-2xl">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="card p-8">
+                        <p class="text-[0.6rem] font-black text-zinc-500 uppercase tracking-widest mb-6">Método de Pagamento</p>
+                        <div class="flex items-center gap-4 p-4 bg-blue-600/5 border border-blue-600/20 rounded-xl mb-6">
                             <i class="fa-brands fa-pix text-emerald-400 text-xl"></i>
-                            <span class="text-sm font-bold">Pix Automático</span>
+                            <span class="text-sm font-bold uppercase">Pagar com Pix</span>
                         </div>
-                        <input type="email" placeholder="Seu melhor e-mail para entrega" class="input-eremby">
+                        <p class="text-[0.6rem] font-black text-zinc-500 uppercase tracking-widest mb-2">Seu E-mail</p>
+                        <input type="email" placeholder="onde quer receber o produto?" class="input-eremby">
                     </div>
                 </div>
 
-                <div class="lg:col-span-5 eremby-card p-8">
-                    <h3 class="text-[10px] font-black uppercase text-zinc-600 mb-8 tracking-widest">Produtos no Carrinho</h3>
-                    <div id="cart-render-list" class="space-y-4"></div>
+                <div class="lg:col-span-5 card p-8">
+                    <p class="text-[0.6rem] font-black text-zinc-500 uppercase tracking-widest mb-6">Itens no Carrinho</p>
+                    <div id="cart-items-list" class="space-y-4">
+                        </div>
                 </div>
 
-                <div class="lg:col-span-3 eremby-card p-8">
-                    <h3 class="text-[10px] font-black uppercase text-zinc-600 mb-8 tracking-widest">Resumo Total</h3>
-                    <div class="pt-6 border-t border-zinc-900 flex justify-between items-baseline mb-10">
-                        <span class="text-sm font-black italic">TOTAL</span>
-                        <span id="final-total-price" class="text-3xl font-black italic text-blue-500">R$ 0,00</span>
+                <div class="lg:col-span-3 card p-8 h-fit">
+                    <p class="text-[0.6rem] font-black text-zinc-500 uppercase tracking-widest mb-6">Resumo</p>
+                    <div class="flex justify-between items-baseline pt-4 border-t border-[#111] mb-8">
+                        <span class="text-xs font-bold text-zinc-400">TOTAL:</span>
+                        <span id="total-price" class="text-3xl font-black italic text-blue-600">R$ 0,00</span>
                     </div>
-                    <button class="btn-main !py-5" onclick="alert('Gerando PIX...')">Pagar Agora</button>
+                    <button class="btn-buy" onclick="alert('Gerando código Pix...')">Concluir Compra</button>
                 </div>
             </div>
-        </section>
+        </div>
     </div>
 
     <script>
         const products = [
-            { id: 1, name: "Youtube Premium 30D", price: 1.50, cat: "Streaming", img: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" },
-            { id: 2, name: "Google Veo 3 Access", price: 4.99, cat: "IA Tools", img: "https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_Gemini_logo.svg" },
-            { id: 3, name: "ChatGPT Plus Shared", price: 2.30, cat: "IA Tools", img: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" },
-            { id: 4, name: "Xbox Game Pass", price: 9.90, cat: "Games", img: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Xbox_one_logo.svg" },
-            { id: 5, name: "Canva Pro Life", price: 5.00, cat: "Design", img: "https://upload.wikimedia.org/wikipedia/commons/0/0e/Canva_logo_2021.svg" }
+            { id: 1, name: "Youtube Premium 30 Dias", price: 1.50, cat: "Streaming", img: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" },
+            { id: 2, name: "Google Gemini Advanced", price: 4.90, cat: "IA Tools", img: "https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_Gemini_logo.svg" },
+            { id: 3, name: "ChatGPT Plus Compartilhado", price: 2.30, cat: "IA Tools", img: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" },
+            { id: 4, name: "Xbox Game Pass 1 Mês", price: 9.90, cat: "Games", img: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Xbox_one_logo.svg" }
         ];
 
         let cart = [];
 
-        function filterItems(cat) {
-            document.querySelectorAll('.tab-eremby').forEach(t => t.classList.toggle('active', t.innerText === cat));
-            const grid = document.getElementById('products-grid');
-            const filtered = cat === 'Todos' ? products : products.filter(p => p.cat === cat);
+        function filter(cat, btn) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
             
-            grid.innerHTML = filtered.map(p => `
-                <div class="eremby-card p-5 flex flex-col h-full">
-                    <div class="w-full h-36 bg-zinc-950 rounded-2xl mb-5 flex items-center justify-center p-6 border border-zinc-900/40">
-                        <img src="${p.img}" class="max-h-full opacity-90">
+            const grid = document.getElementById('product-grid');
+            const data = cat === 'Todos' ? products : products.filter(p => p.cat === cat);
+            
+            grid.innerHTML = data.map(p => `
+                <div class="card p-6 flex flex-col h-full">
+                    <div class="bg-[#050505] rounded-2xl p-6 h-32 flex items-center justify-center mb-5 border border-[#111]">
+                        <img src="${p.img}" class="max-h-full">
                     </div>
-                    <div class="text-[9px] font-black uppercase text-blue-500 mb-2 tracking-widest">${p.cat}</div>
-                    <h3 class="text-xs font-bold mb-5 line-clamp-1">${p.name}</h3>
+                    <span class="text-[0.6rem] font-black text-blue-500 uppercase mb-1">${p.cat}</span>
+                    <h3 class="text-[0.8rem] font-bold mb-4 line-clamp-1">${p.name}</h3>
                     <div class="mt-auto">
-                        <div class="text-2xl font-black italic mb-6">R$ ${p.price.toFixed(2).replace('.', ',')}</div>
-                        <button onclick="addToCart(${p.id})" class="btn-main">Comprar</button>
+                        <p class="text-2xl font-black italic mb-4">R$ ${p.price.toFixed(2).replace('.', ',')}</p>
+                        <button onclick="addToCart(${p.id})" class="btn-buy">Adicionar</button>
                     </div>
                 </div>
             `).join('');
@@ -144,55 +142,61 @@
 
         function addToCart(id) {
             const item = cart.find(i => i.id === id);
-            if(item) item.qty++;
-            else cart.push({...products.find(p => p.id === id), qty: 1});
+            if(item) {
+                item.qty++;
+            } else {
+                const p = products.find(x => x.id === id);
+                cart.push({...p, qty: 1});
+            }
             updateCart();
-            navigate('cart');
+            showView('cart');
         }
 
-        function editQty(idx, delta) {
-            cart[idx].qty += delta;
-            if(cart[idx].qty <= 0) cart.splice(idx, 1);
+        function updateQty(index, delta) {
+            cart[index].qty += delta;
+            if(cart[index].qty <= 0) cart.splice(index, 1);
             updateCart();
         }
 
         function updateCart() {
-            let total = 0; let count = 0;
-            const list = document.getElementById('cart-render-list');
+            let total = 0;
+            let count = 0;
+            const list = document.getElementById('cart-items-list');
             
             list.innerHTML = cart.map((item, i) => {
-                total += (item.price * item.qty); count += item.qty;
+                total += (item.price * item.qty);
+                count += item.qty;
                 return `
-                <div class="flex justify-between items-center p-4 bg-zinc-900/40 border border-zinc-900 rounded-2xl">
+                <div class="flex justify-between items-center p-4 bg-[#080808] border border-[#151515] rounded-xl">
                     <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 bg-zinc-900 rounded-xl flex items-center justify-center p-2"><img src="${item.img}" class="max-h-full"></div>
+                        <img src="${item.img}" class="w-8 h-8 object-contain">
                         <div>
-                            <div class="text-[10px] font-black italic uppercase">${item.name}</div>
-                            <div class="text-[8px] text-zinc-500">ENTREGA AUTOMÁTICA</div>
+                            <p class="text-[0.7rem] font-black uppercase">${item.name}</p>
+                            <p class="text-[0.6rem] text-zinc-500">R$ ${item.price.toFixed(2)}/un</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-4">
-                        <div class="qty-controls">
-                            <button onclick="editQty(${i}, -1)" class="qty-btn">-</button>
-                            <span class="text-[10px] font-black px-2">${item.qty}</span>
-                            <button onclick="editQty(${i}, 1)" class="qty-btn">+</button>
+                        <div class="qty-ctrl">
+                            <button class="qty-btn" onclick="updateQty(${i}, -1)">-</button>
+                            <span class="qty-num">${item.qty}</span>
+                            <button class="qty-btn" onclick="updateQty(${i}, 1)">+</button>
                         </div>
-                        <button onclick="editQty(${i}, -999)" class="text-zinc-700 hover:text-red-500 transition"><i class="fa-solid fa-trash text-xs"></i></button>
+                        <button onclick="updateQty(${i}, -999)" class="text-zinc-600 hover:text-red-500"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 </div>`;
             }).join('');
 
-            document.getElementById('cart-badge').innerText = count;
-            document.getElementById('final-total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            document.getElementById('cart-count').innerText = count;
+            document.getElementById('total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
         }
 
-        function navigate(page) {
-            document.getElementById('view-home').classList.toggle('hidden', page !== 'home');
-            document.getElementById('view-cart').classList.toggle('hidden', page !== 'cart');
+        function showView(v) {
+            document.getElementById('view-home').classList.toggle('hidden', v !== 'home');
+            document.getElementById('view-cart').classList.toggle('hidden', v !== 'cart');
             window.scrollTo(0,0);
         }
 
-        window.onload = () => filterItems('Todos');
+        window.onload = () => filter('Todos', document.querySelector('.tab'));
     </script>
 </body>
 </html>
