@@ -6,216 +6,156 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <title>Azure Digital | Checkout</title>
+    <title>Azure Digital | Pagamento</title>
     <style>
         body { background-color: #050505; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        .glass-nav { background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid #111; }
-        
-        /* ESTILO DOS CARDS E CHECKOUT */
         .nexus-box { background: #0d0d0d; border: 1px solid #161616; border-radius: 1rem; padding: 20px; }
-        .input-checkout { background: #121212; border: 1px solid #1a1a1a; border-radius: 0.8rem; padding: 12px; width: 100%; color: #fff; outline: none; font-size: 13px; }
-        .input-checkout:focus { border-color: #333; }
+        .input-dark { background: #121212; border: 1px solid #1a1a1a; border-radius: 0.8rem; padding: 12px; width: 100%; color: #fff; outline: none; }
+        .btn-white { background: #fff; color: #000; padding: 14px; border-radius: 0.8rem; font-weight: 900; text-transform: uppercase; font-size: 12px; width: 100%; transition: 0.3s; }
+        .btn-white:hover { background: #ccc; }
+        .hidden { display: none !important; }
         
-        .btn-pay { background: #ffffff; color: #000; width: 100%; padding: 15px; border-radius: 0.8rem; font-weight: 900; text-transform: uppercase; font-size: 12px; transition: 0.3s; }
-        .btn-pay:hover { background: #e5e5e5; }
-
-        /* CARRINHO */
-        #cart-view { min-height: 80vh; }
-        .product-row { background: #111; border: 1px solid #1a1a1a; border-radius: 12px; padding: 15px; }
+        /* Estilo do QR Code */
+        .qr-container { border: 2px solid #eab308; padding: 15px; border-radius: 1.5rem; background: white; width: 220px; height: 220px; margin: 0 auto; position: relative; }
+        .qr-corner { position: absolute; width: 30px; height: 30px; border: 4px solid #eab308; }
     </style>
 </head>
 <body>
 
-    <nav class="glass-nav sticky top-0 z-50 py-4 px-6">
+    <nav class="sticky top-0 z-50 py-4 px-6 bg-[#050505]/90 backdrop-blur-md border-b border-zinc-900">
         <div class="w-full flex justify-between items-center">
             <div class="flex items-center gap-3 cursor-pointer" onclick="location.reload()">
                 <div class="w-8 h-8 bg-blue-600 rounded-lg"></div>
                 <span class="font-black italic uppercase text-xl tracking-tighter">Azure <span class="text-blue-500">Digital</span></span>
             </div>
-            
-            <div class="flex items-center gap-4">
-                <button onclick="toggleCart()" class="bg-white text-black px-5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2">
-                    <i class="fa-solid fa-bag-shopping"></i> Carrinho <span id="cart-count" class="bg-black text-white px-2 py-0.5 rounded-md ml-1">0</span>
+            <div id="auth-area" class="flex items-center gap-4">
+                <button onclick="showView('cart')" class="bg-white text-black px-5 py-2 rounded-xl font-bold text-xs flex items-center gap-2">
+                    <i class="fa-solid fa-bag-shopping"></i> Carrinho <span id="cart-count" class="bg-black text-white px-2 py-0.5 rounded-md text-[10px]">0</span>
                 </button>
-                <div id="user-display" class="hidden"></div>
-                <button id="btn-login" onclick="openLogin()" class="bg-zinc-800 px-6 py-2.5 rounded-xl font-black uppercase italic text-xs">Entrar</button>
             </div>
         </div>
     </nav>
 
-    <div id="home-view" class="max-w-7xl mx-auto px-8 py-12">
-        <div class="mb-10"><h2 class="text-2xl font-black italic uppercase tracking-tighter border-l-4 border-blue-600 pl-4">Destaques</h2></div>
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-4" id="products-grid">
-            </div>
-    </div>
-
-    <div id="cart-view" class="hidden max-w-7xl mx-auto px-8 py-12">
-        <div class="mb-8">
-            <h1 class="text-2xl font-bold">Carrinhos de compras</h1>
-            <p class="text-zinc-500 text-sm">Nesta página, você encontra os produtos adicionados ao seu carrinho.</p>
-        </div>
-
+    <section id="cart-view" class="max-w-7xl mx-auto px-6 py-12">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            
-            <div class="lg:col-span-4 space-y-6">
+            <div class="lg:col-span-9 space-y-6">
                 <div class="nexus-box">
-                    <h3 class="font-bold text-sm mb-6 uppercase tracking-widest">Informações de pagamento</h3>
-                    <div class="flex items-center gap-3 mb-6 p-4 border border-blue-600/30 bg-blue-600/5 rounded-xl">
-                        <input type="radio" checked class="accent-blue-600">
-                        <i class="fa-brands fa-pix text-[#00bdae] text-xl"></i>
-                        <span class="text-sm font-bold">Pix</span>
-                    </div>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="text-[10px] font-bold text-zinc-500 uppercase">Informe o seu e-mail</label>
-                            <input type="email" placeholder="Insira seu email" class="input-checkout mt-1">
-                        </div>
-                        <div>
-                            <label class="text-[10px] font-bold text-zinc-500 uppercase">Informe novamente o seu e-mail</label>
-                            <input type="email" placeholder="Insira seu email" class="input-checkout mt-1">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="nexus-box flex justify-between items-center">
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-tag text-blue-500"></i>
-                        <span class="text-xs font-bold uppercase">Cupom de desconto</span>
-                    </div>
-                    <button class="bg-zinc-800 px-4 py-2 rounded-lg text-[10px] font-black uppercase">Adicionar</button>
+                    <h3 class="font-bold text-sm mb-6 uppercase tracking-widest text-zinc-500">Produtos no carrinho</h3>
+                    <div id="cart-list" class="space-y-4"></div>
                 </div>
             </div>
-
-            <div class="lg:col-span-5">
-                <div class="nexus-box">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="font-bold text-sm uppercase tracking-widest">Produtos no carrinho</h3>
-                        <span id="cart-item-count-badge" class="text-[10px] bg-zinc-800 px-2 py-1 rounded">0 itens</span>
-                    </div>
-                    <div id="cart-items-list" class="space-y-4">
-                        </div>
-                </div>
-            </div>
-
             <div class="lg:col-span-3">
                 <div class="nexus-box">
-                    <h3 class="font-bold text-sm mb-6 uppercase tracking-widest text-zinc-500">Resumo da compra</h3>
-                    <div class="space-y-4 mb-6">
-                        <div class="flex justify-between text-xs">
-                            <span class="text-zinc-500">Subtotal</span>
-                            <span id="subtotal-val" class="font-bold">R$ 0,00</span>
-                        </div>
-                        <div class="flex justify-between text-xs">
-                            <span class="text-zinc-500">Método</span>
-                            <span class="flex items-center gap-1 font-bold text-[#00bdae] italic">
-                                <i class="fa-brands fa-pix text-[10px]"></i> Pix
-                            </span>
-                        </div>
+                    <h3 class="font-bold text-sm mb-6 uppercase tracking-widest text-zinc-500">Resumo</h3>
+                    <div class="flex justify-between text-xl font-black italic mb-6">
+                        <span>TOTAL</span>
+                        <span id="cart-total">R$ 0,00</span>
                     </div>
-                    <div class="border-t border-zinc-900 pt-4 flex justify-between items-center mb-6">
-                        <span class="font-black text-sm uppercase italic">Total</span>
-                        <span id="total-val" class="text-xl font-black italic">R$ 0,00</span>
-                    </div>
-                    <button class="btn-pay">Gerar pagamento</button>
+                    <button onclick="generatePayment()" class="btn-white">Gerar pagamento</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="payment-view" class="hidden max-w-4xl mx-auto px-6 py-12">
+        <div class="mb-8">
+            <div class="text-xs text-zinc-500 mb-1">Início > <span class="text-white">Pagamento</span></div>
+            <h1 class="text-2xl font-bold">Aguardando pagamento</h1>
+            <p id="payment-date" class="text-zinc-600 text-[10px] mt-1"></p>
+        </div>
+
+        <div class="nexus-box grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 text-xs">
+            <div>
+                <p class="text-zinc-500 mb-1 uppercase font-bold">Produtos</p>
+                <p id="pay-prod-name" class="font-bold"></p>
+            </div>
+            <div>
+                <p class="text-zinc-500 mb-1 uppercase font-bold">Total</p>
+                <p id="pay-total" class="text-yellow-500 font-bold"></p>
+            </div>
+            <div>
+                <p class="text-zinc-500 mb-1 uppercase font-bold">Email</p>
+                <p id="pay-email" class="truncate font-medium"></p>
+            </div>
+            <div>
+                <p class="text-zinc-500 mb-1 uppercase font-bold">Método</p>
+                <p class="flex items-center gap-1 font-bold"><i class="fa-brands fa-pix text-[#00bdae]"></i> Pix</p>
+            </div>
+        </div>
+
+        <div class="nexus-box text-center py-12">
+            <p class="text-[10px] text-zinc-500 uppercase tracking-[0.2em] mb-2 font-black">Tempo restante</p>
+            <div class="text-2xl font-bold mb-8">24:00:00</div>
+
+            <div class="relative inline-block mb-10">
+                <div class="qr-container">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=AZURE_PAYMENT_SAMPLE" alt="QR Code" class="w-full h-full">
                 </div>
             </div>
 
+            <div class="max-w-md mx-auto">
+                <p class="text-[10px] text-zinc-500 uppercase mb-4">Ou pague com Pix copia e cola</p>
+                <div class="flex items-center bg-[#121212] border border-zinc-900 rounded-xl p-3 gap-3 mb-4">
+                    <i class="fa-solid fa-copy text-zinc-700"></i>
+                    <input type="text" id="pix-code" readonly value="00020126850014br.gov.bcb.pix..." class="bg-transparent border-none text-[10px] w-full text-zinc-400 outline-none">
+                </div>
+                <button onclick="copyPix()" class="bg-white text-black px-8 py-3 rounded-xl font-black uppercase text-[10px]">Copiar Código Pix</button>
+            </div>
         </div>
-    </div>
+    </section>
 
     <script>
-        const products = [
-            { id: 1, name: "YouTube Premium", price: 1.50, color: "bg-red-500" },
-            { id: 2, name: "Google Veo 3", price: 4.99, color: "bg-blue-400" },
-            { id: 3, name: "Chat GPT Plus", price: 2.30, color: "bg-green-500" },
-            { id: 4, name: "Premiere", price: 2.30, color: "bg-green-300" },
-            { id: 5, name: "CapCut PRO", price: 2.20, color: "bg-purple-500" }
-        ];
-
         let cart = JSON.parse(localStorage.getItem('azure_cart')) || [];
+        const user = localStorage.getItem('azure_user') || "visitante@gmail.com";
 
-        function renderHome() {
-            const grid = document.getElementById('products-grid');
-            grid.innerHTML = products.map(p => `
-                <div class="nexus-box flex flex-col items-center">
-                    <div class="w-full h-24 bg-zinc-900 rounded-xl mb-4"></div>
-                    <div class="text-[10px] font-bold text-zinc-400 uppercase italic mb-1">
-                        <span class="w-1.5 h-1.5 rounded-full inline-block ${p.color} mr-1"></span> ${p.name}
-                    </div>
-                    <div class="text-xl font-black italic mb-4">R$ ${p.price.toFixed(2).replace('.', ',')}</div>
-                    <button onclick="addToCart(${p.id})" class="bg-zinc-800 w-full py-3 rounded-xl font-black text-[10px] uppercase hover:bg-white hover:text-black transition">
-                        Comprar <i class="fa-solid fa-bag-shopping ml-2"></i>
-                    </button>
-                </div>
-            `).join('');
-            updateCartUI();
-        }
-
-        function addToCart(id) {
-            const prod = products.find(p => p.id === id);
-            cart.push(prod);
-            localStorage.setItem('azure_cart', JSON.stringify(cart));
-            updateCartUI();
-            toggleCart(); // Abre o carrinho automaticamente ao comprar
-        }
-
-        function updateCartUI() {
-            document.getElementById('cart-count').innerText = cart.length;
-            document.getElementById('cart-item-count-badge').innerText = `${cart.length} itens`;
-            
-            const list = document.getElementById('cart-items-list');
+        function updateUI() {
+            const list = document.getElementById('cart-list');
             let total = 0;
             
-            list.innerHTML = cart.map((item, index) => {
-                total += item.price;
+            list.innerHTML = cart.map((item, idx) => {
+                total += (item.price * item.quantity);
                 return `
-                    <div class="product-row flex justify-between items-center">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-zinc-800 rounded-lg"></div>
-                            <div>
-                                <div class="text-[11px] font-bold italic"><span class="w-2 h-2 rounded-full inline-block ${item.color} mr-1"></span> ${item.name}</div>
-                                <div class="text-[9px] text-zinc-600 mt-1">⚡ Entrega Automática</div>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="text-sm font-black italic">R$ ${item.price.toFixed(2).replace('.', ',')}</div>
-                            <button onclick="removeFromCart(${index})" class="text-red-500/50 hover:text-red-500"><i class="fa-solid fa-trash-can text-xs"></i></button>
-                        </div>
+                    <div class="flex justify-between items-center p-4 bg-zinc-900/50 border border-zinc-900 rounded-xl">
+                        <span class="font-bold text-xs">${item.quantity}x ${item.name}</span>
+                        <span class="font-black italic">R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</span>
                     </div>
                 `;
             }).join('');
 
-            document.getElementById('subtotal-val').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
-            document.getElementById('total-val').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            document.getElementById('cart-total').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            document.getElementById('cart-count').innerText = cart.length;
         }
 
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            localStorage.setItem('azure_cart', JSON.stringify(cart));
-            updateCartUI();
+        function generatePayment() {
+            if(cart.length === 0) return alert("Carrinho vazio!");
+            
+            // Troca de tela
+            document.getElementById('cart-view').classList.add('hidden');
+            document.getElementById('payment-view').classList.remove('hidden');
+
+            // Preenche dados da tela de pagamento
+            const now = new Date();
+            document.getElementById('payment-date').innerText = now.toLocaleString('pt-BR');
+            document.getElementById('pay-prod-name').innerText = `${cart[0].quantity}x ${cart[0].name}${cart.length > 1 ? '...' : ''}`;
+            document.getElementById('pay-total').innerText = document.getElementById('cart-total').innerText;
+            document.getElementById('pay-email').innerText = user;
         }
 
-        function toggleCart() {
-            const home = document.getElementById('home-view');
-            const cartV = document.getElementById('cart-view');
-            if(cartV.classList.contains('hidden')) {
-                home.classList.add('hidden');
-                cartV.classList.remove('hidden');
-            } else {
-                home.classList.remove('hidden');
-                cartV.classList.add('hidden');
+        function copyPix() {
+            const copyText = document.getElementById("pix-code");
+            copyText.select();
+            document.execCommand("copy");
+            alert("Código Pix copiado!");
+        }
+
+        function showView(view) {
+            if(view === 'cart') {
+                document.getElementById('payment-view').classList.add('hidden');
+                document.getElementById('cart-view').classList.remove('hidden');
             }
         }
 
-        window.onload = () => {
-            renderHome();
-            const user = localStorage.getItem('azure_user');
-            if(user) {
-                document.getElementById('btn-login').classList.add('hidden');
-                document.getElementById('user-display').innerHTML = `<span class="bg-zinc-900 border border-zinc-800 px-4 py-2.5 rounded-xl font-black uppercase italic text-[10px] tracking-tighter">${user}</span>`;
-                document.getElementById('user-display').classList.remove('hidden');
-            }
-        };
+        window.onload = updateUI;
     </script>
 </body>
 </html>
