@@ -18,158 +18,107 @@
             -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 85%);
         }
 
-        .glass { background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border); }
+        /* MODAL DE LOGIN (Igual à imagem enviada) */
+        #loginModal {
+            display: none; position: fixed; inset: 0; z-index: 1000;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
+            align-items: center; justify-content: center;
+        }
+        .login-box {
+            background: #0D0E11; border: 1px solid var(--border);
+            width: 100%; max-width: 400px; padding: 40px; border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .input-group {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border);
+            border-radius: 12px; padding: 15px; display: flex; align-items: center; gap: 15px;
+            margin-bottom: 20px;
+        }
+        .input-group input { background: transparent; border: none; outline: none; color: #fff; width: 100%; font-size: 14px; }
+        .input-group input::placeholder { color: #444; }
         
-        /* Card Estilo MineGine */
+        .btn-entrar {
+            background: #444; color: #fff; width: 100%; padding: 14px;
+            border-radius: 12px; font-weight: 700; font-size: 16px;
+            transition: 0.3s; text-align: center; cursor: pointer;
+        }
+        .btn-entrar:hover { background: #555; }
+
+        /* Estilo dos Cards e Categorias */
         .card-mine {
             background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px;
             padding: 18px; transition: 0.4s; backdrop-filter: blur(12px);
-            width: 100%; max-width: 195px; margin: 0 auto;
-            display: flex; flex-direction: column;
+            width: 100%; max-width: 200px; margin: 0 auto;
         }
-        .card-mine.hidden { display: none !important; }
-
         .pill {
             background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border);
             padding: 10px 22px; border-radius: 99px; font-size: 11px; font-weight: 700;
-            text-transform: uppercase; color: #71717a; transition: 0.3s; cursor: pointer;
+            text-transform: uppercase; color: #71717a; cursor: pointer;
         }
         .pill.active { background: #fff; color: #000; border-color: #fff; }
-
-        #cartSide {
-            position: fixed; top: 0; right: -400px; width: 350px; height: 100%;
-            background: #0D0E11; border-left: 1px solid var(--border);
-            z-index: 100; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 30px;
-        }
-        #cartSide.active { right: 0; }
-
-        .btn-mine { background: #fff; color: #000; width: 100%; padding: 12px; border-radius: 10px; font-weight: 900; font-size: 11px; text-transform: uppercase; margin-top: 14px; }
     </style>
 </head>
 <body>
 
     <img src="https://cdn.ereemby.com/attachments/17715554716225022imagem.png" class="hero-mask">
 
-    <header class="sticky top-0 z-50 glass px-8 py-5">
-        <div class="max-w-[1400px] mx-auto flex justify-between items-center gap-6">
+    <header class="sticky top-0 z-50 bg-[#050505]/80 backdrop-blur-xl border-b border-white/5 px-8 py-5">
+        <div class="max-w-[1400px] mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <img src="https://cdn.ereemby.com/attachments/17706209715176161imagem.jpeg" class="w-9 h-9 rounded-xl">
-                <span class="font-black text-base italic uppercase tracking-tighter">Azure <span class="text-blue-500">Digital</span></span>
+                <span class="font-black text-base italic uppercase">Azure Digital</span>
             </div>
-
-            <div class="hidden md:flex flex-1 justify-center">
-                <div class="bg-white/5 border border-white/5 rounded-xl px-4 py-2 w-full max-w-md flex items-center gap-3">
-                    <i class="fa-solid fa-magnifying-glass text-zinc-600"></i>
-                    <input type="text" id="searchInput" oninput="filterAll()" placeholder="Pesquisar produto..." class="bg-transparent outline-none text-xs w-full text-white">
-                </div>
-            </div>
-
             <div class="flex items-center gap-4">
-                <div onclick="toggleCart()" class="bg-white text-black px-5 py-2.5 rounded-xl font-black text-[11px] uppercase cursor-pointer">
-                    Carrinho (<span id="cartCount">0</span>)
-                </div>
+                <div class="bg-white text-black px-5 py-2.5 rounded-xl font-black text-[11px] uppercase cursor-pointer">Carrinho</div>
+                <button onclick="openLogin()" class="bg-[#111] px-5 py-2.5 rounded-xl text-zinc-400 font-bold text-[11px] border border-white/5">ENTRAR</button>
             </div>
         </div>
     </header>
 
-    <div id="cartSide">
-        <div class="flex justify-between items-center mb-8">
-            <h2 class="font-black italic text-xl uppercase">Meu Carrinho</h2>
-            <i onclick="toggleCart()" class="fa-solid fa-xmark cursor-pointer"></i>
-        </div>
-        <div id="cartItems"></div>
-        <div class="absolute bottom-10 left-0 w-full px-8">
-            <button class="btn-mine">Finalizar Compra</button>
+    <div id="loginModal" onclick="closeLogin(event)">
+        <div class="login-box" onclick="event.stopPropagation()">
+            <div class="mb-6 text-center">
+                <h2 class="text-2xl font-black italic uppercase">Acessar Conta</h2>
+            </div>
+            
+            <div class="input-group">
+                <i class="fa-solid fa-envelope text-zinc-600"></i>
+                <div class="flex flex-col w-full">
+                    <span class="text-[10px] text-blue-500 font-bold uppercase">Endereço de e-mail</span>
+                    <input type="email" placeholder="exemplo@gmail.com">
+                </div>
+            </div>
+
+            <button class="btn-entrar" onclick="alert('Login realizado!')">Entrar</button>
         </div>
     </div>
 
     <main class="max-w-[1400px] mx-auto px-8 py-14">
         <nav class="flex justify-center gap-3 mb-12">
-            <button class="pill active" onclick="setCategory('todos', this)">Todos</button>
-            <button class="pill" onclick="setCategory('discord', this)">Discord</button>
-            <button class="pill" onclick="setCategory('streaming', this)">Streaming</button>
-            <button class="pill" onclick="setCategory('games', this)">Games</button>
+            <button class="pill active">Todos</button>
+            <button class="pill">Discord</button>
+            <button class="pill">Streaming</button>
         </nav>
 
-        <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-            
-            <div class="card-mine product-card" data-category="discord" data-name="discord nitro">
-                <div class="bg-black border border-white/5 rounded-xl aspect-square flex items-center justify-center mb-4 text-blue-500/30">
-                    <i class="fa-brands fa-discord text-5xl"></i>
-                </div>
-                <span class="text-[10px] text-zinc-500 font-black uppercase text-center mb-1">Discord Nitro</span>
-                <p class="text-xl font-black italic text-center">R$ 15,90</p>
-                <button onclick="addToCart('Discord Nitro', 15.90)" class="btn-mine">Adicionar</button>
-            </div>
-
-            <div class="card-mine product-card" data-category="streaming" data-name="youtube premium">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+            <div class="card-mine">
                 <div class="bg-black border border-white/5 rounded-xl aspect-square flex items-center justify-center mb-4">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" class="w-1/2">
                 </div>
-                <span class="text-[10px] text-zinc-500 font-black uppercase text-center mb-1">Youtube Premium</span>
+                <span class="text-[9px] text-zinc-500 font-black uppercase text-center mb-1">Youtube Premium</span>
                 <p class="text-xl font-black italic text-center">R$ 1,50</p>
-                <button onclick="addToCart('Youtube Premium', 1.50)" class="btn-mine">Adicionar</button>
+                <button class="bg-white text-black w-full py-2 rounded-lg font-black text-[10px] mt-4">COMPRAR</button>
             </div>
-
-            <div class="card-mine product-card" data-category="games" data-name="gta v">
-                <div class="bg-black border border-white/5 rounded-xl aspect-square flex items-center justify-center mb-4 text-zinc-700">
-                    <i class="fa-solid fa-gamepad text-5xl"></i>
-                </div>
-                <span class="text-[10px] text-zinc-500 font-black uppercase text-center mb-1">GTA V Premium</span>
-                <p class="text-xl font-black italic text-center">R$ 45,00</p>
-                <button onclick="addToCart('GTA V', 45.00)" class="btn-mine">Adicionar</button>
-            </div>
-
         </div>
     </main>
 
     <script>
-        let currentCategory = 'todos';
-
-        // FUNÇÃO DE FILTRAGEM (CATEGORIA + PESQUISA)
-        function filterAll() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const cards = document.querySelectorAll('.product-card');
-
-            cards.forEach(card => {
-                const name = card.getAttribute('data-name').toLowerCase();
-                const category = card.getAttribute('data-category');
-
-                const matchesSearch = name.includes(searchTerm);
-                const matchesCategory = (currentCategory === 'todos' || category === currentCategory);
-
-                if (matchesSearch && matchesCategory) {
-                    card.classList.remove('hidden');
-                } else {
-                    card.classList.add('hidden');
-                }
-            });
+        function openLogin() {
+            document.getElementById('loginModal').style.display = 'flex';
         }
 
-        function setCategory(cat, el) {
-            // Atualiza botões
-            document.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
-            el.classList.add('active');
-            
-            currentCategory = cat;
-            filterAll();
-        }
-
-        // FUNÇÕES DO CARRINHO
-        let cart = [];
-        function toggleCart() { document.getElementById('cartSide').classList.toggle('active'); }
-        
-        function addToCart(name, price) {
-            cart.push({name, price});
-            document.getElementById('cartCount').innerText = cart.length;
-            updateCartUI();
-            toggleCart();
-        }
-
-        function updateCartUI() {
-            const container = document.getElementById('cartItems');
-            container.innerHTML = cart.map(i => `<div class="flex justify-between mb-2 text-xs uppercase font-bold"><span>${i.name}</span><span>R$ ${i.price.toFixed(2)}</span></div>`).join('');
+        function closeLogin(e) {
+            document.getElementById('loginModal').style.display = 'none';
         }
     </script>
 </body>
