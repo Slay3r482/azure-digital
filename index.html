@@ -14,112 +14,140 @@
 
         /* Categorias */
         .cat-item { 
-            background: #080808; border: 1px solid #111; padding: 14px 20px; border-radius: 1rem; 
+            background: #080808; border: 1px solid #111; padding: 12px 18px; border-radius: 0.8rem; 
             font-weight: 900; font-size: 10px; color: #444; text-transform: uppercase; text-align: left;
-            transition: 0.2s; width: 100%; margin-bottom: 6px;
+            transition: 0.2s; width: 100%; margin-bottom: 6px; cursor: pointer;
         }
         .cat-item.active { background: #fff; color: #000; border-color: #fff; }
 
-        /* Card Compacto - IGUAL AO PRINT */
+        /* Cards Super Compactos */
         .product-card { 
-            background: #080808; border: 1px solid #111; border-radius: 2rem; 
-            padding: 25px; text-align: center; transition: 0.3s;
+            background: #080808; border: 1px solid #111; border-radius: 1.5rem; 
+            padding: 15px; text-align: center; transition: 0.3s;
         }
         .product-img-box { 
-            background: #050505; border: 1px solid #111; border-radius: 1.5rem; 
-            height: 160px; /* Reduzi a altura para não ocupar muito espaço */
-            display: flex; align-items: center; justify-content: center; 
-            margin-bottom: 20px; padding: 30px;
+            background: #050505; border: 1px solid #111; border-radius: 1rem; 
+            height: 120px; display: flex; align-items: center; justify-content: center; 
+            margin-bottom: 12px; padding: 20px;
         }
         .product-img-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
         .btn-buy {
-            background: #fff; color: #000; width: 100%; padding: 14px;
-            border-radius: 1rem; font-weight: 900; text-transform: uppercase;
-            font-size: 12px; margin-top: 15px;
+            background: #fff; color: #000; width: 100%; padding: 10px;
+            border-radius: 0.8rem; font-weight: 900; text-transform: uppercase;
+            font-size: 11px; margin-top: 10px; cursor: pointer;
         }
 
-        /* Barra de Pesquisa */
-        .search-input { 
-            background: #080808; border: 1px solid #111; border-radius: 0.8rem; 
-            padding: 10px 18px; width: 400px; display: flex; align-items: center; gap: 12px; 
-        }
-
-        /* Widgets Flutuantes */
-        .social-bar { position: fixed; right: 20px; top: 50%; transform: translateY(-50%); background: #080808; border: 1px solid #111; border-radius: 1.2rem; padding: 12px; display: flex; flex-direction: column; gap: 20px; z-index: 100; }
+        /* Widgets */
         .support-box { position: fixed; bottom: 20px; left: 20px; background: #080808; border: 1px solid #111; border-radius: 0.8rem; padding: 10px 15px; display: flex; align-items: center; gap: 10px; z-index: 100; border-bottom: 2px solid white; }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <div class="social-bar">
-        <i class="fa-brands fa-discord opacity-40 hover:opacity-100 cursor-pointer"></i>
-        <i class="fa-brands fa-instagram opacity-40 hover:opacity-100 cursor-pointer"></i>
-        <i class="fa-brands fa-tiktok opacity-40 hover:opacity-100 cursor-pointer"></i>
-    </div>
+    <nav class="bg-[#050505] border-b border-[#111] px-8 py-4 flex justify-between items-center sticky top-0 z-[100]">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="renderProducts('Todos')">
+            <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/20"><i class="fa-solid fa-bolt text-lg"></i></div>
+            <span class="text-xl font-eremby italic">Azure <span class="text-blue-600">Digital</span></span>
+        </div>
+        
+        <div class="bg-[#080808] border border-[#111] px-5 py-2.5 rounded-xl w-[350px] flex items-center gap-4">
+            <i class="fa-solid fa-magnifying-glass text-zinc-700 text-sm"></i>
+            <input type="text" id="searchInput" onkeyup="search()" placeholder="Pesquisar produto" class="bg-transparent border-none outline-none text-xs w-full">
+        </div>
+
+        <div class="flex items-center gap-4">
+            <div onclick="alert('Abrindo Carrinho...')" class="relative bg-white text-black px-5 py-2.5 rounded-xl font-black text-xs flex items-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-bag-shopping"></i> Carrinho
+                <div id="cartCount" class="absolute -top-2 -right-2 bg-white text-black border-4 border-[#050505] w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-black">0</div>
+            </div>
+            <button onclick="alert('Abrindo Login...')" class="bg-[#1a1a1a] px-6 py-2.5 rounded-xl font-black text-xs uppercase text-white hover:bg-zinc-800 transition">Entrar</button>
+        </div>
+    </nav>
+
+    <main class="max-w-[1300px] mx-auto px-8 py-10">
+        <div class="flex gap-10">
+            <aside class="w-60 flex-shrink-0">
+                <p class="text-[9px] font-black text-zinc-700 uppercase tracking-widest mb-6">Categorias</p>
+                <div id="categoryList">
+                    <button class="cat-item active" onclick="filterCat('Todos', this)">Todos os produtos</button>
+                    <button class="cat-item" onclick="filterCat('Streaming', this)">Streaming</button>
+                    <button class="cat-item" onclick="filterCat('IA Tools', this)">Ferramentas IA</button>
+                </div>
+            </aside>
+
+            <div class="flex-1">
+                <h1 id="viewTitle" class="text-5xl font-eremby mb-10 italic">TODOS</h1>
+                <div id="productGrid" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    </div>
+            </div>
+        </div>
+    </main>
 
     <div class="support-box">
         <div class="w-7 h-7 bg-white rounded flex items-center justify-center text-black text-sm"><i class="fa-solid fa-chart-line"></i></div>
         <div class="text-[9px] font-bold"><span class="text-zinc-600 uppercase">Suporte online:</span> <br><span>Resposta em menos de 5 min.</span></div>
     </div>
 
-    <nav class="bg-[#050505] border-b border-[#111] px-10 py-5 flex justify-between items-center sticky top-0 z-[100]">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/20"><i class="fa-solid fa-bolt text-xl"></i></div>
-            <span class="text-2xl font-eremby italic">Azure <span class="text-blue-600">Digital</span></span>
-        </div>
-        <div class="search-input">
-            <i class="fa-solid fa-magnifying-glass text-zinc-700 text-sm"></i>
-            <input type="text" placeholder="Pesquisar produto" class="bg-transparent border-none outline-none text-xs w-full">
-        </div>
-        <div class="flex items-center gap-5">
-            <div class="relative bg-white text-black px-5 py-2.5 rounded-xl font-black text-xs flex items-center gap-2 cursor-pointer">
-                <i class="fa-solid fa-bag-shopping"></i> Carrinho
-                <div class="absolute -top-2 -right-2 bg-white text-black border-4 border-[#050505] w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-black">0</div>
-            </div>
-            <button class="bg-[#1a1a1a] px-6 py-2.5 rounded-xl font-black text-xs uppercase">Entrar</button>
-        </div>
-    </nav>
+    <script>
+        const products = [
+            { id: 1, name: "Youtube Premium", price: 1.50, cat: "Streaming", img: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" },
+            { id: 2, name: "ChatGPT Plus", price: 2.30, cat: "IA Tools", img: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" },
+            { id: 3, name: "Netflix 4K", price: 5.90, cat: "Streaming", img: "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" },
+            { id: 4, name: "Midjourney", price: 4.50, cat: "IA Tools", img: "https://upload.wikimedia.org/wikipedia/commons/a/af/Adobe_Photoshop_CC_icon.svg" }
+        ];
 
-    <main class="max-w-[1400px] mx-auto px-10 py-12">
-        <div class="flex gap-12">
-            <aside class="w-64 flex-shrink-0">
-                <p class="text-[9px] font-black text-zinc-700 uppercase tracking-widest mb-6">Categorias</p>
-                <button class="cat-item active">Todos os produtos</button>
-                <button class="cat-item">Streaming</button>
-                <button class="cat-item">Ferramentas IA</button>
-                <button class="cat-item">Games & Gift Cards</button>
-            </aside>
+        let count = 0;
 
-            <div class="flex-1">
-                <h1 class="text-6xl font-eremby mb-12 italic">TODOS</h1>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    <div class="product-card">
-                        <div class="product-img-box">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" alt="Youtube">
-                        </div>
-                        <div class="flex items-center justify-center gap-2 mb-1">
-                            <div class="w-2 h-2 rounded-full bg-red-600"></div>
-                            <span class="text-[10px] font-black text-zinc-600 tracking-wider uppercase italic">Youtube Premium</span>
-                        </div>
-                        <p class="font-eremby text-2xl italic">R$ 1,50</p>
-                        <button class="btn-buy">Comprar</button>
+        function renderProducts(filter = 'Todos') {
+            const grid = document.getElementById('productGrid');
+            const data = filter === 'Todos' ? products : products.filter(p => p.cat === filter);
+            
+            grid.innerHTML = data.map(p => `
+                <div class="product-card">
+                    <div class="product-img-box">
+                        <img src="${p.img}" alt="${p.name}">
                     </div>
-                    <div class="product-card">
-                        <div class="product-img-box">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" alt="ChatGPT">
-                        </div>
-                        <div class="flex items-center justify-center gap-2 mb-1">
-                            <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
-                            <span class="text-[10px] font-black text-zinc-600 tracking-wider uppercase italic">ChatGPT Plus</span>
-                        </div>
-                        <p class="font-eremby text-2xl italic">R$ 2,30</p>
-                        <button class="btn-buy">Comprar</button>
+                    <div class="flex items-center justify-center gap-2 mb-1">
+                        <div class="w-1.5 h-1.5 rounded-full bg-blue-600"></div>
+                        <span class="text-[9px] font-black text-zinc-600 tracking-wider uppercase italic">${p.name}</span>
                     </div>
+                    <p class="font-eremby text-xl italic">R$ ${p.price.toFixed(2).replace('.', ',')}</p>
+                    <button onclick="addToCart()" class="btn-buy">Comprar</button>
                 </div>
-            </div>
-        </div>
-    </main>
+            `).join('');
+        }
 
+        function filterCat(cat, btn) {
+            document.querySelectorAll('.cat-item').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('viewTitle').innerText = cat.toUpperCase();
+            renderProducts(cat);
+        }
+
+        function search() {
+            const val = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(val));
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = filtered.map(p => `
+                <div class="product-card">
+                    <div class="product-img-box"><img src="${p.img}"></div>
+                    <div class="flex items-center justify-center gap-2 mb-1">
+                        <div class="w-1.5 h-1.5 rounded-full bg-blue-600"></div>
+                        <span class="text-[9px] font-black text-zinc-600 tracking-wider uppercase italic">${p.name}</span>
+                    </div>
+                    <p class="font-eremby text-xl italic">R$ ${p.price.toFixed(2).replace('.', ',')}</p>
+                    <button onclick="addToCart()" class="btn-buy">Comprar</button>
+                </div>
+            `).join('');
+        }
+
+        function addToCart() {
+            count++;
+            document.getElementById('cartCount').innerText = count;
+        }
+
+        window.onload = () => renderProducts();
+    </script>
 </body>
 </html>
