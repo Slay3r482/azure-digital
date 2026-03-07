@@ -8,66 +8,39 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <title>Azure Digital | Store</title>
     <style>
-        :root { 
-            --bg: #08090B; 
-            --header: #0D0E11; 
-            --border: #201e1e; 
-            --accent: #ffba09;
-        }
-        
-        body { 
-            background-color: var(--bg); 
-            color: #fff; 
-            font-family: 'Inter', sans-serif; 
-            margin: 0;
-            overflow-x: hidden;
-        }
+        :root { --bg: #08090B; --header: #0D0E11; --border: #201e1e; --accent: #ffba09; }
+        body { background-color: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; }
 
-        /* Banner de fundo fixo com máscara */
         .hero-mask {
-            position: fixed; top: 47px; left: 0; width: 100%; height: 100%; 
-            max-height: 700px; z-index: -1; pointer-events: none;
-            object-fit: cover; opacity: 0.4;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            object-fit: cover; opacity: 0.3;
             mask-image: linear-gradient(black, rgba(0,0,0,0.4), transparent);
             -webkit-mask-image: linear-gradient(black, rgba(0,0,0,0.4), transparent);
         }
 
-        /* Barra de Pesquisa Estilo Original */
+        /* Barra de Pesquisa Centralizada */
         .search-container {
-            background: #0D0E11;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 8px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-            max-width: 450px;
-            transition: 0.2s;
+            background: #0D0E11; border: 1px solid var(--border); border-radius: 12px;
+            padding: 8px 16px; display: flex; align-items: center; gap: 12px; width: 100%; max-width: 400px;
         }
-        .search-container:focus-within { border-color: #585869; }
-        .search-container input {
-            background: transparent;
-            border: none;
-            outline: none;
-            color: #8C8C8C;
-            font-size: 13px;
-            width: 100%;
-        }
+        .search-container input { background: transparent; border: none; outline: none; color: #8C8C8C; font-size: 13px; width: 100%; }
 
-        /* CARD COMPACTO - Estilo Nexus/Eremby */
+        /* CATEGORIAS NO CENTRO (Igual ao modelo) */
+        .category-nav {
+            display: flex; justify-content: center; align-items: center; gap: 12px; margin-bottom: 40px; flex-wrap: wrap;
+        }
+        .cat-pill {
+            background: rgba(13, 14, 17, 0.6); border: 1px solid var(--border);
+            padding: 10px 24px; border-radius: 99px; font-size: 11px; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1px; color: #8C8C8C; transition: 0.3s;
+        }
+        .cat-pill:hover, .cat-pill.active { background: #fff; color: #000; border-color: #fff; }
+
+        /* CARDS COMPACTOS */
         .card-nexus {
-            background: rgba(88, 88, 105, 0.08);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 14px;
-            transition: 0.3s;
-            backdrop-filter: blur(10px);
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            max-width: 210px; /* Mantém os cards pequenos */
-            margin: 0 auto;
+            background: rgba(88, 88, 105, 0.08); border: 1px solid var(--border); border-radius: 12px;
+            padding: 14px; transition: 0.3s; backdrop-filter: blur(10px);
+            display: flex; flex-direction: column; width: 100%; max-width: 210px; margin: 0 auto;
         }
         .card-nexus:hover { border-color: #585869; transform: translateY(-4px); }
 
@@ -75,17 +48,12 @@
             background: #0D0E11; border-radius: 8px; width: 100%; aspect-ratio: 1/1;
             display: flex; align-items: center; justify-content: center; margin-bottom: 12px;
         }
-        .img-container img { width: 55%; object-fit: contain; opacity: 0.9; }
+        .img-container img { width: 55%; object-fit: contain; }
 
         .btn-buy {
-            background: #fff; color: #000; width: 100%; padding: 10px;
-            border-radius: 8px; font-weight: 900; font-size: 11px;
-            text-transform: uppercase; margin-top: 12px; transition: 0.2s;
+            background: #fff; color: #000; width: 100%; padding: 10px; border-radius: 8px;
+            font-weight: 900; font-size: 11px; text-transform: uppercase; margin-top: 12px;
         }
-        .btn-buy:hover { background: var(--accent); }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -94,79 +62,62 @@
 
     <header class="sticky top-0 z-50 bg-[#0D0E11]/95 border-b border-[#201e1e] px-8 py-4">
         <div class="max-w-[1400px] mx-auto flex justify-between items-center gap-6">
-            
             <div class="flex items-center gap-3 flex-shrink-0">
                 <img src="https://cdn.ereemby.com/attachments/17706209715176161imagem.jpeg" class="w-9 h-9 rounded-lg">
-                <span class="font-black text-sm uppercase italic tracking-tighter">Azure Digital</span>
+                <span class="font-black text-sm uppercase italic">Azure Digital</span>
             </div>
 
             <div class="hidden md:flex flex-1 justify-center">
                 <div class="search-container">
                     <i class="fa-solid fa-magnifying-glass text-[#8C8C8C] text-sm"></i>
-                    <input type="text" id="searchInput" onkeyup="filterProducts()" placeholder="Pesquisar produto...">
+                    <input type="text" placeholder="Pesquisar produto...">
                 </div>
             </div>
 
             <div class="flex items-center gap-4 flex-shrink-0">
-                <div class="relative bg-white text-black px-5 py-2.5 rounded-lg font-black text-[11px] uppercase cursor-pointer flex items-center gap-2">
+                <div class="bg-white text-black px-5 py-2 rounded-lg font-black text-[11px] uppercase cursor-pointer flex items-center gap-2">
                     <i class="fa-solid fa-bag-shopping"></i> Carrinho
-                    <div class="absolute -top-2 -right-2 bg-white text-black border-2 border-[#0D0E11] w-5 h-5 rounded-full flex items-center justify-center text-[9px]">0</div>
                 </div>
-                <button class="bg-[#1a1a1a] px-5 py-2.5 rounded-lg text-white font-bold text-[11px] uppercase border border-[#201e1e]">Entrar</button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-[1400px] mx-auto px-8 py-12">
+    <main class="max-w-[1400px] mx-auto px-8 py-16">
         
-        <h1 class="text-4xl font-black italic mb-12 uppercase tracking-tighter">Produtos</h1>
-        
-        <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+        <div class="text-center mb-10">
+            <h1 class="text-5xl font-black italic uppercase tracking-tighter mb-8">Produtos</h1>
             
-            <div class="card-nexus product-item" data-name="youtube premium">
+            <nav class="category-nav">
+                <button class="cat-pill active">Todos</button>
+                <button class="cat-pill">Streaming</button>
+                <button class="cat-pill">Discord</button>
+                <button class="cat-pill">Games</button>
+                <button class="cat-pill">Ferramentas</button>
+            </nav>
+        </div>
+        
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+            
+            <div class="card-nexus">
                 <div class="img-container">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png">
                 </div>
-                <span class="text-[10px] text-zinc-500 font-bold uppercase text-center truncate">Youtube Premium</span>
+                <span class="text-[9px] text-zinc-500 font-bold uppercase text-center">Youtube Premium</span>
                 <p class="text-xl font-black italic mt-1 text-center">R$ 1,50</p>
                 <button class="btn-buy">Comprar</button>
             </div>
 
-            <div class="card-nexus product-item" data-name="discord nitro">
+            <div class="card-nexus">
                 <div class="img-container">
                     <i class="fa-brands fa-discord text-4xl text-indigo-500/40"></i>
                 </div>
-                <span class="text-[10px] text-zinc-500 font-bold uppercase text-center truncate">Discord Nitro</span>
+                <span class="text-[9px] text-zinc-500 font-bold uppercase text-center">Discord Nitro</span>
                 <p class="text-xl font-black italic mt-1 text-center">R$ 15,90</p>
-                <button class="btn-buy">Comprar</button>
-            </div>
-
-            <div class="card-nexus product-item" data-name="gta v premium">
-                <div class="img-container">
-                    <i class="fa-solid fa-gamepad text-4xl text-blue-500/30"></i>
-                </div>
-                <span class="text-[10px] text-zinc-500 font-bold uppercase text-center truncate">GTA V Premium</span>
-                <p class="text-xl font-black italic mt-1 text-center">R$ 45,00</p>
                 <button class="btn-buy">Comprar</button>
             </div>
 
         </div>
     </main>
 
-    <script>
-        function filterProducts() {
-            const input = document.getElementById('searchInput').value.toLowerCase();
-            const products = document.getElementsByClassName('product-item');
-            
-            for (let i = 0; i < products.length; i++) {
-                const name = products[i].getAttribute('data-name');
-                if (name.includes(input)) {
-                    products[i].style.display = "flex";
-                } else {
-                    products[i].style.display = "none";
-                }
-            }
-        }
-    </script>
 </body>
 </html>
