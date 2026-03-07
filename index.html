@@ -11,7 +11,6 @@
         :root { --bg: #050505; --card-bg: rgba(13, 14, 17, 0.7); --border: rgba(255, 255, 255, 0.05); }
         body { background-color: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; }
 
-        /* Fundo com Máscara MineGine */
         .hero-mask {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: -1;
             object-fit: cover; opacity: 0.35;
@@ -21,7 +20,7 @@
 
         .glass { background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border); }
         
-        /* Modal de Login (Igual à imagem) */
+        /* Modal de Login */
         #loginModal {
             display: none; position: fixed; inset: 0; z-index: 1000;
             background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
@@ -39,6 +38,9 @@
         .btn-entrar { background: #444; color: #fff; width: 100%; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; }
         .btn-entrar:hover { background: #555; }
 
+        /* Botão Sair */
+        #logoutBtn { display: none; }
+
         /* Carrinho Lateral */
         #cartSide {
             position: fixed; top: 0; right: -400px; width: 350px; height: 100%;
@@ -47,7 +49,6 @@
         }
         #cartSide.active { right: 0; }
 
-        /* Estilo dos Cards e Pílulas */
         .card-mine {
             background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px;
             padding: 18px; transition: 0.4s; backdrop-filter: blur(12px);
@@ -63,7 +64,7 @@
         .pill.active { background: #fff; color: #000; border-color: #fff; }
     </style>
 </head>
-<body>
+<body onload="checkLogin()">
 
     <img src="https://cdn.ereemby.com/attachments/17715554716225022imagem.png" class="hero-mask">
 
@@ -86,6 +87,7 @@
                     Carrinho (<span id="cartCount">0</span>)
                 </div>
                 <button onclick="openLogin()" id="loginBtn" class="bg-[#111] px-5 py-2.5 rounded-xl text-zinc-400 font-bold text-[11px] border border-white/5">ENTRAR</button>
+                <button onclick="logout()" id="logoutBtn" class="bg-red-900/20 px-4 py-2.5 rounded-xl text-red-500 font-bold text-[11px] border border-red-500/20 hover:bg-red-900/40">SAIR</button>
             </div>
         </div>
     </header>
@@ -123,7 +125,6 @@
         </nav>
 
         <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-            
             <div class="card-mine product-card" data-category="streaming" data-name="youtube premium">
                 <div class="bg-black border border-white/5 rounded-xl aspect-square flex items-center justify-center mb-4">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" class="w-1/2">
@@ -132,20 +133,43 @@
                 <p class="text-xl font-black italic text-center">R$ 1,50</p>
                 <button onclick="addToCart('Youtube', 1.50)" class="bg-white text-black w-full py-2 rounded-lg font-black text-[10px] mt-4 uppercase">Adicionar</button>
             </div>
-
-            <div class="card-mine product-card" data-category="discord" data-name="discord nitro">
-                <div class="bg-black border border-white/5 rounded-xl aspect-square flex items-center justify-center mb-4 text-blue-500/30">
-                    <i class="fa-brands fa-discord text-5xl"></i>
-                </div>
-                <span class="text-[9px] text-zinc-500 font-black uppercase text-center mb-1">Discord Nitro</span>
-                <p class="text-xl font-black italic text-center">R$ 15,90</p>
-                <button onclick="addToCart('Nitro', 15.90)" class="bg-white text-black w-full py-2 rounded-lg font-black text-[10px] mt-4 uppercase">Adicionar</button>
-            </div>
-
         </div>
     </main>
 
     <script>
+        // Lógica de Persistência de Login
+        function checkLogin() {
+            const savedUser = localStorage.getItem('userEmail');
+            if (savedUser) {
+                updateLoginUI(savedUser);
+            }
+        }
+
+        function confirmLogin() {
+            const email = document.getElementById('emailInput').value;
+            if (email) {
+                localStorage.setItem('userEmail', email); // Salva no navegador
+                updateLoginUI(email);
+                closeLogin();
+            }
+        }
+
+        function updateLoginUI(email) {
+            const userPart = email.split('@')[0].toUpperCase();
+            document.getElementById('loginBtn').innerText = userPart;
+            document.getElementById('loginBtn').onclick = null; // Desativa abrir modal ao clicar no nome
+            document.getElementById('logoutBtn').style.display = 'block'; // Mostra botão sair
+        }
+
+        function logout() {
+            localStorage.removeItem('userEmail'); // Remove do navegador
+            location.reload(); // Recarrega a página para resetar o estado
+        }
+
+        function openLogin() { document.getElementById('loginModal').style.display = 'flex'; }
+        function closeLogin() { document.getElementById('loginModal').style.display = 'none'; }
+
+        // Restante das funções (Filtro e Carrinho)
         let currentCategory = 'todos';
         let cart = [];
 
@@ -164,17 +188,6 @@
             el.classList.add('active');
             currentCategory = cat;
             filterAll();
-        }
-
-        function openLogin() { document.getElementById('loginModal').style.display = 'flex'; }
-        function closeLogin() { document.getElementById('loginModal').style.display = 'none'; }
-        
-        function confirmLogin() {
-            const email = document.getElementById('emailInput').value;
-            if(email) {
-                document.getElementById('loginBtn').innerText = email.split('@')[0].toUpperCase();
-                closeLogin();
-            }
         }
 
         function toggleCart() { document.getElementById('cartSide').classList.toggle('active'); }
