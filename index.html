@@ -9,131 +9,111 @@
     <title>Azure Digital | EREMBY</title>
     <style>
         :root { --bg: #050505; --card: #080808; --border: #111; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         .font-eremby { font-family: 'Inter', sans-serif; font-weight: 900; font-style: italic; text-transform: uppercase; }
 
-        /* Categorias Idênticas ao Eremby */
-        .cat-list { display: flex; flex-direction: column; gap: 8px; }
+        /* Categorias */
         .cat-item { 
-            background: #080808; 
-            border: 1px solid #111; 
-            padding: 16px 24px; 
-            border-radius: 1rem; 
-            font-weight: 900; 
-            font-size: 11px; 
-            color: #444; 
-            text-transform: uppercase; 
-            text-align: left;
-            transition: 0.2s;
+            background: #080808; border: 1px solid #111; padding: 14px 20px; border-radius: 1rem; 
+            font-weight: 900; font-size: 10px; color: #444; text-transform: uppercase; text-align: left;
+            transition: 0.2s; width: 100%; margin-bottom: 6px;
         }
-        .cat-item.active { 
-            background: #fff; 
-            color: #000; 
-            border-color: #fff; 
-        }
+        .cat-item.active { background: #fff; color: #000; border-color: #fff; }
 
-        /* Cards de Produto (Fiel ao Azure) */
+        /* Card Compacto - IGUAL AO PRINT */
         .product-card { 
-            background: #080808; 
-            border: 1px solid #111; 
-            border-radius: 2.5rem; 
-            padding: 40px; 
-            text-align: center;
+            background: #080808; border: 1px solid #111; border-radius: 2rem; 
+            padding: 25px; text-align: center; transition: 0.3s;
         }
         .product-img-box { 
-            background: #050505; 
-            border: 1px solid #111; 
-            border-radius: 2rem; 
-            height: 250px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            margin-bottom: 30px; 
-            overflow: hidden;
+            background: #050505; border: 1px solid #111; border-radius: 1.5rem; 
+            height: 160px; /* Reduzi a altura para não ocupar muito espaço */
+            display: flex; align-items: center; justify-content: center; 
+            margin-bottom: 20px; padding: 30px;
         }
-        .product-img-box img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            opacity: 0.9;
-        }
+        .product-img-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
         .btn-buy {
-            background: #fff;
-            color: #000;
-            width: 100%;
-            padding: 18px;
-            border-radius: 1.2rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            font-size: 13px;
-            margin-top: 25px;
+            background: #fff; color: #000; width: 100%; padding: 14px;
+            border-radius: 1rem; font-weight: 900; text-transform: uppercase;
+            font-size: 12px; margin-top: 15px;
+        }
+
+        /* Barra de Pesquisa */
+        .search-input { 
+            background: #080808; border: 1px solid #111; border-radius: 0.8rem; 
+            padding: 10px 18px; width: 400px; display: flex; align-items: center; gap: 12px; 
         }
 
         /* Widgets Flutuantes */
-        .social-bar { position: fixed; right: 25px; top: 50%; transform: translateY(-50%); background: #080808; border: 1px solid #111; border-radius: 1.5rem; padding: 18px; display: flex; flex-direction: column; gap: 25px; z-index: 100; }
-        .support-box { position: fixed; bottom: 30px; left: 30px; background: #080808; border: 1px solid #111; border-radius: 1rem; padding: 12px 20px; display: flex; align-items: center; gap: 12px; z-index: 100; }
+        .social-bar { position: fixed; right: 20px; top: 50%; transform: translateY(-50%); background: #080808; border: 1px solid #111; border-radius: 1.2rem; padding: 12px; display: flex; flex-direction: column; gap: 20px; z-index: 100; }
+        .support-box { position: fixed; bottom: 20px; left: 20px; background: #080808; border: 1px solid #111; border-radius: 0.8rem; padding: 10px 15px; display: flex; align-items: center; gap: 10px; z-index: 100; border-bottom: 2px solid white; }
     </style>
 </head>
 <body>
 
     <div class="social-bar">
-        <i class="fa-brands fa-discord text-xl opacity-50 hover:opacity-100 cursor-pointer"></i>
-        <i class="fa-brands fa-instagram text-xl opacity-50 hover:opacity-100 cursor-pointer"></i>
-        <i class="fa-brands fa-tiktok text-xl opacity-50 hover:opacity-100 cursor-pointer"></i>
+        <i class="fa-brands fa-discord opacity-40 hover:opacity-100 cursor-pointer"></i>
+        <i class="fa-brands fa-instagram opacity-40 hover:opacity-100 cursor-pointer"></i>
+        <i class="fa-brands fa-tiktok opacity-40 hover:opacity-100 cursor-pointer"></i>
     </div>
 
     <div class="support-box">
-        <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-black"><i class="fa-solid fa-chart-line"></i></div>
-        <div class="text-[10px] font-bold"><span class="text-zinc-600">Suporte online:</span> <span>Resposta em menos de 5 min.</span></div>
+        <div class="w-7 h-7 bg-white rounded flex items-center justify-center text-black text-sm"><i class="fa-solid fa-chart-line"></i></div>
+        <div class="text-[9px] font-bold"><span class="text-zinc-600 uppercase">Suporte online:</span> <br><span>Resposta em menos de 5 min.</span></div>
     </div>
 
-    <nav class="bg-[#050505] border-b border-[#111] px-12 py-6 flex justify-between items-center sticky top-0 z-[100]">
-        <div class="flex items-center gap-4">
-            <div class="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-600/30"><i class="fa-solid fa-bolt text-2xl"></i></div>
-            <span class="text-3xl font-eremby italic">Azure <span class="text-blue-600">Digital</span></span>
+    <nav class="bg-[#050505] border-b border-[#111] px-10 py-5 flex justify-between items-center sticky top-0 z-[100]">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/20"><i class="fa-solid fa-bolt text-xl"></i></div>
+            <span class="text-2xl font-eremby italic">Azure <span class="text-blue-600">Digital</span></span>
         </div>
-        <div class="bg-[#080808] border border-[#111] px-6 py-3 rounded-xl w-[450px] flex items-center gap-4">
-            <i class="fa-solid fa-magnifying-glass text-zinc-700"></i>
-            <input type="text" placeholder="Pesquisar produto" class="bg-transparent border-none outline-none text-sm w-full">
+        <div class="search-input">
+            <i class="fa-solid fa-magnifying-glass text-zinc-700 text-sm"></i>
+            <input type="text" placeholder="Pesquisar produto" class="bg-transparent border-none outline-none text-xs w-full">
         </div>
-        <div class="flex items-center gap-6">
-            <div class="relative bg-white text-black px-6 py-3 rounded-xl font-black text-sm flex items-center gap-3 cursor-pointer">
+        <div class="flex items-center gap-5">
+            <div class="relative bg-white text-black px-5 py-2.5 rounded-xl font-black text-xs flex items-center gap-2 cursor-pointer">
                 <i class="fa-solid fa-bag-shopping"></i> Carrinho
-                <div class="absolute -top-2 -right-2 bg-white text-black border-4 border-[#050505] w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-black">0</div>
+                <div class="absolute -top-2 -right-2 bg-white text-black border-4 border-[#050505] w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-black">0</div>
             </div>
-            <button class="bg-[#1a1a1a] px-8 py-3 rounded-xl font-black text-xs uppercase">Entrar</button>
+            <button class="bg-[#1a1a1a] px-6 py-2.5 rounded-xl font-black text-xs uppercase">Entrar</button>
         </div>
     </nav>
 
-    <main class="max-w-[1600px] mx-auto px-12 py-16">
-        <div class="bg-[#0c0e14] border border-[#1a1d26] rounded-[3rem] p-20 mb-20">
-            <h2 class="text-7xl font-eremby italic mb-4">NOVIDADES <span class="text-blue-500">AZURE</span></h2>
-            <p class="text-zinc-600 font-bold uppercase text-sm tracking-[0.5em]">Os melhores preços do mercado digital</p>
-        </div>
-
-        <div class="flex gap-20">
-            <aside class="w-80">
-                <p class="text-[10px] font-black text-zinc-700 uppercase tracking-widest mb-8">Categorias</p>
-                <div class="cat-list">
-                    <button class="cat-item active">Todos os produtos</button>
-                    <button class="cat-item">Streaming</button>
-                    <button class="cat-item">Ferramentas IA</button>
-                    <button class="cat-item">Games & Gift Cards</button>
-                </div>
+    <main class="max-w-[1400px] mx-auto px-10 py-12">
+        <div class="flex gap-12">
+            <aside class="w-64 flex-shrink-0">
+                <p class="text-[9px] font-black text-zinc-700 uppercase tracking-widest mb-6">Categorias</p>
+                <button class="cat-item active">Todos os produtos</button>
+                <button class="cat-item">Streaming</button>
+                <button class="cat-item">Ferramentas IA</button>
+                <button class="cat-item">Games & Gift Cards</button>
             </aside>
 
             <div class="flex-1">
-                <h1 class="text-7xl font-eremby mb-20 italic">TODOS</h1>
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12">
+                <h1 class="text-6xl font-eremby mb-12 italic">TODOS</h1>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     <div class="product-card">
                         <div class="product-img-box">
                             <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" alt="Youtube">
                         </div>
-                        <div class="flex items-center justify-center gap-3 mb-3">
-                            <div class="w-2.5 h-2.5 rounded-full bg-red-600"></div>
-                            <span class="text-xs font-black text-zinc-500 tracking-widest uppercase italic">Youtube Premium</span>
+                        <div class="flex items-center justify-center gap-2 mb-1">
+                            <div class="w-2 h-2 rounded-full bg-red-600"></div>
+                            <span class="text-[10px] font-black text-zinc-600 tracking-wider uppercase italic">Youtube Premium</span>
                         </div>
-                        <p class="font-eremby text-5xl italic">R$ 1,50</p>
+                        <p class="font-eremby text-2xl italic">R$ 1,50</p>
+                        <button class="btn-buy">Comprar</button>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-img-box">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" alt="ChatGPT">
+                        </div>
+                        <div class="flex items-center justify-center gap-2 mb-1">
+                            <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                            <span class="text-[10px] font-black text-zinc-600 tracking-wider uppercase italic">ChatGPT Plus</span>
+                        </div>
+                        <p class="font-eremby text-2xl italic">R$ 2,30</p>
                         <button class="btn-buy">Comprar</button>
                     </div>
                 </div>
