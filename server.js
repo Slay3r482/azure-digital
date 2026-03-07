@@ -1,54 +1,27 @@
 const express = require('express');
-const mercadopago = require('mercadopago');
 const app = express();
+const path = require('path');
 
 app.use(express.json());
+app.use(express.static('public'));
 
-// Configure seu Token do Mercado Pago
-mercadopago.configure({
-    access_token: process.env.MP_ACCESS_TOKEN 
+// CONFIGURAÇÃO DA SUA CHAVE PIX
+const MINHA_CHAVE_PIX = "SUA_CHAVE_AQUI"; 
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Rota para criar o pagamento PIX
-app.post('/create-payment', async (req, res) => {
-    const payment_data = {
-        transaction_amount: 1.50,
-        description: 'YouTube Premium - Azure Digital',
-        payment_method_id: 'pix',
-        payer: {
-            email: req.body.email,
-            first_name: 'Cliente',
-            last_name: 'Azure'
-        }
-    };
-
-    try {
-        const payment = await mercadopago.payment.create(payment_data);
-        res.json({
-            qr_code: payment.body.point_of_interaction.transaction_data.qr_code,
-            qr_code_base64: payment.body.point_of_interaction.transaction_data.qr_code_base64,
-            id: payment.body.id
-        });
-    } catch (error) {
-        res.status(500).send(error);
-    }
+// Rota para simular o checkout
+app.post('/checkout', (req, res) => {
+    const { email, produto } = req.body;
+    // Aqui você retornaria os dados para o cliente pagar manualmente
+    res.json({
+        msg: "Pagamento via PIX",
+        chave: MINHA_CHAVE_PIX,
+        instrucoes: "Após pagar, o sistema enviará o produto para: " + email
+    });
 });
 
-// WEBHOOK: Entrega Automática quando o PIX é pago
-app.post('/webhook', async (req, res) => {
-    const { action, data } = req.body;
-
-    if (action === "payment.updated") {
-        const payment = await mercadopago.payment.get(data.id);
-        
-        if (payment.body.status === "approved") {
-            console.log("PAGAMENTO APROVADO!");
-            // LÓGICA DE ENTREGA:
-            // 1. Buscar conta no banco de dados (Supabase)
-            // 2. Enviar por e-mail ou via bot Discord
-        }
-    }
-    res.sendStatus(200);
-});
-
-app.listen(process.env.PORT || 3000, () => console.log("Servidor Online!"));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
