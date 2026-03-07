@@ -8,19 +8,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <title>Azure Digital | Premium Store</title>
     <style>
-        body { background-color: #050505; color: #fff; font-family: 'Inter', sans-serif; }
-        .nexus-box { background: #0d0d0d; border: 1px solid #161616; border-radius: 1.2rem; transition: 0.3s; overflow: hidden; }
+        body { background-color: #050505; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .nexus-box { background: #0d0d0d; border: 1px solid #161616; border-radius: 1.2rem; transition: 0.3s; }
         .product-card:hover { transform: translateY(-5px); border-color: #2563eb; box-shadow: 0 10px 30px -10px rgba(37, 99, 235, 0.2); }
         .btn-white { background: #fff; color: #000; padding: 12px; border-radius: 0.8rem; font-weight: 900; text-transform: uppercase; font-size: 11px; width: 100%; transition: 0.2s; cursor: pointer; text-align: center; border: none; }
         .btn-white:hover { background: #e5e5e5; }
-        .input-dark { background: #121212; border: 1px solid #1a1a1a; border-radius: 0.8rem; padding: 12px; width: 100%; color: #fff; outline: none; }
-        .badge-stock { background: rgba(34, 197, 94, 0.1); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.2); font-size: 9px; padding: 2px 8px; rounded: 4px; }
+        .category-btn { background: #0d0d0d; border: 1px solid #161616; padding: 10px 20px; border-radius: 1rem; font-size: 10px; font-weight: 900; text-transform: uppercase; transition: 0.2s; }
+        .category-btn.active { background: #fff; color: #000; border-color: #fff; }
+        .input-dark { background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 0.8rem; padding: 12px; width: 100%; color: #fff; outline: none; font-size: 12px; }
         .hidden { display: none !important; }
-        
-        /* Estilo Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #050505; }
-        ::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -28,155 +24,195 @@
     <nav class="sticky top-0 z-50 py-4 px-6 bg-[#050505]/90 backdrop-blur-xl border-b border-zinc-900">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3 cursor-pointer" onclick="showView('home')">
-                <div class="w-9 h-9 bg-blue-600 rounded-xl shadow-[0_0_20px_rgba(37,99,235,0.5)] flex items-center justify-center">
+                <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(37,99,235,0.4)]">
                     <i class="fa-solid fa-bolt text-white"></i>
                 </div>
                 <span class="font-black italic uppercase text-2xl tracking-tighter">Azure <span class="text-blue-500">Digital</span></span>
             </div>
 
-            <div class="hidden md:flex flex-1 max-w-lg mx-12">
-                <div class="relative w-full">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-zinc-600"></i>
-                    <input type="text" placeholder="O que você está procurando hoje?" class="w-full bg-[#0d0d0d] border border-zinc-800 rounded-2xl py-3 pl-12 pr-4 text-xs focus:border-blue-500 transition outline-none">
-                </div>
-            </div>
-            
             <div class="flex items-center gap-4">
-                <button onclick="showView('cart')" class="bg-white text-black px-6 py-2.5 rounded-2xl font-black text-xs flex items-center gap-2 hover:scale-105 transition">
+                <button onclick="showView('cart')" class="bg-white text-black px-6 py-2.5 rounded-2xl font-black text-xs flex items-center gap-2">
                     <i class="fa-solid fa-cart-shopping"></i> Carrinho <span id="cart-badge" class="bg-black text-white px-2 py-0.5 rounded-lg text-[10px]">0</span>
                 </button>
                 <div id="auth-section">
-                    <button onclick="openModal()" class="bg-zinc-900 border border-zinc-800 px-6 py-2.5 rounded-2xl font-black uppercase italic text-xs hover:bg-zinc-800 transition">Entrar</button>
+                    <button onclick="openModal()" class="bg-zinc-900 px-6 py-2.5 rounded-2xl font-black uppercase italic text-xs">Entrar</button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <header id="home-header" class="max-w-7xl mx-auto px-6 pt-16 pb-8">
-        <div class="bg-gradient-to-r from-blue-900/20 to-transparent p-12 rounded-[3rem] border border-blue-500/10 relative overflow-hidden">
-            <div class="relative z-10">
-                <h1 class="text-7xl font-black italic uppercase tracking-tighter mb-4 leading-none">A MELHOR LOJA<br><span class="text-blue-600">DIGITAL DO BRASIL</span></h1>
-                <p class="text-zinc-400 text-lg max-w-xl mb-8">Produtos premium com entrega 100% automática via Discord e E-mail. Preços que cabem no seu bolso.</p>
-                <div class="flex gap-4">
-                    <button class="bg-blue-600 px-8 py-4 rounded-2xl font-black italic uppercase text-sm shadow-lg shadow-blue-600/20 hover:bg-blue-700 transition">Explorar Catálogo</button>
-                    <button class="bg-zinc-900 border border-zinc-800 px-8 py-4 rounded-2xl font-black italic uppercase text-sm hover:bg-zinc-800 transition">Suporte Discord</button>
-                </div>
-            </div>
-            <i class="fa-brands fa-discord absolute -right-10 -bottom-10 text-[20rem] text-blue-600/5 rotate-12"></i>
+    <header id="home-header" class="max-w-7xl mx-auto px-6 pt-12 pb-6 text-center md:text-left">
+        <h1 class="text-6xl font-black italic uppercase tracking-tighter mb-4">AZURE <span class="text-blue-600">DIGITAL!</span></h1>
+        <p class="text-zinc-500 text-sm max-w-md mb-8">Sua loja premium de produtos digitais. Entrega 100% automática via Discord e E-mail.</p>
+        
+        <div class="flex flex-wrap gap-3 mb-10" id="category-filters">
+            <button class="category-btn active" onclick="filterCategory('todos')">Todos</button>
+            <button class="category-btn" onclick="filterCategory('IA Tools')">IA Tools</button>
+            <button class="category-btn" onclick="filterCategory('Streaming')">Streaming</button>
+            <button class="category-btn" onclick="filterCategory('Games')">Games</button>
+            <button class="category-btn" onclick="filterCategory('Design')">Design</button>
         </div>
     </header>
 
-    <main id="home-view" class="max-w-7xl mx-auto px-6 py-12">
-        <div class="flex items-center justify-between mb-10">
-            <div class="flex items-center gap-3">
-                <span class="w-2 h-8 bg-blue-600 rounded-full"></span>
-                <h2 class="text-2xl font-black italic uppercase tracking-widest">Destaques da Semana</h2>
-            </div>
-        </div>
-        
-        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            </div>
+    <main id="home-view" class="max-w-7xl mx-auto px-6 pb-20">
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6"></div>
     </main>
 
-    <div id="login-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6 bg-black/95 backdrop-blur-md">
-        <div class="nexus-box w-full max-w-md p-10 !rounded-[3rem] border-zinc-800">
-            <div class="text-center mb-10">
-                <h2 class="text-4xl font-black italic uppercase italic">ENTRAR</h2>
-                <p class="text-zinc-500 text-xs">Faça login para gerenciar suas compras</p>
+    <section id="cart-view" class="hidden max-w-7xl mx-auto px-6 py-12">
+        <div class="mb-10">
+            <h1 class="text-2xl font-bold">Carrinhos de compras</h1>
+            <p class="text-zinc-500 text-sm">Nesta página, você encontra os produtos adicionados ao seu carrinho.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div class="lg:col-span-4 space-y-6">
+                <div class="nexus-box p-6">
+                    <h3 class="text-[10px] font-black uppercase text-zinc-500 mb-6 tracking-widest">Informações de pagamento</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 p-4 bg-blue-600/5 border border-blue-600/20 rounded-xl">
+                            <input type="radio" checked class="accent-blue-600">
+                            <i class="fa-brands fa-pix text-emerald-400"></i>
+                            <span class="text-sm font-bold">Pix</span>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold text-zinc-500 uppercase">Informe o seu e-mail</label>
+                            <input type="email" placeholder="seuemail@gmail.com" class="input-dark">
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <div class="lg:col-span-5 space-y-4">
+                <div class="nexus-box p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Produtos no carrinho</h3>
+                        <span id="item-count-badge" class="bg-zinc-900 text-[10px] px-2 py-1 rounded-md">0 itens</span>
+                    </div>
+                    <div id="checkout-list" class="space-y-4"></div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-3 space-y-6">
+                <div class="nexus-box p-6">
+                    <h3 class="text-[10px] font-black uppercase text-zinc-500 mb-6 tracking-widest">Resumo da compra</h3>
+                    <div class="space-y-3 mb-8">
+                        <div class="flex justify-between text-xs text-zinc-400"><span>Subtotal</span><span id="subtotal-val">R$ 0,00</span></div>
+                        <div class="flex justify-between text-xs text-zinc-400"><span>Método</span><span class="text-emerald-400">Pix</span></div>
+                        <div class="pt-4 border-t border-zinc-900 flex justify-between items-baseline">
+                            <span class="text-sm font-black italic">TOTAL</span>
+                            <span id="final-total" class="text-2xl font-black italic">R$ 0,00</span>
+                        </div>
+                    </div>
+                    <button class="btn-white !py-4" onclick="alert('Gerando QR Code...')">Gerar Pagamento</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="login-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6 bg-black/95">
+        <div class="nexus-box w-full max-w-md p-10 !rounded-[2.5rem] text-center border-zinc-800">
+            <h2 class="text-4xl font-black italic uppercase mb-2">ENTRAR</h2>
+            <p class="text-zinc-500 text-xs mb-10">Faça login com seu endereço de e-mail</p>
             <div class="space-y-4 mb-8">
-                <button class="w-full bg-zinc-900 border border-zinc-800 py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3 hover:bg-zinc-800 transition">
+                <button class="w-full bg-zinc-900 border border-zinc-800 py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3">
                     <i class="fa-brands fa-google text-red-500"></i> Conectar com Google
                 </button>
-                <button class="w-full bg-[#5865F2]/10 border border-[#5865F2]/20 py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3 hover:bg-[#5865F2]/20 transition">
-                    <i class="fa-brands fa-discord text-[#5865F2]"></i> Conectar com Discord
+                <button class="w-full bg-zinc-900 border border-zinc-800 py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3">
+                    <i class="fa-brands fa-discord text-blue-500"></i> Conectar com Discord
                 </button>
             </div>
-            <div class="relative flex items-center justify-center mb-8">
-                <div class="border-t border-zinc-800 w-full"></div>
-                <span class="bg-[#0d0d0d] px-4 text-[10px] text-zinc-600 uppercase font-black absolute">ou continuar com e-mail</span>
-            </div>
-            <input type="email" id="login-email" placeholder="seuemail@exemplo.com" class="input-dark mb-4 text-center font-bold">
-            <button onclick="doLogin()" class="btn-white !py-4 !rounded-2xl !bg-blue-600 !text-white">Acessar Conta</button>
-            <button onclick="closeModal()" class="w-full mt-6 text-xs text-zinc-600 hover:text-white transition underline">Voltar para a loja</button>
+            <input type="email" id="login-email" placeholder="exemplo@gmail.com" class="input-dark mb-4 text-center">
+            <button onclick="doLogin()" class="btn-white !bg-zinc-800 !text-white">Entrar</button>
+            <button onclick="closeModal()" class="mt-4 text-[10px] text-zinc-600 uppercase font-black block w-full">Cancelar</button>
         </div>
     </div>
 
-    <section id="cart-view" class="hidden max-w-4xl mx-auto px-6 py-20 text-center">
-        <h1 class="text-4xl font-black italic mb-8">CARRINHO</h1>
-        <div id="cart-list" class="nexus-box p-8 mb-8 space-y-4"></div>
-        <div class="flex justify-between items-center text-2xl font-black italic mb-8">
-            <span>TOTAL A PAGAR:</span>
-            <span id="total-val" class="text-blue-500">R$ 0,00</span>
-        </div>
-        <button onclick="generatePayment()" class="btn-white !py-5 !text-lg">Finalizar e Pagar via Pix</button>
-    </section>
-
     <script>
-        // LISTA DE PRODUTOS PROFISSIONAL COM IMAGENS REAIS
         const products = [
-            { id: 1, name: "Youtube Premium - 30 Dias", price: 1.50, stock: 45, img: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png", category: "Assinaturas" },
+            { id: 1, name: "Youtube Premium - 30 Dias", price: 1.50, stock: 45, img: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png", category: "Streaming" },
             { id: 2, name: "Google Veo 3 - Acesso", price: 4.99, stock: 12, img: "https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_Gemini_logo.svg", category: "IA Tools" },
             { id: 3, name: "ChatGPT Plus Shared", price: 2.30, stock: 8, img: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg", category: "IA Tools" },
-            { id: 4, name: "Netflix Premium - 4K", price: 12.00, stock: 0, img: "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg", category: "Streaming" },
-            { id: 5, name: "Xbox Game Pass Ult.", price: 9.90, stock: 22, img: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Xbox_one_logo.svg", category: "Games" },
-            { id: 6, name: "Canva Pro Vitalício", price: 5.00, stock: 99, img: "https://upload.wikimedia.org/wikipedia/commons/0/0e/Canva_logo_2021.svg", category: "Design" },
-            { id: 7, name: "Spotify Family - 1 Ano", price: 15.00, stock: 15, img: "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg", category: "Música" },
-            { id: 8, name: "Disney+ & Star+", price: 8.50, stock: 30, img: "https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg", category: "Streaming" }
+            { id: 4, name: "Xbox Game Pass Ult.", price: 9.90, stock: 22, img: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Xbox_one_logo.svg", category: "Games" },
+            { id: 5, name: "Canva Pro Vitalício", price: 5.00, stock: 99, img: "https://upload.wikimedia.org/wikipedia/commons/0/0e/Canva_logo_2021.svg", category: "Design" }
         ];
 
         let cart = [];
 
-        function renderProducts() {
+        function renderProducts(filter = 'todos') {
             const grid = document.getElementById('product-grid');
-            grid.innerHTML = products.map(p => {
-                const isOut = p.stock === 0;
-                return `
-                <div class="nexus-box product-card flex flex-col p-5 ${isOut ? 'opacity-60 grayscale' : ''}">
-                    <div class="relative w-full h-32 bg-zinc-900 rounded-2xl mb-5 flex items-center justify-center p-6">
-                        <img src="${p.img}" alt="${p.name}" class="max-h-full object-contain">
-                        ${isOut ? '<div class="absolute inset-0 bg-black/60 flex items-center justify-center font-black italic text-red-500 rotate-12 border-2 border-red-500 m-4 rounded-xl">ESGOTADO</div>' : ''}
+            const filtered = filter === 'todos' ? products : products.filter(p => p.category === filter);
+            
+            grid.innerHTML = filtered.map(p => `
+                <div class="nexus-box product-card p-5 flex flex-col">
+                    <div class="w-full h-32 bg-zinc-900 rounded-2xl mb-4 flex items-center justify-center p-6">
+                        <img src="${p.img}" class="max-h-full object-contain">
                     </div>
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-[9px] font-black uppercase tracking-widest text-blue-500">${p.category}</span>
-                        <span class="badge-stock italic">${p.stock} em estoque</span>
+                    <div class="flex justify-between text-[8px] font-black uppercase text-blue-500 mb-2">
+                        <span>${p.category}</span>
+                        <span class="text-zinc-500">${p.stock} em estoque</span>
                     </div>
                     <h3 class="text-xs font-bold mb-4 line-clamp-1">${p.name}</h3>
                     <div class="mt-auto">
-                        <div class="flex items-baseline gap-1 mb-4">
-                            <span class="text-[10px] font-bold text-zinc-500">R$</span>
-                            <span class="text-2xl font-black italic">${p.price.toFixed(2).replace('.', ',')}</span>
-                        </div>
-                        <button onclick="${isOut ? '' : `addToCart(${p.id})`}" class="${isOut ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed' : 'btn-white'} w-full !py-3 font-black">
-                            ${isOut ? 'Sem Estoque' : 'Comprar Agora'}
-                        </button>
+                        <div class="text-xl font-black italic mb-4">R$ ${p.price.toFixed(2).replace('.', ',')}</div>
+                        <button onclick="addToCart(${p.id})" class="btn-white">Comprar</button>
                     </div>
                 </div>
-            `}).join('');
+            `).join('');
+        }
+
+        function filterCategory(cat) {
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.innerText.toLowerCase() === cat.toLowerCase() || (cat === 'todos' && btn.innerText === 'Todos'));
+            });
+            renderProducts(cat);
         }
 
         function addToCart(id) {
-            const p = products.find(x => x.id === id);
-            cart.push(p);
-            updateCart();
+            const item = products.find(p => p.id === id);
+            cart.push(item);
+            updateCartUI();
             showView('cart');
         }
 
-        function updateCart() {
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
             document.getElementById('cart-badge').innerText = cart.length;
-            const list = document.getElementById('cart-list');
+            document.getElementById('item-count-badge').innerText = `${cart.length} itens`;
+            
+            const list = document.getElementById('checkout-list');
             let total = 0;
-            list.innerHTML = cart.map(item => {
+
+            list.innerHTML = cart.map((item, index) => {
                 total += item.price;
-                return `<div class="flex justify-between font-bold text-sm border-b border-zinc-900 pb-2"><span>${item.name}</span><span>R$ ${item.price.toFixed(2)}</span></div>`;
+                return `
+                <div class="flex justify-between items-center p-4 bg-zinc-900/30 border border-zinc-900 rounded-xl">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-zinc-900 rounded-lg flex items-center justify-center p-2">
+                            <img src="${item.img}" class="max-h-full">
+                        </div>
+                        <div>
+                            <div class="text-[10px] font-black italic">${item.name}</div>
+                            <div class="text-[8px] text-zinc-500 uppercase">Entrega Automática</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="text-xs font-black italic">R$ ${item.price.toFixed(2).replace('.', ',')}</span>
+                        <button onclick="removeFromCart(${index})" class="text-zinc-600 hover:text-red-500"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                    </div>
+                </div>`;
             }).join('');
-            document.getElementById('total-val').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+
+            const formattedTotal = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            document.getElementById('subtotal-val').innerText = formattedTotal;
+            document.getElementById('final-total').innerText = formattedTotal;
         }
 
         function showView(v) {
-            document.getElementById('home-view').classList.add('hidden');
-            document.getElementById('home-header').classList.add('hidden');
-            document.getElementById('cart-view').classList.add('hidden');
+            ['home-view', 'home-header', 'cart-view'].forEach(id => document.getElementById(id).classList.add('hidden'));
             if(v === 'home') {
                 document.getElementById('home-view').classList.remove('hidden');
                 document.getElementById('home-header').classList.remove('hidden');
@@ -202,13 +238,10 @@
             const user = localStorage.getItem('azure_user');
             if(user) {
                 document.getElementById('auth-section').innerHTML = `
-                    <div class="flex items-center gap-3 bg-zinc-900/50 p-1.5 pl-4 rounded-2xl border border-zinc-800">
-                        <span class="text-[10px] font-black italic text-blue-500">${user}</span>
-                        <button onclick="logout()" class="w-8 h-8 bg-zinc-800 rounded-lg flex items-center justify-center hover:bg-red-500/20 hover:text-red-500 transition">
-                            <i class="fa-solid fa-power-off text-xs"></i>
-                        </button>
-                    </div>
-                `;
+                    <div class="flex items-center gap-2">
+                        <span class="bg-zinc-900 border border-zinc-800 px-4 py-2.5 rounded-xl font-black text-[10px] text-blue-500 italic">${user}</span>
+                        <button onclick="logout()" class="text-zinc-600 hover:text-red-500"><i class="fa-solid fa-right-from-bracket"></i></button>
+                    </div>`;
             }
         };
     </script>
