@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Azure Digital | Store</title>
+    <style>
+        body { background-color: #050505; color: #fff; font-family: 'Inter', sans-serif; }
+        .glass-nav { background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid #1a1a1a; }
+        .nexus-card { background: #0d0d0d; border: 1px solid #1a1a1a; transition: 0.3s; }
+        .nexus-card:hover { border-color: #3b82f6; transform: translateY(-5px); }
+        .btn-gradient { background: linear-gradient(90deg, #1e40af, #3b82f6); }
+    </style>
+</head>
+<body>
+    <nav class="glass-nav sticky top-0 z-50 p-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center gap-4">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg"></div>
+                <span class="font-bold text-xl tracking-tighter">AZURE DIGITAL</span>
+            </div>
+            
+            <div class="hidden md:flex flex-1 max-w-md relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-zinc-500"></i>
+                <input type="text" placeholder="Pesquisar produto..." class="w-full bg-[#121212] border border-zinc-800 rounded-xl py-2 pl-10 pr-4 focus:outline-none focus:border-blue-500">
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button class="bg-white text-black px-4 py-2 rounded-lg font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-bag-shopping"></i> Carrinho
+                </button>
+                <button class="bg-zinc-800 px-4 py-2 rounded-lg font-medium">Entrar</button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="max-w-7xl mx-auto py-16 px-6 flex flex-col md:flex-row items-center justify-between gap-10">
+        <div class="md:w-1/2">
+            <h1 class="text-6xl font-black mb-6">Bem Vindo(a)<br><span class="text-blue-500">Azure Digital!</span></h1>
+            <p class="text-zinc-400 text-lg mb-8">Produtos 100% digitais com entrega imediata e o melhor preço do mercado.</p>
+            <div class="flex gap-4">
+                <button class="bg-[#121212] border border-zinc-800 px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-zinc-800">
+                    <i class="fa-brands fa-discord"></i> Suporte Discord
+                </button>
+                <button class="btn-gradient px-6 py-3 rounded-xl font-bold">Ver Catálogo</button>
+            </div>
+        </div>
+        <div class="md:w-1/2 grid grid-cols-2 gap-4 opacity-50">
+            <div class="h-40 bg-zinc-900 rounded-3xl border border-zinc-800"></div>
+            <div class="h-40 bg-zinc-900 rounded-3xl border border-zinc-800 mt-8"></div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 pb-20">
+        <h2 class="text-2xl font-bold mb-8 flex items-center gap-2">
+            <span class="w-2 h-8 bg-blue-600 rounded-full"></span> ASSINATURAS
+        </h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="nexus-card rounded-2xl overflow-hidden group">
+                <div class="relative h-48 bg-zinc-800">
+                    <img src="https://via.placeholder.com/400x250/111/fff?text=YouTube+Premium" class="w-full h-full object-cover">
+                    <div class="absolute top-3 right-3 bg-black/70 text-[10px] font-bold px-2 py-1 rounded-full border border-white/10 text-blue-400">
+                        ⚡ ENTREGA AUTOMÁTICA
+                    </div>
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg mb-1">YouTube Premium</h3>
+                    <div class="flex items-baseline gap-2 mb-4">
+                        <span class="text-2xl font-black">R$ 1,50</span>
+                        <span class="text-xs text-zinc-500">no PIX</span>
+                    </div>
+                    <button onclick="comprar(1)" class="w-full py-3 bg-zinc-100 text-black font-black rounded-xl hover:bg-white transition">
+                        COMPRAR
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function comprar(id) {
+            alert("Redirecionando para o Checkout PIX...");
+            // Aqui chamaria sua rota do back-end /create-payment
+        }
+    </script>
+</body>
+</html>
