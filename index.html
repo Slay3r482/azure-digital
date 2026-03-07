@@ -8,219 +8,188 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <title>Azure Digital | Store</title>
     <style>
-        body { background-color: #050505; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        .glass-nav { background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid #1a1a1a; }
+        body { background-color: #080808; color: #fff; font-family: 'Inter', sans-serif; }
         
-        /* CARDS PADRONIZADOS (NEXUS STYLE) */
+        /* Estilo idêntico ao da imagem Nexus Prime */
         .nexus-card { 
-            background: #0d0d0d; 
+            background: #111111; 
             border: 1px solid #1a1a1a; 
-            border-radius: 1rem; 
-            transition: 0.3s; 
-            display: flex; 
-            flex-direction: column; 
-            height: 100%; /* Garante que todos tenham a mesma altura na linha */
-            padding: 1rem;
-        }
-        .nexus-card:hover { border-color: #3b82f6; transform: translateY(-5px); }
-
-        /* IMAGEM DO PRODUTO FIXA */
-        .card-img-container {
-            height: 160px; /* Altura fixa para a imagem */
-            background: #121212;
-            border-radius: 0.75rem;
+            border-radius: 1.5rem; 
+            padding: 12px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .nexus-card:hover { border-color: #333; transform: translateY(-3px); }
+
+        /* Container da Imagem do Produto */
+        .product-image {
+            width: 100%;
+            height: 120px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 1rem;
+            margin-bottom: 12px;
             position: relative;
-            margin-bottom: 1rem;
-            border: 1px solid #1a1a1a;
-            overflow: hidden;
         }
 
+        /* Badge de Entrega Automática (Exato igual à foto) */
         .badge-auto {
             position: absolute;
             top: 8px;
             right: 8px;
-            background: rgba(0, 0, 0, 0.7);
-            color: #3b82f6;
-            font-size: 9px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #333;
+            color: #fff;
+            font-size: 7px;
             padding: 2px 8px;
             border-radius: 99px;
             font-weight: 800;
             text-transform: uppercase;
-            border: 1px solid rgba(59, 130, 246, 0.3);
         }
 
-        /* BOTÃO COMPRAR PADRÃO */
-        .btn-comprar {
+        /* Título do Produto */
+        .product-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: #efefef;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Preço e Ícones de Pagamento */
+        .price-section { margin-bottom: 15px; }
+        .price-main { font-size: 22px; font-weight: 900; font-style: italic; }
+        .payment-icons { 
+            font-size: 9px; 
+            color: #888; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 4px;
+        }
+
+        /* Botão "VER DETALHES" (Padrão da Nexus) */
+        .btn-details {
             background: #1a1a1a;
             color: #fff;
-            padding: 0.75rem;
-            border-radius: 0.75rem;
+            width: 100%;
+            padding: 10px;
+            border-radius: 0.8rem;
+            font-size: 10px;
             font-weight: 900;
             text-transform: uppercase;
-            font-style: italic;
-            font-size: 0.75rem;
-            margin-top: auto; /* Empurra o botão para o final do card */
             transition: 0.3s;
-            text-align: center;
-            width: 100%;
         }
-        .btn-comprar:hover { background: #fff; color: #000; }
+        .btn-details:hover { background: #252525; }
 
-        .modal { transition: opacity 0.3s ease; }
+        /* Botão "COMPRAR" (Caso o item esteja selecionado) */
+        .btn-buy-now {
+            background: #ffffff;
+            color: #000;
+            width: 100%;
+            padding: 10px;
+            border-radius: 0.8rem;
+            font-size: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
 
-    <nav class="glass-nav sticky top-0 z-50 py-4 px-6">
-        <div class="w-full flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-blue-600 rounded-lg"></div>
-                <span class="font-bold text-xl italic uppercase">Azure Digital</span>
-            </div>
-            
-            <div class="hidden lg:flex flex-1 max-w-md mx-10 relative">
-                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-zinc-500 text-sm"></i>
-                <input type="text" placeholder="Pesquisar produto..." class="w-full bg-[#121212] border border-zinc-800 rounded-xl py-2 pl-10 pr-4 outline-none text-xs">
-            </div>
-
-            <div class="flex items-center gap-3">
-                <button onclick="toggleModal('cart-modal')" class="bg-white text-black px-4 py-2 rounded-xl font-bold flex items-center gap-2 text-sm">
-                    <i class="fa-solid fa-bag-shopping"></i> Carrinho
-                    <span id="cart-count" class="bg-blue-600 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
-                </button>
-                <div id="user-area" class="flex items-center gap-2">
-                    <button onclick="toggleModal('login-modal')" id="btn-user-status" class="bg-zinc-800 text-white px-4 py-2 rounded-xl font-black uppercase italic text-sm">Entrar</button>
-                    <button onclick="logout()" id="btn-logout" class="hidden text-zinc-500 hover:text-red-500 transition px-1 text-xl"><i class="fa-solid fa-right-from-bracket"></i></button>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <header class="max-w-7xl mx-auto py-12 px-6">
-        <h1 class="text-5xl font-black italic uppercase leading-none mb-2">Azure <span class="text-blue-500">Digital!</span></h1>
-        <p class="text-zinc-500 text-sm font-medium max-w-lg">Sua loja premium de produtos digitais. Entrega 100% automática via Discord e E-mail.</p>
-        <div class="flex gap-3 mt-6">
-            <button class="bg-zinc-900 border border-zinc-800 px-6 py-3 rounded-xl font-bold text-xs flex items-center gap-2 hover:bg-zinc-800 transition">
-                <i class="fa-brands fa-discord text-blue-500"></i> SUPORTE DISCORD
-            </button>
-            <button class="bg-blue-600 px-6 py-3 rounded-xl font-bold text-xs uppercase italic hover:bg-blue-500 transition">CATÁLOGO</button>
-        </div>
-    </header>
-
-    <main class="max-w-7xl mx-auto px-6 pb-20">
-        <div class="mb-8 flex items-center gap-3">
-            <span class="w-1 h-6 bg-blue-600 rounded-full"></span>
-            <h2 class="text-xl font-black italic uppercase">Destaques</h2>
-        </div>
-        
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <main class="max-w-6xl mx-auto px-6 py-10">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             
             <div class="nexus-card">
-                <div class="card-img-container">
-                    <img src="https://logodownload.org/wp-content/uploads/2014/10/youtube-logo-9.png" class="w-20 opacity-40">
+                <div class="product-image" style="background-image: url('https://img.freepik.com/vetores-premium/logotipo-do-youtube-vermelho-e-branco-fundo-preto_960911-379.jpg');">
                     <span class="badge-auto">⚡ Entrega Automática</span>
                 </div>
-                <h3 class="font-bold text-xs mb-1 uppercase italic text-zinc-300">YouTube Premium - 30 Dias</h3>
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="text-2xl font-black italic">R$ 1,50</span>
-                    <i class="fa-solid fa-bolt text-blue-500 text-[10px]"></i>
+                <div class="product-title">
+                    <span class="w-2 h-2 rounded-full bg-red-500"></span> Youtube Premium
                 </div>
-                <button onclick="adicionarAoCarrinho('YouTube Premium', 1.50)" class="btn-comprar">Comprar</button>
+                <div class="price-section">
+                    <div class="price-main text-white">R$ 1,50 <span class="text-sm font-normal text-zinc-500">+ 🪙</span></div>
+                    <div class="payment-icons">
+                        <i class="fa-brands fa-cc-mastercard text-orange-500"></i>
+                        <i class="fa-brands fa-cc-visa text-blue-500"></i>
+                        <span>À vista no PIX ou Cartão</span>
+                    </div>
+                </div>
+                <button class="btn-details">Ver Detalhes</button>
             </div>
 
             <div class="nexus-card">
-                <div class="card-img-container">
-                    <img src="https://logodownload.org/wp-content/uploads/2014/10/steam-logo-7.png" class="w-20 opacity-40">
+                <div class="product-image" style="background-image: url('https://static.vecteezy.com/system/resources/previews/010/353/285/original/google-logo-on-black-background-free-vector.jpg');">
                     <span class="badge-auto">⚡ Entrega Automática</span>
                 </div>
-                <h3 class="font-bold text-xs mb-1 uppercase italic text-zinc-300">10x Steam Key Premium</h3>
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="text-2xl font-black italic">R$ 0,90</span>
-                    <i class="fa-solid fa-bolt text-blue-500 text-[10px]"></i>
+                <div class="product-title">
+                    <span class="w-2 h-2 rounded-full bg-purple-500"></span> Google Veo3
                 </div>
-                <button onclick="adicionarAoCarrinho('10x Steam Key', 0.90)" class="btn-comprar">Comprar</button>
+                <div class="price-section">
+                    <div class="price-main text-white">R$ 4,99 <span class="text-sm font-normal text-zinc-500">+ 🪙</span></div>
+                    <div class="payment-icons">
+                        <i class="fa-brands fa-cc-visa text-blue-500"></i>
+                        <span>À vista no PIX ou Cartão</span>
+                    </div>
+                </div>
+                <button class="btn-details">Ver Detalhes</button>
             </div>
 
             <div class="nexus-card">
-                <div class="card-img-container">
-                    <img src="https://logodownload.org/wp-content/uploads/2020/03/canva-logo-0.png" class="w-16 opacity-40">
+                <div class="product-image flex items-center justify-center bg-zinc-900">
+                    <span class="font-black text-xs text-zinc-500 tracking-widest">ESGOTADO</span>
                 </div>
-                <h3 class="font-bold text-xs mb-1 uppercase italic text-zinc-300">Canva Pro - Vitalício</h3>
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="text-2xl font-black italic">R$ 5,00</span>
+                <div class="product-title">
+                    <span class="w-2 h-2 rounded-full bg-green-500"></span> Chat Gpt
                 </div>
-                <button onclick="adicionarAoCarrinho('Canva Pro', 5.00)" class="btn-comprar">Comprar</button>
+                <div class="price-section">
+                    <div class="price-main text-white">R$ 2,30 <i class="fa-solid fa-bolt text-blue-500 text-sm"></i></div>
+                    <div class="payment-icons">
+                        <i class="fa-brands fa-cc-mastercard text-orange-500"></i>
+                        <span>À vista no PIX ou Cartão</span>
+                    </div>
+                </div>
+                <button class="btn-details">Ver Detalhes</button>
             </div>
 
-            <div class="nexus-card opacity-60">
-                <div class="card-img-container">
-                    <span class="text-[10px] font-black uppercase text-zinc-500">ESGOTADO</span>
+            <div class="nexus-card">
+                <div class="product-image" style="background-image: url('https://yt3.googleusercontent.com/ytc/AIdro_miT8Rov_3pP-mS4H5Pz-4xW-kX9D7z-u-0K4O7=s900-c-k-c0x00ffffff-no-rj');">
                 </div>
-                <h3 class="font-bold text-xs mb-1 uppercase italic text-zinc-300">Netflix Premium - 30 Dias</h3>
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="text-2xl font-black italic">R$ 12,00</span>
+                <div class="product-title">
+                    <span class="w-2 h-2 rounded-full bg-green-400"></span> Premiere
                 </div>
-                <button class="btn-comprar cursor-not-allowed">Comprar</button>
+                <div class="price-section">
+                    <div class="price-main text-white">R$ 2,30 <i class="fa-solid fa-bolt text-blue-500 text-sm"></i></div>
+                    <div class="payment-icons">
+                        <i class="fa-brands fa-cc-visa text-blue-500"></i>
+                        <span>À vista no PIX ou Cartão</span>
+                    </div>
+                </div>
+                <button class="btn-buy-now">Comprar <i class="fa-solid fa-bag-shopping ml-2"></i></button>
+            </div>
+
+            <div class="nexus-card">
+                <div class="product-image" style="background-image: url('https://logowik.com/content/uploads/images/capcut-icon6105.jpg');">
+                </div>
+                <div class="product-title">
+                    <span class="w-2 h-2 rounded-full bg-purple-400"></span> CapCut PRO
+                </div>
+                <div class="price-section">
+                    <div class="price-main text-white">R$ 2,20 <span class="text-sm font-normal text-zinc-500">+ 🪙</span></div>
+                    <div class="payment-icons">
+                        <span>À vista no PIX ou Cartão</span>
+                    </div>
+                </div>
+                <button class="btn-details">Ver Detalhes</button>
             </div>
 
         </div>
     </main>
 
-    <div id="login-modal" class="modal fixed inset-0 z-[100] hidden">
-        <div class="absolute inset-0 bg-black/95 backdrop-blur-md" onclick="toggleModal('login-modal')"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xs p-8 bg-[#0d0d0d] border border-zinc-800 rounded-[2.5rem]">
-            <div class="text-center mb-8">
-                <h2 class="text-2xl font-black italic uppercase mb-1">Entrar</h2>
-                <p class="text-zinc-500 text-[10px] font-medium uppercase">Faça login com seu e-mail</p>
-            </div>
-            <div class="bg-[#121212] border border-zinc-800 rounded-2xl p-4 flex items-center gap-3 mb-6">
-                <i class="fa-regular fa-envelope text-zinc-600"></i>
-                <input id="login-email" type="email" placeholder="exemplo@gmail.com" class="bg-transparent w-full outline-none text-xs font-bold text-white">
-            </div>
-            <button onclick="fazerLogin()" class="w-full bg-[#2a2a2a] py-4 rounded-2xl font-black text-zinc-400 hover:bg-white hover:text-black transition uppercase text-sm italic">Entrar</button>
-        </div>
-    </div>
-
-    <script>
-        let carrinho = [];
-
-        window.onload = () => {
-            const emailSalvo = localStorage.getItem('userEmail');
-            if (emailSalvo) aplicarLogin(emailSalvo);
-        };
-
-        function toggleModal(id) { document.getElementById(id).classList.toggle('hidden'); }
-
-        function fazerLogin() {
-            const email = document.getElementById('login-email').value;
-            if(!email.includes('@')) return alert("E-mail inválido!");
-            localStorage.setItem('userEmail', email);
-            aplicarLogin(email);
-            toggleModal('login-modal');
-        }
-
-        function aplicarLogin(email) {
-            const btn = document.getElementById('btn-user-status');
-            btn.innerText = email.split('@')[0].toUpperCase();
-            btn.classList.add('logged-in');
-            document.getElementById('btn-logout').classList.remove('hidden');
-        }
-
-        function logout() {
-            localStorage.removeItem('userEmail');
-            location.reload();
-        }
-
-        function adicionarAoCarrinho(nome, preco) {
-            carrinho.push({nome, preco});
-            const count = document.getElementById('cart-count');
-            count.innerText = carrinho.length;
-            count.classList.remove('hidden');
-            alert(nome + " adicionado!");
-        }
-    </script>
 </body>
 </html>
