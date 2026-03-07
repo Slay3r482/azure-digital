@@ -183,6 +183,60 @@
             const data = await response.json();
             alert(`Pague para a chave PIX: ${data.pix}\n\nAssim que o Nubank confirmar seu PIX de ${email}, enviaremos seu produto!`);
         }
+        // Abre e fecha o carrinho
+function toggleCarrinho() {
+    const modal = document.getElementById('cart-modal');
+    // Remove ou adiciona a classe 'hidden' (escondido)
+    modal.classList.toggle('hidden');
+}
+
+// Garante que o carrinho comece vazio
+let carrinho = [];
+
+function adicionarAoCarrinho(nome, preco) {
+    carrinho.push({nome, preco});
+    atualizarTudo();
+    // Abre o carrinho automaticamente ao adicionar um item (opcional)
+    toggleCarrinho(); 
+}
+
+function atualizarTudo() {
+    const container = document.getElementById('cart-items');
+    const totalElement = document.getElementById('cart-total');
+    const countBadge = document.getElementById('cart-count');
+
+    // Atualiza a bolinha de contagem na Navbar
+    countBadge.innerText = carrinho.length;
+    countBadge.classList.toggle('hidden', carrinho.length === 0);
+
+    if (carrinho.length === 0) {
+        container.innerHTML = '<p class="text-zinc-500 text-center mt-10">O carrinho está vazio.</p>';
+        totalElement.innerText = "R$ 0,00";
+        return;
+    }
+
+    // Gera a lista de produtos no HTML
+    container.innerHTML = carrinho.map((item, index) => `
+        <div class="bg-[#121212] p-4 rounded-xl border border-zinc-800 flex justify-between items-center group hover:border-blue-900 transition">
+            <div>
+                <p class="font-bold text-sm uppercase">${item.nome}</p>
+                <p class="text-blue-500 text-sm font-black italic">R$ ${item.preco.toFixed(2)}</p>
+            </div>
+            <button onclick="removerItem(${index})" class="text-zinc-600 hover:text-red-500 transition">
+                <i class="fa-solid fa-trash-can"></i>
+            </button>
+        </div>
+    `).join('');
+
+    // Soma o valor total
+    const total = carrinho.reduce((sum, item) => sum + item.preco, 0);
+    totalElement.innerText = `R$ ${total.toFixed(2)}`;
+}
+
+function removerItem(index) {
+    carrinho.splice(index, 1);
+    atualizarTudo();
+}
     </script>
 </body>
 </html>
