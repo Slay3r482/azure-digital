@@ -5,139 +5,205 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <title>Azure Digital | Store</title>
+    <title>Azure Digital | Segurança e Entrega Automática</title>
     <style>
         body { background-color: #050505; color: #fff; font-family: 'Inter', sans-serif; }
         .glass-nav { background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid #1a1a1a; }
-        /* Estilo do Modal Lateral */
-        #cart-modal { transition: opacity 0.3s ease; }
-        .cart-content { transition: transform 0.3s ease-in-out; }
+        .nexus-card { background: #0d0d0d; border: 1px solid #1a1a1a; transition: 0.3s; position: relative; overflow: hidden; }
+        .nexus-card:hover { border-color: #3b82f6; transform: translateY(-5px); }
+        .modal { transition: opacity 0.3s ease; z-index: 100; }
+        .side-bar { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); }
     </style>
 </head>
 <body>
 
     <nav class="glass-nav sticky top-0 z-50 p-4">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <div class="max-w-7xl mx-auto flex justify-between items-center gap-4">
             <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-blue-600 rounded-lg"></div>
-                <span class="font-bold text-xl italic">AZURE DIGITAL</span>
+                <div class="w-8 h-8 bg-blue-600 rounded-lg shadow-lg shadow-blue-900/50"></div>
+                <span class="font-bold text-xl italic tracking-tighter">AZURE DIGITAL</span>
             </div>
             
+            <div class="hidden md:flex flex-1 max-w-md relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-zinc-500 text-sm"></i>
+                <input type="text" placeholder="Pesquisar produto..." class="w-full bg-[#121212] border border-zinc-800 rounded-xl py-2 pl-10 pr-4 focus:outline-none focus:border-blue-500 transition text-sm">
+            </div>
+
             <div class="flex items-center gap-4">
-                <button id="btn-abrir-carrinho" class="bg-white text-black px-4 py-2 rounded-lg font-bold flex items-center gap-2 relative transition hover:bg-zinc-200">
-                    <i class="fa-solid fa-bag-shopping"></i> 
-                    Carrinho
+                <button onclick="toggleModal('cart-modal')" class="bg-white text-black px-4 py-2 rounded-lg font-bold flex items-center gap-2 relative transition hover:bg-zinc-200">
+                    <i class="fa-solid fa-bag-shopping"></i> Carrinho
                     <span id="cart-count" class="absolute -top-2 -right-2 bg-blue-600 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center hidden border-2 border-[#050505]">0</span>
                 </button>
-                <button class="bg-zinc-800 px-4 py-2 rounded-lg font-medium">Entrar</button>
+                <button onclick="toggleModal('login-modal')" id="btn-user-status" class="bg-zinc-800 px-4 py-2 rounded-lg font-medium hover:bg-zinc-700 transition">Entrar</button>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto p-10 grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-[#0d0d0d] border border-zinc-800 p-5 rounded-2xl">
-            <h3 class="font-bold text-lg mb-2">YouTube Premium</h3>
-            <p class="text-blue-500 font-black mb-4 text-2xl">R$ 1,50</p>
-            <button onclick="adicionarAoCarrinho('YouTube Premium', 1.50)" class="w-full bg-blue-600 py-3 rounded-xl font-bold hover:bg-blue-500 transition">
-                COMPRAR
-            </button>
+    <div class="fixed right-4 top-1/2 -translate-y-1/2 flex flex-col gap-6 side-bar p-4 rounded-full z-40">
+        <a href="#" class="text-zinc-400 hover:text-white transition text-xl"><i class="fa-brands fa-discord"></i></a>
+        <a href="#" class="text-zinc-400 hover:text-white transition text-xl"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" class="text-zinc-400 hover:text-white transition text-xl"><i class="fa-brands fa-tiktok"></i></a>
+    </div>
+
+    <header class="max-w-7xl mx-auto py-20 px-6">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-12">
+            <div class="md:w-1/2">
+                <h1 class="text-6xl font-black mb-6 leading-tight">Bem Vindo(a)<br><span class="text-blue-500">Azure Digital!</span></h1>
+                <p class="text-zinc-400 text-lg mb-8 max-w-lg">Produtos 100% digitais com entrega automática. Compre com segurança e receba na hora.</p>
+                <div class="flex gap-4">
+                    <button class="bg-[#121212] border border-zinc-800 px-8 py-4 rounded-xl font-bold flex items-center gap-2 hover:bg-zinc-800 transition">
+                        <i class="fa-brands fa-discord"></i> Suporte Discord
+                    </button>
+                    <button class="bg-blue-600 px-8 py-4 rounded-xl font-bold hover:shadow-lg hover:shadow-blue-900/40 transition">Ver Catálogo</button>
+                </div>
+            </div>
+            <div class="md:w-1/2 grid grid-cols-2 gap-4 opacity-40 select-none pointer-events-none">
+                <div class="h-40 bg-zinc-900 border border-zinc-800 rounded-3xl"></div>
+                <div class="h-40 bg-zinc-900 border border-zinc-800 rounded-3xl mt-12"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 pb-24">
+        <h2 class="text-2xl font-bold mb-10 flex items-center gap-3">
+            <span class="w-1.5 h-8 bg-blue-600 rounded-full"></span> ASSINATURAS
+        </h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="nexus-card rounded-2xl p-5">
+                <div class="h-40 bg-zinc-800 rounded-xl mb-4 relative overflow-hidden">
+                    <img src="https://via.placeholder.com/400x200/ff0000/fff?text=YouTube+Premium" class="w-full h-full object-cover opacity-80">
+                    <span class="absolute top-2 right-2 bg-black/70 text-[9px] px-2 py-1 rounded-full border border-white/10 text-blue-400 font-bold uppercase">⚡ Entrega Automática</span>
+                </div>
+                <h3 class="font-bold mb-1">YouTube Premium - 30 Dias</h3>
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="text-2xl font-black">R$ 1,50</span>
+                    <span class="text-[9px] text-zinc-500 bg-zinc-900 px-2 py-1 rounded italic uppercase font-bold">no PIX</span>
+                </div>
+                <button onclick="adicionarAoCarrinho('YouTube Premium', 1.50)" class="w-full bg-white text-black py-3 rounded-xl font-black hover:bg-zinc-200 transition uppercase text-sm">Comprar</button>
+            </div>
         </div>
     </main>
 
-    <div id="cart-modal" class="fixed inset-0 z-[100] hidden">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="cart-overlay"></div>
-        
-        <div class="absolute right-0 top-0 h-full w-full max-w-md bg-[#0d0d0d] border-l border-zinc-800 p-8 flex flex-col shadow-2xl cart-content">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="text-2xl font-bold uppercase tracking-tighter">Meu Carrinho</h2>
-                <button id="btn-fechar-carrinho" class="text-zinc-500 hover:text-white transition">
-                    <i class="fa-solid fa-xmark text-3xl"></i>
+    <div id="login-modal" class="modal fixed inset-0 hidden">
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="toggleModal('login-modal')"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-8 bg-[#0d0d0d] border border-zinc-800 rounded-3xl shadow-2xl">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-black mb-2">Entrar</h2>
+                <p class="text-zinc-500 text-sm">Faça login para salvar suas compras e ter mais segurança.</p>
+            </div>
+            
+            <div class="space-y-4 mb-6">
+                <button class="w-full bg-zinc-900 border border-zinc-800 py-3 rounded-xl flex items-center justify-center gap-3 hover:bg-zinc-800 transition font-medium">
+                    <i class="fa-brands fa-google"></i> Conectar com Google
+                </button>
+                <button class="w-full bg-[#5865F2] py-3 rounded-xl flex items-center justify-center gap-3 hover:opacity-90 transition font-medium">
+                    <i class="fa-brands fa-discord"></i> Conectar com Discord
                 </button>
             </div>
 
-            <div id="cart-items-list" class="flex-1 overflow-y-auto space-y-4">
-                <p class="text-zinc-500 text-center mt-10 italic">O carrinho está vazio.</p>
+            <div class="relative flex items-center justify-center mb-6">
+                <div class="w-full border-t border-zinc-800"></div>
+                <span class="absolute bg-[#0d0d0d] px-4 text-xs text-zinc-600 uppercase">Ou continuar com</span>
             </div>
 
+            <div class="space-y-4">
+                <div class="bg-[#121212] border border-zinc-800 rounded-xl p-3 flex items-center gap-3 focus-within:border-blue-500 transition">
+                    <i class="fa-regular fa-envelope text-zinc-500"></i>
+                    <input id="login-email" type="email" placeholder="exemplo@gmail.com" class="bg-transparent w-full outline-none text-sm">
+                </div>
+                <button onclick="fazerLogin()" class="w-full bg-zinc-700 py-4 rounded-xl font-bold text-zinc-400 hover:bg-white hover:text-black transition">Entrar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cart-modal" class="modal fixed inset-0 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleModal('cart-modal')"></div>
+        <div class="absolute right-0 top-0 h-full w-full max-w-md bg-[#0d0d0d] border-l border-zinc-800 p-8 flex flex-col shadow-2xl">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-bold uppercase tracking-tighter italic">Carrinho</h2>
+                <button onclick="toggleModal('cart-modal')"><i class="fa-solid fa-xmark text-3xl text-zinc-500 hover:text-white transition"></i></button>
+            </div>
+            <div id="cart-items" class="flex-1 overflow-y-auto space-y-4">
+                <p class="text-zinc-500 text-center mt-10">Monte um carrinho de compras!</p>
+            </div>
             <div class="border-t border-zinc-800 pt-6 mt-6">
                 <div class="flex justify-between text-xl font-bold mb-6">
                     <span>Total:</span>
-                    <span id="cart-total-price" class="text-blue-500">R$ 0,00</span>
+                    <span id="cart-total" class="text-blue-500">R$ 0,00</span>
                 </div>
-                <button onclick="alert('Iniciando Checkout PIX...')" class="w-full bg-blue-600 py-4 rounded-xl font-black text-lg transition">
-                    PAGAR COM PIX
+                <button onclick="finalizarPagamento()" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-xl font-black text-lg transition shadow-lg shadow-blue-900/20">
+                    FINALIZAR COMPRA (PIX)
                 </button>
             </div>
         </div>
     </div>
 
     <script>
-        // Seleção de Elementos
-        const modal = document.getElementById('cart-modal');
-        const btnAbrir = document.getElementById('btn-abrir-carrinho');
-        const btnFechar = document.getElementById('btn-fechar-carrinho');
-        const overlay = document.getElementById('cart-overlay');
-        const countBadge = document.getElementById('cart-count');
-        const listaItens = document.getElementById('cart-items-list');
-        const totalDisplay = document.getElementById('cart-total-price');
-
         let carrinho = [];
+        let usuarioLogado = null;
 
-        // --- FUNÇÕES DE ABRIR/FECHAR ---
-        function abrirCarrinho() {
-            modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; // Trava o scroll do site
+        function toggleModal(id) {
+            document.getElementById(id).classList.toggle('hidden');
         }
 
-        function fecharCarrinho() {
-            modal.classList.add('hidden');
-            document.body.style.overflow = 'auto'; // Libera o scroll
+        function fazerLogin() {
+            const email = document.getElementById('login-email').value;
+            if(!email.includes('@')) return alert("Digite um e-mail válido!");
+            
+            usuarioLogado = email;
+            document.getElementById('btn-user-status').innerText = email.split('@')[0];
+            toggleModal('login-modal');
+            alert(`Bem-vindo, ${email}! Agora suas compras estão seguras.`);
         }
 
-        // Eventos de Clique
-        btnAbrir.addEventListener('click', abrirCarrinho);
-        btnFechar.addEventListener('click', fecharCarrinho);
-        overlay.addEventListener('click', fecharCarrinho);
-
-        // --- LÓGICA DO CARRINHO ---
         function adicionarAoCarrinho(nome, preco) {
-            carrinho.push({ nome, preco });
-            renderizarCarrinho();
-            abrirCarrinho(); // Abre o carrinho automaticamente ao clicar em comprar
+            carrinho.push({nome, preco});
+            atualizarInterface();
+            if(carrinho.length === 1) toggleModal('cart-modal');
         }
 
-        function renderizarCarrinho() {
-            // Atualiza contador da Navbar
-            countBadge.innerText = carrinho.length;
-            countBadge.classList.toggle('hidden', carrinho.length === 0);
+        function atualizarInterface() {
+            const container = document.getElementById('cart-items');
+            const totalDisplay = document.getElementById('cart-total');
+            const count = document.getElementById('cart-count');
 
-            if (carrinho.length === 0) {
-                listaItens.innerHTML = '<p class="text-zinc-500 text-center mt-10 italic">O carrinho está vazio.</p>';
+            count.innerText = carrinho.length;
+            count.classList.toggle('hidden', carrinho.length === 0);
+
+            if(carrinho.length === 0) {
+                container.innerHTML = '<p class="text-zinc-500 text-center mt-10 italic">O carrinho está vazio.</p>';
                 totalDisplay.innerText = "R$ 0,00";
                 return;
             }
 
-            // Gera a lista
-            listaItens.innerHTML = carrinho.map((item, index) => `
+            container.innerHTML = carrinho.map((item, i) => `
                 <div class="bg-[#121212] p-4 rounded-xl border border-zinc-800 flex justify-between items-center group">
                     <div>
                         <p class="font-bold text-sm uppercase">${item.nome}</p>
                         <p class="text-blue-500 text-sm font-black">R$ ${item.preco.toFixed(2)}</p>
                     </div>
-                    <button onclick="removerItem(${index})" class="text-zinc-600 hover:text-red-500 transition">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </button>
+                    <button onclick="removerItem(${i})" class="text-zinc-600 hover:text-red-500 transition"><i class="fa-solid fa-trash-can"></i></button>
                 </div>
             `).join('');
 
-            // Soma Total
             const total = carrinho.reduce((acc, item) => acc + item.preco, 0);
             totalDisplay.innerText = `R$ ${total.toFixed(2)}`;
         }
 
-        function removerItem(index) {
-            carrinho.splice(index, 1);
-            renderizarCarrinho();
+        function removerItem(i) {
+            carrinho.splice(i, 1);
+            atualizarInterface();
+        }
+
+        function finalizarPagamento() {
+            if(!usuarioLogado) {
+                alert("Você precisa estar logado para comprar com segurança!");
+                return toggleModal('login-modal');
+            }
+            if(carrinho.length === 0) return alert("Adicione produtos ao carrinho.");
+            
+            alert(`Azure Digital: Pedido gerado para ${usuarioLogado}.\n\nPague via PIX para sua chave cadastrada.\n\nMonitorando pagamento via Nubank...`);
         }
     </script>
 </body>
