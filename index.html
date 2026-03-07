@@ -6,24 +6,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <title>Azure Digital | MineGine Style</title>
+    <title>Azure Digital | Store</title>
     <style>
-        :root { 
-            --bg: #050505; 
-            --card-bg: rgba(13, 14, 17, 0.7); 
-            --border: rgba(255, 255, 255, 0.05); 
-            --accent: #3b82f6; 
-        }
-        
-        body { 
-            background-color: var(--bg); 
-            color: #fff; 
-            font-family: 'Inter', sans-serif; 
-            margin: 0;
-            letter-spacing: -0.01em;
-        }
+        :root { --bg: #050505; --card-bg: rgba(13, 14, 17, 0.7); --border: rgba(255, 255, 255, 0.05); }
+        body { background-color: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; }
 
-        /* Fundo com a máscara da MineGine */
         .hero-mask {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: -1;
             object-fit: cover; opacity: 0.35;
@@ -31,96 +18,40 @@
             -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 85%);
         }
 
-        /* Nav Estilo Premium */
-        .nav-glass {
-            background: rgba(5, 5, 5, 0.75);
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid var(--border);
-        }
-
-        /* Pesquisa Estilo MineGine */
-        .search-box {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 10px 18px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-            max-width: 420px;
-            transition: 0.3s;
-        }
-        .search-box:focus-within { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); }
-        .search-box input { background: transparent; border: none; outline: none; color: #fff; font-size: 13px; width: 100%; }
-
-        /* Categorias em Pílulas (Igual ao site solicitado) */
-        .cat-pills-container {
-            display: flex; justify-content: center; gap: 8px; margin-bottom: 45px; flex-wrap: wrap;
-        }
-        .pill {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            padding: 10px 22px;
-            border-radius: 99px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: #71717a;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .pill:hover, .pill.active {
-            background: #fff;
-            color: #000;
-            border-color: #fff;
-            transform: translateY(-2px);
-        }
-
-        /* Card Compacto MineGine */
+        /* Efeito de Vidro (Glassmorphism) */
+        .glass { background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(15px); border: 1px solid var(--border); }
+        
         .card-mine {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 18px;
-            transition: 0.4s;
-            backdrop-filter: blur(12px);
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            max-width: 195px; /* Tamanho exato para ficar elegante */
-            margin: 0 auto;
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px;
+            padding: 18px; transition: 0.4s; backdrop-filter: blur(12px);
+            width: 100%; max-width: 195px; margin: 0 auto;
         }
-        .card-mine:hover {
-            border-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+        .card-mine:hover { border-color: rgba(255, 255, 255, 0.15); transform: translateY(-5px); }
+
+        /* Modal do Carrinho Lateral */
+        #cartSide {
+            position: fixed; top: 0; right: -400px; width: 350px; height: 100%;
+            background: #0D0E11; border-left: 1px solid var(--border);
+            z-index: 100; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 30px; box-shadow: -10px 0 30px rgba(0,0,0,0.5);
         }
+        #cartSide.active { right: 0; }
 
-        .img-box {
-            background: #000; border: 1px solid var(--border); border-radius: 14px;
-            width: 100%; aspect-ratio: 1/1;
-            display: flex; align-items: center; justify-content: center; margin-bottom: 14px;
+        .pill {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border);
+            padding: 10px 22px; border-radius: 99px; font-size: 11px; font-weight: 700;
+            text-transform: uppercase; color: #71717a; transition: 0.3s;
         }
-        .img-box img { width: 50%; opacity: 0.9; }
+        .pill.active { background: #fff; color: #000; border-color: #fff; }
 
-        .price-text { font-size: 20px; font-weight: 900; font-style: italic; text-align: center; color: #fff; }
-
-        .btn-mine {
-            background: #fff; color: #000; width: 100%; padding: 12px;
-            border-radius: 10px; font-weight: 900; font-size: 11px;
-            text-transform: uppercase; margin-top: 14px; transition: 0.2s;
-        }
-        .btn-mine:hover { opacity: 0.85; }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        .btn-mine { background: #fff; color: #000; width: 100%; padding: 12px; border-radius: 10px; font-weight: 900; font-size: 11px; text-transform: uppercase; margin-top: 14px; }
     </style>
 </head>
 <body>
 
     <img src="https://cdn.ereemby.com/attachments/17715554716225022imagem.png" class="hero-mask">
 
-    <header class="sticky top-0 z-50 nav-glass px-8 py-5">
+    <header class="sticky top-0 z-50 glass px-8 py-5">
         <div class="max-w-[1400px] mx-auto flex justify-between items-center gap-6">
             <div class="flex items-center gap-3">
                 <img src="https://cdn.ereemby.com/attachments/17706209715176161imagem.jpeg" class="w-9 h-9 rounded-xl">
@@ -128,67 +59,102 @@
             </div>
 
             <div class="hidden md:flex flex-1 justify-center">
-                <div class="search-box">
+                <div class="bg-white/5 border border-white/5 rounded-xl px-4 py-2 w-full max-w-md flex items-center gap-3">
                     <i class="fa-solid fa-magnifying-glass text-zinc-600"></i>
-                    <input type="text" placeholder="Pesquisar na loja...">
+                    <input type="text" placeholder="Pesquisar na loja..." class="bg-transparent outline-none text-xs w-full text-white">
                 </div>
             </div>
 
             <div class="flex items-center gap-4">
-                <div class="bg-white text-black px-5 py-2.5 rounded-xl font-black text-[11px] uppercase cursor-pointer flex items-center gap-2">
-                    <i class="fa-solid fa-cart-shopping"></i> Carrinho
+                <div onclick="toggleCart()" class="bg-white text-black px-5 py-2.5 rounded-xl font-black text-[11px] uppercase cursor-pointer flex items-center gap-2">
+                    <i class="fa-solid fa-cart-shopping"></i> Carrinho (<span id="cartCount">0</span>)
                 </div>
-                <button class="bg-[#111] px-5 py-2.5 rounded-xl text-zinc-400 font-bold text-[11px] border border-white/5">LOGIN</button>
+                <button onclick="handleLogin()" id="loginBtn" class="bg-[#111] px-5 py-2.5 rounded-xl text-zinc-400 font-bold text-[11px] border border-white/5 uppercase">LOGIN</button>
             </div>
         </div>
     </header>
 
+    <div id="cartSide">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="font-black italic text-xl uppercase">Meu Carrinho</h2>
+            <i onclick="toggleCart()" class="fa-solid fa-xmark cursor-pointer text-zinc-500 hover:text-white"></i>
+        </div>
+        <div id="cartItems" class="text-zinc-500 text-sm italic">O carrinho está vazio.</div>
+        <div class="absolute bottom-10 left-0 w-full px-8">
+            <div class="border-t border-white/10 pt-4 mb-4 flex justify-between font-bold">
+                <span>Total:</span>
+                <span id="cartTotal">R$ 0,00</span>
+            </div>
+            <button onclick="alert('Indo para o checkout!')" class="btn-mine">Finalizar Compra</button>
+        </div>
+    </div>
+
     <main class="max-w-[1400px] mx-auto px-8 py-14">
-        
-        <nav class="cat-pills-container">
+        <nav class="flex justify-center gap-3 mb-12">
             <button class="pill active">Todos</button>
-            <button class="pill">Streaming</button>
             <button class="pill">Discord</button>
-            <button class="pill">Games</button>
-            <button class="pill">Apps</button>
+            <button class="pill">Streaming</button>
         </nav>
 
-        <div class="flex flex-col items-center mb-14">
-            <h1 class="text-5xl font-black italic uppercase tracking-tighter mb-2">Produtos</h1>
-            <div class="h-1 w-20 bg-blue-600 rounded-full"></div>
-        </div>
-        
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-            
             <div class="card-mine">
-                <div class="img-box">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png">
+                <div class="bg-black border border-white/5 rounded-xl aspect-square flex items-center justify-center mb-4">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" class="w-1/2">
                 </div>
                 <span class="text-[9px] text-zinc-500 font-black uppercase text-center mb-1">Youtube Premium</span>
-                <p class="price-text">R$ 1,50</p>
-                <button class="btn-mine">Comprar</button>
+                <p class="text-xl font-black italic text-center">R$ 1,50</p>
+                <button onclick="addToCart('Youtube Premium', 1.50)" class="btn-mine">Adicionar</button>
             </div>
 
             <div class="card-mine">
-                <div class="img-box">
-                    <i class="fa-brands fa-discord text-5xl text-blue-600/30"></i>
+                <div class="bg-black border border-white/5 rounded-xl aspect-square flex items-center justify-center mb-4 text-blue-500/30">
+                    <i class="fa-brands fa-discord text-5xl"></i>
                 </div>
                 <span class="text-[9px] text-zinc-500 font-black uppercase text-center mb-1">Discord Nitro</span>
-                <p class="price-text">R$ 15,90</p>
-                <button class="btn-mine">Comprar</button>
+                <p class="text-xl font-black italic text-center">R$ 15,90</p>
+                <button onclick="addToCart('Discord Nitro', 15.90)" class="btn-mine">Adicionar</button>
             </div>
-
-            <div class="card-mine">
-                <div class="img-box">
-                    <i class="fa-solid fa-gamepad text-5xl text-zinc-700"></i>
-                </div>
-                <span class="text-[9px] text-zinc-500 font-black uppercase text-center mb-1">GTA V Premium</span>
-                <p class="price-text">R$ 45,00</p>
-                <button class="btn-mine">Comprar</button>
-            </div>
-
         </div>
     </main>
 
+    <script>
+        let cart = [];
+        let total = 0;
+
+        function toggleCart() {
+            document.getElementById('cartSide').classList.toggle('active');
+        }
+
+        function addToCart(name, price) {
+            cart.push({name, price});
+            total += price;
+            updateCart();
+            if(!document.getElementById('cartSide').classList.contains('active')) toggleCart();
+        }
+
+        function updateCart() {
+            document.getElementById('cartCount').innerText = cart.length;
+            document.getElementById('cartTotal').innerText = `R$ ${total.toFixed(2)}`;
+            
+            const itemsDiv = document.getElementById('cartItems');
+            if(cart.length > 0) {
+                itemsDiv.innerHTML = cart.map(item => `
+                    <div class="flex justify-between mb-4 text-white font-bold text-xs uppercase">
+                        <span>${item.name}</span>
+                        <span>R$ ${item.price.toFixed(2)}</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function handleLogin() {
+            const user = prompt("Digite seu usuário:");
+            if(user) {
+                document.getElementById('loginBtn').innerText = user.substring(0, 10);
+                document.getElementById('loginBtn').classList.add('text-blue-500');
+                alert("Bem-vindo, " + user + "!");
+            }
+        }
+    </script>
 </body>
 </html>
