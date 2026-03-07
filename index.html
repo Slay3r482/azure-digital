@@ -12,7 +12,7 @@
             --bg-dark: #08090B;
             --header-bg: #0D0E11;
             --border-color: #201e1e;
-            --accent: #ffba09; /* Cor de destaque da Eremby no scroll */
+            --accent: #ffba09; 
         }
 
         body {
@@ -20,9 +20,10 @@
             color: #fffafa;
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        /* Banner com máscara igual ao original */
+        /* Banner de fundo com máscara gradual */
         .hero-banner {
             position: fixed;
             z-index: -1;
@@ -37,7 +38,7 @@
             opacity: 0.5;
         }
 
-        /* Estilo dos Cards */
+        /* Estilo dos Cards de Produto */
         .product-card {
             background-color: #58586910;
             border: 1px solid var(--border-color);
@@ -51,6 +52,7 @@
             transform: translateY(-5px);
         }
 
+        /* Etiquetas de Categoria */
         .category-label {
             display: inline-flex;
             backdrop-filter: blur(10px);
@@ -61,6 +63,7 @@
             font-size: 14px;
             font-weight: 700;
             margin-bottom: 1.5rem;
+            text-transform: uppercase;
         }
 
         /* Scrollbar customizada da Eremby */
@@ -81,7 +84,7 @@
         <div class="max-w-[1320px] mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <img src="https://cdn.ereemby.com/attachments/17706209715176161imagem.jpeg" class="w-8 h-8 rounded-md" alt="logo">
-                <span class="font-bold text-sm tracking-tight">Azure Digital</span>
+                <span class="font-bold text-sm">Azure Digital</span>
             </div>
 
             <div class="hidden md:flex bg-[#0D0E11] border border-[#201e1e] px-4 py-2 rounded-xl w-96 items-center gap-3">
@@ -93,72 +96,88 @@
                 <a href="/cart" class="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-md font-bold text-xs uppercase transition-transform active:scale-95">
                     <i class="fa-solid fa-bag-shopping"></i> <span>Carrinho</span>
                 </a>
-                <a href="/login" class="text-xs font-medium text-zinc-400 hover:text-white transition">Entrar</a>
             </div>
         </div>
     </header>
 
-    <main class="max-w-[1280px] mx-auto px-4 py-12">
-        <section class="mb-12">
-            <div class="category-label uppercase tracking-widest">Assinaturas</div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                
+    <main class="max-w-[1280px] mx-auto px-4 py-12 space-y-16">
+        
+        <section>
+            <div class="category-label">Games</div>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
                 <div class="product-card">
-                    <div class="aspect-square bg-[#0D0E11] rounded-lg mb-4 flex items-center justify-center overflow-hidden">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" class="w-2/3 opacity-80" alt="YT">
+                    <div class="aspect-square bg-[#0D0E11] rounded-lg mb-4 flex items-center justify-center">
+                        <i class="fa-solid fa-gamepad text-4xl opacity-20"></i>
                     </div>
-                    <h3 class="text-sm font-bold mb-1">YouTube Premium</h3>
-                    <p class="text-[10px] text-zinc-500 uppercase font-black mb-3">Entrega Imediata</p>
+                    <h3 class="text-sm font-bold">GTA V Premium</h3>
                     <div class="flex justify-between items-center mt-4">
-                        <span class="text-lg font-black text-white">R$ 15,90</span>
-                        <button class="bg-white text-black p-2 rounded-lg hover:scale-105 transition">
-                            <i class="fa-solid fa-cart-plus"></i>
-                        </button>
+                        <span class="text-lg font-black">R$ 45,00</span>
+                        <button class="bg-white text-black p-2 rounded-lg hover:scale-110 transition"><i class="fa-solid fa-plus"></i></button>
                     </div>
                 </div>
+                </div>
+        </section>
 
-                <div class="product-card">
-                    <div class="aspect-square bg-[#0D0E11] rounded-lg mb-4 flex items-center justify-center overflow-hidden">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" class="w-2/3 opacity-80" alt="Netflix">
+        <section>
+            <div class="category-label">Discord</div>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <div class="product-card border-indigo-500/30">
+                    <div class="aspect-square bg-[#0D0E11] rounded-lg mb-4 flex items-center justify-center">
+                        <i class="fa-brands fa-discord text-4xl text-indigo-500 opacity-50"></i>
                     </div>
-                    <h3 class="text-sm font-bold mb-1">Netflix 4K Screen</h3>
-                    <p class="text-[10px] text-zinc-500 uppercase font-black mb-3">Estoque: 15</p>
+                    <h3 class="text-sm font-bold">Discord Nitro (1 Mês)</h3>
                     <div class="flex justify-between items-center mt-4">
-                        <span class="text-lg font-black text-white">R$ 12,00</span>
-                        <button class="bg-white text-black p-2 rounded-lg hover:scale-105 transition">
-                            <i class="fa-solid fa-cart-plus"></i>
-                        </button>
+                        <span class="text-lg font-black">R$ 15,00</span>
+                        <button class="bg-indigo-500 text-white p-2 rounded-lg hover:scale-110 transition"><i class="fa-solid fa-plus"></i></button>
                     </div>
                 </div>
-
             </div>
         </section>
 
-        <footer class="mt-20 border-t border-[#201e1e] pt-10 flex flex-col md:flex-row justify-between gap-8 text-[#8C8C8C]">
-            <div class="max-w-xs">
-                <div class="flex items-center gap-2 mb-4 text-white">
-                    <img src="https://cdn.ereemby.com/attachments/17706209715176161imagem.jpeg" class="w-6 h-6 rounded" alt="">
-                    <span class="font-bold">Azure Digital</span>
-                </div>
-                <p class="text-xs leading-relaxed">Focada em oferecer uma experiência clara, eficiente e confiável em cada transação.</p>
-            </div>
-            
-            <div class="flex gap-12">
-                <div class="flex flex-col gap-2">
-                    <span class="text-white text-xs font-bold uppercase mb-2">Páginas</span>
-                    <a href="#" class="text-xs hover:text-white">Termos de uso</a>
-                    <a href="#" class="text-xs hover:text-white">Políticas</a>
-                </div>
-                <div class="flex flex-col gap-2">
-                    <span class="text-white text-xs font-bold uppercase mb-2">Redes Sociais</span>
-                    <div class="flex gap-4">
-                        <i class="fa-brands fa-discord hover:text-white cursor-pointer"></i>
-                        <i class="fa-brands fa-instagram hover:text-white cursor-pointer"></i>
+        <section>
+            <div class="category-label">Assinaturas</div>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <div class="product-card">
+                    <div class="aspect-square bg-[#0D0E11] rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" class="w-1/2 opacity-70">
+                    </div>
+                    <h3 class="text-sm font-bold">YouTube Premium</h3>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="text-lg font-black">R$ 12,90</span>
+                        <button class="bg-white text-black p-2 rounded-lg"><i class="fa-solid fa-cart-plus"></i></button>
                     </div>
                 </div>
             </div>
-        </footer>
+        </section>
+
     </main>
+
+    <footer class="mt-20 border-t border-[#201e1e] bg-[#0D0E11] py-12">
+        <div class="max-w-[1280px] mx-auto px-6 flex flex-col md:flex-row justify-between items-start gap-8">
+            <div class="max-w-sm">
+                <div class="flex items-center gap-2 mb-4">
+                    <img src="https://cdn.ereemby.com/attachments/17706209715176161imagem.jpeg" class="w-6 h-6 rounded">
+                    <span class="font-bold">Azure Digital</span>
+                </div>
+                <p class="text-xs text-[#8C8C8C] leading-relaxed">Reputação baseada em confiança e transparência. Evoluímos para oferecer uma experiência clara e segura em cada transação.</p>
+            </div>
+            
+            <div class="flex gap-16">
+                <div class="flex flex-col gap-3">
+                    <span class="text-xs font-bold uppercase text-white">Navegação</span>
+                    <a href="#" class="text-xs text-[#8C8C8C] hover:text-white transition">Termos</a>
+                    <a href="#" class="text-xs text-[#8C8C8C] hover:text-white transition">Início</a>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <span class="text-xs font-bold uppercase text-white">Social</span>
+                    <div class="flex gap-4 text-[#8C8C8C]">
+                        <i class="fa-brands fa-discord text-xl hover:text-white cursor-pointer transition"></i>
+                        <i class="fa-brands fa-instagram text-xl hover:text-white cursor-pointer transition"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 
 </body>
 </html>
