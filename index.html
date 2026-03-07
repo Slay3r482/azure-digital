@@ -6,156 +6,215 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <title>Azure Digital | Store</title>
+    <title>Azure Digital | Checkout</title>
     <style>
         body { background-color: #050505; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        .glass-nav { background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid #111; width: 100%; }
+        .glass-nav { background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid #111; }
         
-        /* CARD ESTILO NEXUS */
-        .nexus-card { 
-            background: #0d0d0d; border: 1px solid #161616; border-radius: 1.5rem; 
-            padding: 12px; display: flex; flex-direction: column; align-items: center; 
-            text-align: center; transition: 0.3s; height: 100%;
-        }
-        .nexus-card:hover:not(.sold-out) { border-color: #333; transform: translateY(-5px); }
-        .sold-out { opacity: 0.4; filter: grayscale(1); }
+        /* ESTILO DOS CARDS E CHECKOUT */
+        .nexus-box { background: #0d0d0d; border: 1px solid #161616; border-radius: 1rem; padding: 20px; }
+        .input-checkout { background: #121212; border: 1px solid #1a1a1a; border-radius: 0.8rem; padding: 12px; width: 100%; color: #fff; outline: none; font-size: 13px; }
+        .input-checkout:focus { border-color: #333; }
+        
+        .btn-pay { background: #ffffff; color: #000; width: 100%; padding: 15px; border-radius: 0.8rem; font-weight: 900; text-transform: uppercase; font-size: 12px; transition: 0.3s; }
+        .btn-pay:hover { background: #e5e5e5; }
 
-        .btn-comprar {
-            background: #151515; color: #fff; width: 100%; padding: 12px; 
-            border-radius: 0.8rem; font-size: 10px; font-weight: 900; 
-            text-transform: uppercase; display: flex; align-items: center; 
-            justify-content: center; gap: 8px; margin-top: auto;
-        }
-        .btn-comprar:hover { background: #fff; color: #000; }
-
-        /* MODAL */
-        .modal-content { background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 2.5rem; padding: 40px; }
-        .input-email { background: #121212; border: 1px solid #1a1a1a; border-radius: 1rem; padding: 18px; width: 100%; color: #fff; outline: none; }
+        /* CARRINHO */
+        #cart-view { min-height: 80vh; }
+        .product-row { background: #111; border: 1px solid #1a1a1a; border-radius: 12px; padding: 15px; }
     </style>
 </head>
 <body>
 
     <nav class="glass-nav sticky top-0 z-50 py-4 px-6">
         <div class="w-full flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 bg-blue-600 rounded-lg shadow-[0_0_15px_rgba(37,99,235,0.4)]"></div>
+            <div class="flex items-center gap-3 cursor-pointer" onclick="location.reload()">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg"></div>
                 <span class="font-black italic uppercase text-xl tracking-tighter">Azure <span class="text-blue-500">Digital</span></span>
             </div>
             
-            <div class="hidden lg:flex flex-1 max-w-md mx-10">
-                <div class="relative w-full">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-zinc-600 text-sm"></i>
-                    <input type="text" placeholder="Pesquisar produto..." class="w-full bg-[#0d0d0d] border border-zinc-900 rounded-xl py-3 pl-12 pr-4 text-xs outline-none focus:border-blue-600">
-                </div>
-            </div>
-
-            <div class="flex items-center gap-4" id="nav-auth-area">
-                <button class="bg-white text-black px-5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2">
-                    <i class="fa-solid fa-bag-shopping"></i> Carrinho
+            <div class="flex items-center gap-4">
+                <button onclick="toggleCart()" class="bg-white text-black px-5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2">
+                    <i class="fa-solid fa-bag-shopping"></i> Carrinho <span id="cart-count" class="bg-black text-white px-2 py-0.5 rounded-md ml-1">0</span>
                 </button>
-                <button id="btn-login-trigger" onclick="openModal()" class="bg-zinc-800 hover:bg-zinc-700 px-6 py-2.5 rounded-xl font-black uppercase italic text-xs transition">
-                    Entrar
-                </button>
+                <div id="user-display" class="hidden"></div>
+                <button id="btn-login" onclick="openLogin()" class="bg-zinc-800 px-6 py-2.5 rounded-xl font-black uppercase italic text-xs">Entrar</button>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-6xl mx-auto px-6 py-12">
-        <div class="mb-10 flex items-center gap-3">
-            <span class="w-1.5 h-6 bg-blue-600 rounded-full"></span>
-            <h2 class="text-xl font-black italic uppercase tracking-widest">Destaques</h2>
+    <div id="home-view" class="max-w-7xl mx-auto px-8 py-12">
+        <div class="mb-10"><h2 class="text-2xl font-black italic uppercase tracking-tighter border-l-4 border-blue-600 pl-4">Destaques</h2></div>
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4" id="products-grid">
+            </div>
+    </div>
+
+    <div id="cart-view" class="hidden max-w-7xl mx-auto px-8 py-12">
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold">Carrinhos de compras</h1>
+            <p class="text-zinc-500 text-sm">Nesta página, você encontra os produtos adicionados ao seu carrinho.</p>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            <div class="nexus-card">
-                <div class="w-full h-28 bg-zinc-900 rounded-2xl mb-4 flex items-center justify-center">
-                    <i class="fa-brands fa-youtube text-4xl text-red-600"></i>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <div class="lg:col-span-4 space-y-6">
+                <div class="nexus-box">
+                    <h3 class="font-bold text-sm mb-6 uppercase tracking-widest">Informações de pagamento</h3>
+                    <div class="flex items-center gap-3 mb-6 p-4 border border-blue-600/30 bg-blue-600/5 rounded-xl">
+                        <input type="radio" checked class="accent-blue-600">
+                        <i class="fa-brands fa-pix text-[#00bdae] text-xl"></i>
+                        <span class="text-sm font-bold">Pix</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-[10px] font-bold text-zinc-500 uppercase">Informe o seu e-mail</label>
+                            <input type="email" placeholder="Insira seu email" class="input-checkout mt-1">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-zinc-500 uppercase">Informe novamente o seu e-mail</label>
+                            <input type="email" placeholder="Insira seu email" class="input-checkout mt-1">
+                        </div>
+                    </div>
                 </div>
-                <div class="text-[11px] font-bold text-zinc-400 mb-2 uppercase italic">YouTube Premium</div>
-                <div class="text-2xl font-black italic mb-4">R$ 1,50</div>
-                <button class="btn-comprar">Comprar <i class="fa-solid fa-bag-shopping"></i></button>
-            </div>
-            </div>
-    </main>
 
-    <div id="login-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6">
-        <div class="absolute inset-0 bg-black/95 backdrop-blur-sm" onclick="closeModal()"></div>
-        <div class="modal-content w-full max-w-md relative z-10">
-            <div class="text-center mb-8">
-                <h2 class="text-5xl font-black italic uppercase tracking-tighter mb-2">ENTRAR</h2>
-                <p class="text-zinc-500 text-xs font-medium uppercase tracking-widest">Faça login com seu e-mail</p>
+                <div class="nexus-box flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-tag text-blue-500"></i>
+                        <span class="text-xs font-bold uppercase">Cupom de desconto</span>
+                    </div>
+                    <button class="bg-zinc-800 px-4 py-2 rounded-lg text-[10px] font-black uppercase">Adicionar</button>
+                </div>
             </div>
 
-            <div class="space-y-3 mb-8">
-                <button class="w-full bg-[#0d0d0d] border border-zinc-800 py-4 rounded-2xl flex items-center justify-center gap-3 font-bold text-xs hover:bg-zinc-900 transition">
-                    <img src="https://www.google.com/favicon.ico" class="w-4 h-4"> Conectar com Google
-                </button>
-                <button class="w-full bg-[#0d0d0d] border border-zinc-800 py-4 rounded-2xl flex items-center justify-center gap-3 font-bold text-xs hover:bg-zinc-900 transition">
-                    <i class="fa-brands fa-discord text-blue-500 text-lg"></i> Conectar com Discord
-                </button>
+            <div class="lg:col-span-5">
+                <div class="nexus-box">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-sm uppercase tracking-widest">Produtos no carrinho</h3>
+                        <span id="cart-item-count-badge" class="text-[10px] bg-zinc-800 px-2 py-1 rounded">0 itens</span>
+                    </div>
+                    <div id="cart-items-list" class="space-y-4">
+                        </div>
+                </div>
             </div>
 
-            <div class="flex items-center gap-4 mb-8 text-zinc-800">
-                <div class="h-[1px] bg-zinc-900 flex-1"></div>
-                <span class="text-[9px] font-black uppercase tracking-widest">OU CONTINUAR COM</span>
-                <div class="h-[1px] bg-zinc-900 flex-1"></div>
+            <div class="lg:col-span-3">
+                <div class="nexus-box">
+                    <h3 class="font-bold text-sm mb-6 uppercase tracking-widest text-zinc-500">Resumo da compra</h3>
+                    <div class="space-y-4 mb-6">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-zinc-500">Subtotal</span>
+                            <span id="subtotal-val" class="font-bold">R$ 0,00</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span class="text-zinc-500">Método</span>
+                            <span class="flex items-center gap-1 font-bold text-[#00bdae] italic">
+                                <i class="fa-brands fa-pix text-[10px]"></i> Pix
+                            </span>
+                        </div>
+                    </div>
+                    <div class="border-t border-zinc-900 pt-4 flex justify-between items-center mb-6">
+                        <span class="font-black text-sm uppercase italic">Total</span>
+                        <span id="total-val" class="text-xl font-black italic">R$ 0,00</span>
+                    </div>
+                    <button class="btn-pay">Gerar pagamento</button>
+                </div>
             </div>
 
-            <div class="relative mb-6">
-                <i class="fa-regular fa-envelope absolute left-5 top-5 text-zinc-600"></i>
-                <input type="email" id="user-email" placeholder="exemplo@gmail.com" class="input-email pl-14 text-sm font-bold">
-            </div>
-
-            <button onclick="handleLogin()" class="w-full bg-zinc-800 py-5 rounded-2xl font-black italic uppercase text-zinc-500 hover:bg-white hover:text-black transition tracking-widest">
-                ENTRAR
-            </button>
         </div>
     </div>
 
     <script>
-        // FUNÇÕES PARA O MODAL E PERSISTÊNCIA (SALVAR CONTA)
-        const modal = document.getElementById('login-modal');
-        const authArea = document.getElementById('nav-auth-area');
+        const products = [
+            { id: 1, name: "YouTube Premium", price: 1.50, color: "bg-red-500" },
+            { id: 2, name: "Google Veo 3", price: 4.99, color: "bg-blue-400" },
+            { id: 3, name: "Chat GPT Plus", price: 2.30, color: "bg-green-500" },
+            { id: 4, name: "Premiere", price: 2.30, color: "bg-green-300" },
+            { id: 5, name: "CapCut PRO", price: 2.20, color: "bg-purple-500" }
+        ];
 
-        function openModal() { modal.classList.remove('hidden'); }
-        function closeModal() { modal.classList.add('hidden'); }
+        let cart = JSON.parse(localStorage.getItem('azure_cart')) || [];
 
-        // Salvar e Carregar Login
-        function handleLogin() {
-            const email = document.getElementById('user-email').value;
-            if (email) {
-                const username = email.split('@')[0].toUpperCase();
-                localStorage.setItem('azure_user', username); // Salva no navegador
-                renderUser(username);
-                closeModal();
+        function renderHome() {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = products.map(p => `
+                <div class="nexus-box flex flex-col items-center">
+                    <div class="w-full h-24 bg-zinc-900 rounded-xl mb-4"></div>
+                    <div class="text-[10px] font-bold text-zinc-400 uppercase italic mb-1">
+                        <span class="w-1.5 h-1.5 rounded-full inline-block ${p.color} mr-1"></span> ${p.name}
+                    </div>
+                    <div class="text-xl font-black italic mb-4">R$ ${p.price.toFixed(2).replace('.', ',')}</div>
+                    <button onclick="addToCart(${p.id})" class="bg-zinc-800 w-full py-3 rounded-xl font-black text-[10px] uppercase hover:bg-white hover:text-black transition">
+                        Comprar <i class="fa-solid fa-bag-shopping ml-2"></i>
+                    </button>
+                </div>
+            `).join('');
+            updateCartUI();
+        }
+
+        function addToCart(id) {
+            const prod = products.find(p => p.id === id);
+            cart.push(prod);
+            localStorage.setItem('azure_cart', JSON.stringify(cart));
+            updateCartUI();
+            toggleCart(); // Abre o carrinho automaticamente ao comprar
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-count').innerText = cart.length;
+            document.getElementById('cart-item-count-badge').innerText = `${cart.length} itens`;
+            
+            const list = document.getElementById('cart-items-list');
+            let total = 0;
+            
+            list.innerHTML = cart.map((item, index) => {
+                total += item.price;
+                return `
+                    <div class="product-row flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-zinc-800 rounded-lg"></div>
+                            <div>
+                                <div class="text-[11px] font-bold italic"><span class="w-2 h-2 rounded-full inline-block ${item.color} mr-1"></span> ${item.name}</div>
+                                <div class="text-[9px] text-zinc-600 mt-1">⚡ Entrega Automática</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-sm font-black italic">R$ ${item.price.toFixed(2).replace('.', ',')}</div>
+                            <button onclick="removeFromCart(${index})" class="text-red-500/50 hover:text-red-500"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('subtotal-val').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            document.getElementById('total-val').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('azure_cart', JSON.stringify(cart));
+            updateCartUI();
+        }
+
+        function toggleCart() {
+            const home = document.getElementById('home-view');
+            const cartV = document.getElementById('cart-view');
+            if(cartV.classList.contains('hidden')) {
+                home.classList.add('hidden');
+                cartV.classList.remove('hidden');
+            } else {
+                home.classList.remove('hidden');
+                cartV.classList.add('hidden');
             }
         }
 
-        function renderUser(name) {
-            authArea.innerHTML = `
-                <button class="bg-white text-black px-5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2">
-                    <i class="fa-solid fa-bag-shopping"></i> Carrinho
-                </button>
-                <div class="flex items-center gap-2">
-                    <span class="bg-zinc-900 border border-zinc-800 px-4 py-2.5 rounded-xl font-black uppercase italic text-[10px] tracking-tighter">
-                        ${name}
-                    </span>
-                    <button onclick="logout()" class="text-zinc-600 hover:text-red-500 transition ml-1">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                    </button>
-                </div>
-            `;
-        }
-
-        function logout() {
-            localStorage.removeItem('azure_user');
-            window.location.reload();
-        }
-
-        // Verifica se já estava logado ao abrir o site
         window.onload = () => {
-            const savedUser = localStorage.getItem('azure_user');
-            if (savedUser) renderUser(savedUser);
+            renderHome();
+            const user = localStorage.getItem('azure_user');
+            if(user) {
+                document.getElementById('btn-login').classList.add('hidden');
+                document.getElementById('user-display').innerHTML = `<span class="bg-zinc-900 border border-zinc-800 px-4 py-2.5 rounded-xl font-black uppercase italic text-[10px] tracking-tighter">${user}</span>`;
+                document.getElementById('user-display').classList.remove('hidden');
+            }
         };
     </script>
 </body>
