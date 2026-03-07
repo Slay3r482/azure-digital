@@ -8,150 +8,94 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <title>Azure Digital | Store</title>
     <style>
-        body { background-color: #050505; color: #fff; font-family: 'Inter', sans-serif; }
+        body { background-color: #050505; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         
-        /* CARD PADRÃO NEXUS PRIME */
+        /* NAVBAR FIXA */
+        .glass-nav { background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid #111; }
+
+        /* BANNER PRINCIPAL (IGUAL À FOTO) */
+        .hero-section { padding: 80px 0; }
+        .hero-title { font-size: 64px; font-weight: 900; font-style: italic; text-transform: uppercase; line-height: 0.9; }
+
+        /* ESTILO DOS CARDS NEXUS */
         .nexus-card { 
-            background: #0d0d0d; 
-            border: 1px solid #1a1a1a; 
-            border-radius: 1.5rem; 
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            transition: 0.3s;
-            position: relative;
-            height: 100%;
+            background: #0d0d0d; border: 1px solid #161616; border-radius: 1.5rem; 
+            padding: 12px; display: flex; flex-direction: column; align-items: center; 
+            text-align: center; transition: 0.3s; position: relative; height: 100%;
         }
-        .nexus-card:hover:not(.sold-out) { border-color: #333; transform: translateY(-4px); }
+        .nexus-card:hover:not(.sold-out) { border-color: #333; transform: translateY(-5px); }
+        .sold-out { opacity: 0.4; filter: grayscale(1); }
 
-        /* ESTADO ESGOTADO */
-        .sold-out { opacity: 0.5; cursor: not-allowed; }
-        .sold-out-badge {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.8);
-            padding: 4px 12px;
-            border-radius: 8px;
-            font-weight: 900;
-            font-size: 10px;
-            letter-spacing: 1px;
-            z-index: 10;
-            border: 1px solid #333;
-        }
-
-        /* IMAGEM DO PRODUTO */
         .product-image {
-            width: 100%;
-            height: 115px;
-            background-size: cover;
-            background-position: center;
-            border-radius: 1rem;
-            margin-bottom: 12px;
-            position: relative;
-            border: 1px solid #1a1a1a;
+            width: 100%; height: 110px; background-size: cover; background-position: center;
+            border-radius: 1rem; margin-bottom: 12px; border: 1px solid #1a1a1a; position: relative;
         }
 
-        /* BADGE ENTREGA AUTOMÁTICA */
-        .badge-auto {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: rgba(0,0,0,0.8);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #fff;
-            font-size: 7px;
-            padding: 2px 8px;
-            border-radius: 99px;
-            font-weight: 800;
-            text-transform: uppercase;
-        }
-
-        /* TÍTULO COM INDICADOR DE STATUS */
-        .product-title {
-            font-size: 11px;
-            font-weight: 700;
-            color: #ccc;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* PREÇO E ÍCONES */
-        .price-main { font-size: 20px; font-weight: 900; font-style: italic; }
-        .payment-info { 
-            font-size: 8px; 
-            color: #666; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 4px;
-            margin-bottom: 15px;
-        }
-
-        /* BOTÃO COMPRAR PADRONIZADO */
         .btn-comprar {
-            background: #161616;
-            color: #fff;
-            width: 100%;
-            padding: 10px;
-            border-radius: 0.8rem;
-            font-size: 10px;
-            font-weight: 900;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: 0.2s;
-            margin-top: auto;
+            background: #151515; color: #fff; width: 100%; padding: 12px; 
+            border-radius: 0.8rem; font-size: 10px; font-weight: 900; 
+            text-transform: uppercase; display: flex; align-items: center; 
+            justify-content: center; gap: 8px; margin-top: auto; transition: 0.2s;
         }
-        .btn-comprar:hover:not(.btn-off) { background: #fff; color: #000; }
-        .btn-off { background: #111; color: #444; cursor: not-allowed; }
+        .btn-comprar:hover { background: #fff; color: #000; }
+
+        /* MODAL DE LOGIN (IGUAL À FOTO) */
+        .modal-content { background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 2.5rem; padding: 40px; }
+        .input-dark { background: #121212; border: 1px solid #1a1a1a; border-radius: 1rem; padding: 15px; width: 100%; color: #fff; outline: none; }
     </style>
 </head>
 <body>
 
-    <nav class="sticky top-0 z-50 bg-[#050505]/80 backdrop-blur-lg border-bottom border-[#1a1a1a] py-4 px-6">
+    <nav class="glass-nav sticky top-0 z-50 py-4 px-8">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="w-7 h-7 bg-blue-600 rounded-lg"></div>
-                <span class="font-black italic uppercase text-lg tracking-tighter">Azure Digital</span>
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg shadow-[0_0_15px_rgba(37,99,235,0.4)]"></div>
+                <span class="font-black italic uppercase text-xl tracking-tighter">Azure <span class="text-blue-500">Digital</span></span>
             </div>
+            
+            <div class="hidden md:flex flex-1 max-w-md mx-10">
+                <div class="relative w-full">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-zinc-600 text-sm"></i>
+                    <input type="text" placeholder="Pesquisar produto..." class="w-full bg-[#0d0d0d] border border-zinc-900 rounded-xl py-3 pl-12 pr-4 text-xs font-medium focus:border-blue-600 transition outline-none">
+                </div>
+            </div>
+
             <div class="flex items-center gap-4">
-                <button class="bg-white text-black px-4 py-2 rounded-xl font-bold text-xs flex items-center gap-2 italic">
+                <button class="bg-white text-black px-5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2">
                     <i class="fa-solid fa-bag-shopping"></i> Carrinho
                 </button>
-                <button class="bg-zinc-800 px-4 py-2 rounded-xl font-black uppercase italic text-xs">Entrar</button>
+                <button onclick="document.getElementById('login-modal').classList.remove('hidden')" class="bg-zinc-800 hover:bg-zinc-700 px-6 py-2.5 rounded-xl font-black uppercase italic text-xs transition">Entrar</button>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-6xl mx-auto px-6 py-12">
-        <div class="mb-10 flex items-center gap-3">
-            <span class="w-1 h-6 bg-blue-600 rounded-full shadow-[0_0_10px_#2563eb]"></span>
-            <h2 class="text-xl font-black italic uppercase tracking-widest">Assinaturas</h2>
+    <header class="max-w-7xl mx-auto px-8 hero-section">
+        <h1 class="hero-title mb-4">AZURE <span class="text-blue-600">DIGITAL!</span></h1>
+        <p class="text-zinc-500 font-medium max-w-lg text-sm leading-relaxed mb-8">
+            Sua loja premium de produtos digitais. Entrega 100% automática via Discord e E-mail.
+        </p>
+        <div class="flex gap-4">
+            <button class="bg-[#0d0d0d] border border-zinc-900 px-8 py-4 rounded-2xl font-bold text-xs flex items-center gap-3 hover:bg-zinc-900 transition">
+                <i class="fa-brands fa-discord text-blue-500 text-lg"></i> SUPORTE DISCORD
+            </button>
+            <button class="bg-blue-600 px-10 py-4 rounded-2xl font-black italic uppercase text-xs hover:bg-blue-500 transition shadow-[0_0_20px_rgba(37,99,235,0.3)]">CATÁLOGO</button>
         </div>
-        
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            
+    </header>
+
+    <section class="max-w-7xl mx-auto px-8 pb-20">
+        <div class="mb-12 flex items-center gap-4">
+            <span class="w-1.5 h-8 bg-blue-600 rounded-full"></span>
+            <h2 class="text-2xl font-black italic uppercase tracking-tighter">Destaques</h2>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
             <div class="nexus-card">
                 <div class="product-image" style="background-image: url('https://img.freepik.com/vetores-premium/logotipo-do-youtube-vermelho-e-branco-fundo-preto_960911-379.jpg');">
                     <span class="badge-auto">⚡ Entrega Automática</span>
                 </div>
-                <div class="product-title">
-                    <span class="w-2 h-2 rounded-full bg-red-500"></span> Youtube Premium
-                </div>
-                <div class="price-main italic">R$ 1,50 <span class="text-xs font-bold text-zinc-600">+ 🪙</span></div>
-                <div class="payment-info">
-                    <i class="fa-brands fa-cc-mastercard"></i>
-                    <i class="fa-brands fa-cc-visa"></i>
-                    <span>À vista no PIX ou Cartão</span>
-                </div>
+                <div class="product-title"><span class="w-2 h-2 rounded-full bg-red-600"></span> YouTube Premium</div>
+                <div class="text-2xl font-black italic mb-1">R$ 1,50 <span class="text-xs text-zinc-600">+ 🪙</span></div>
+                <div class="flex gap-1 mb-4 opacity-50"><i class="fa-brands fa-cc-visa text-[10px]"></i><i class="fa-brands fa-cc-mastercard text-[10px]"></i></div>
                 <button class="btn-comprar">Comprar <i class="fa-solid fa-bag-shopping"></i></button>
             </div>
 
@@ -159,62 +103,72 @@
                 <div class="product-image" style="background-image: url('https://static.vecteezy.com/system/resources/previews/010/353/285/original/google-logo-on-black-background-free-vector.jpg');">
                     <span class="badge-auto">⚡ Entrega Automática</span>
                 </div>
-                <div class="product-title">
-                    <span class="w-2 h-2 rounded-full bg-blue-400"></span> Google Veo 3
-                </div>
-                <div class="price-main italic">R$ 4,99 <span class="text-xs font-bold text-zinc-600">+ 🪙</span></div>
-                <div class="payment-info">
-                    <i class="fa-brands fa-cc-visa"></i>
-                    <span>À vista no PIX ou Cartão</span>
-                </div>
+                <div class="product-title"><span class="w-2 h-2 rounded-full bg-purple-500"></span> Google Veo 3</div>
+                <div class="text-2xl font-black italic mb-1">R$ 4,99 <span class="text-xs text-zinc-600">+ 🪙</span></div>
+                <div class="flex gap-1 mb-4 opacity-50"><i class="fa-brands fa-cc-visa text-[10px]"></i></div>
                 <button class="btn-comprar">Comprar <i class="fa-solid fa-bag-shopping"></i></button>
             </div>
 
             <div class="nexus-card sold-out">
                 <div class="product-image" style="background-image: url('https://logodownload.org/wp-content/uploads/2023/02/chatgpt-logo-1.png');">
-                    <div class="sold-out-badge">ESGOTADO</div>
+                    <div class="absolute inset-0 flex items-center justify-center font-black text-[10px] tracking-widest text-white uppercase bg-black/60">ESGOTADO</div>
                 </div>
-                <div class="product-title">
-                    <span class="w-2 h-2 rounded-full bg-green-500"></span> Chat Gpt
-                </div>
-                <div class="price-main italic">R$ 2,30 <i class="fa-solid fa-bolt text-blue-500 text-xs"></i></div>
-                <div class="payment-info">
-                    <span>Indisponível no momento</span>
-                </div>
-                <button class="btn-comprar btn-off">Comprar <i class="fa-solid fa-bag-shopping"></i></button>
+                <div class="product-title"><span class="w-2 h-2 rounded-full bg-green-500"></span> Chat GPT Plus</div>
+                <div class="text-2xl font-black italic mb-1">R$ 2,30</div>
+                <button class="btn-comprar opacity-50 cursor-not-allowed">Comprar</button>
             </div>
-
-            <div class="nexus-card">
-                <div class="product-image" style="background-image: url('https://yt3.googleusercontent.com/fLpxK56z-O-0E2z4E9vG_V0-fRzO6oXvM0b9vK6I7_U1fE=s900-c-k-c0x00ffffff-no-rj');">
-                    <span class="badge-auto">⚡ Entrega Automática</span>
-                </div>
-                <div class="product-title">
-                    <span class="w-2 h-2 rounded-full bg-green-300"></span> Premiere
-                </div>
-                <div class="price-main italic">R$ 2,30 <i class="fa-solid fa-bolt text-blue-500 text-xs"></i></div>
-                <div class="payment-info">
-                    <i class="fa-brands fa-cc-mastercard"></i>
-                    <span>À vista no PIX ou Cartão</span>
-                </div>
-                <button class="btn-comprar">Comprar <i class="fa-solid fa-bag-shopping"></i></button>
+            
             </div>
+    </section>
 
-            <div class="nexus-card">
-                <div class="product-image" style="background-image: url('https://logowik.com/content/uploads/images/capcut-icon6105.jpg');">
-                </div>
-                <div class="product-title">
-                    <span class="w-2 h-2 rounded-full bg-purple-500"></span> CapCut PRO
-                </div>
-                <div class="price-main italic">R$ 2,20 <span class="text-xs font-bold text-zinc-600">+ 🪙</span></div>
-                <div class="payment-info">
-                    <i class="fa-brands fa-cc-visa text-blue-500"></i>
-                    <span>À vista no PIX ou Cartão</span>
-                </div>
-                <button class="btn-comprar">Comprar <i class="fa-solid fa-bag-shopping"></i></button>
+    <footer class="border-t border-zinc-900 py-10 px-8 bg-[#030303]">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="text-center md:text-left">
+                <div class="font-black italic text-lg uppercase mb-2">Azure Digital</div>
+                <p class="text-zinc-600 text-xs">© 2026 Todos os direitos reservados.</p>
             </div>
-
+            <div class="flex flex-col items-center gap-3">
+                <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Meios de Pagamento</span>
+                <div class="flex gap-4 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition">
+                    <i class="fa-brands fa-pix text-2xl"></i>
+                    <i class="fa-brands fa-cc-visa text-2xl"></i>
+                    <i class="fa-brands fa-cc-mastercard text-2xl"></i>
+                </div>
+            </div>
         </div>
-    </main>
+    </footer>
+
+    <div id="login-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6">
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-sm" onclick="this.parentElement.classList.add('hidden')"></div>
+        <div class="modal-content w-full max-w-sm relative z-10">
+            <div class="text-center mb-10">
+                <h2 class="text-4xl font-black italic uppercase tracking-tighter mb-2">ENTRAR</h2>
+                <p class="text-zinc-500 text-xs font-medium">Faça login com seu endereço de e-mail</p>
+            </div>
+
+            <div class="space-y-3 mb-8">
+                <button class="w-full bg-[#0d0d0d] border border-zinc-800 py-4 rounded-2xl flex items-center justify-center gap-3 font-bold text-xs hover:bg-zinc-900 transition">
+                    <img src="https://www.google.com/favicon.ico" class="w-4 h-4"> Conectar com Google
+                </button>
+                <button class="w-full bg-[#0d0d0d] border border-zinc-800 py-4 rounded-2xl flex items-center justify-center gap-3 font-bold text-xs hover:bg-zinc-900 transition">
+                    <i class="fa-brands fa-discord text-blue-500 text-lg"></i> Conectar com Discord
+                </button>
+            </div>
+
+            <div class="flex items-center gap-4 mb-8">
+                <div class="h-[1px] bg-zinc-900 flex-1"></div>
+                <span class="text-[9px] font-black text-zinc-700 uppercase tracking-widest">ou continuar com</span>
+                <div class="h-[1px] bg-zinc-900 flex-1"></div>
+            </div>
+
+            <div class="relative mb-6">
+                <i class="fa-regular fa-envelope absolute left-5 top-5 text-zinc-600"></i>
+                <input type="email" placeholder="exemplo@gmail.com" class="input-dark pl-14 text-sm font-bold">
+            </div>
+
+            <button class="w-full bg-zinc-800 py-5 rounded-2xl font-black italic uppercase text-zinc-500 hover:bg-white hover:text-black transition tracking-widest">ENTRAR</button>
+        </div>
+    </div>
 
 </body>
 </html>
