@@ -10,29 +10,16 @@
     <style>
         :root { --bg: #050505; --card: #0d0d0d; --border: #1a1a1a; --accent: #2563eb; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; }
-        
-        /* Estilo Eremby Cards */
         .card { background: var(--card); border: 1px solid var(--border); border-radius: 1.25rem; transition: 0.2s; }
         .card:hover { border-color: var(--accent); }
-        
-        /* Botões */
-        .btn-buy { background: #fff; color: #000; font-weight: 800; text-transform: uppercase; font-size: 0.7rem; padding: 12px; border-radius: 0.75rem; width: 100%; transition: 0.2s; }
-        .btn-buy:hover { opacity: 0.8; transform: scale(1.02); }
-        
-        /* Abas de Categorias */
-        .tab { padding: 10px 20px; border-radius: 0.75rem; background: var(--card); border: 1px solid var(--border); color: #666; font-weight: 800; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; transition: 0.2s; }
+        .btn-buy { background: #fff; color: #000; font-weight: 800; text-transform: uppercase; font-size: 0.7rem; padding: 12px; border-radius: 0.75rem; width: 100%; transition: 0.2s; cursor: pointer; }
+        .tab { padding: 10px 20px; border-radius: 0.75rem; background: var(--card); border: 1px solid var(--border); color: #666; font-weight: 800; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; }
         .tab.active { background: #fff; color: #000; border-color: #fff; }
-
-        /* Controles de Quantidade no Carrinho */
-        .qty-ctrl { display: flex; align-items: center; background: #151515; border: 1px solid var(--border); border-radius: 0.5rem; overflow: hidden; }
-        .qty-btn { padding: 5px 12px; color: #fff; font-weight: bold; transition: 0.2s; cursor: pointer; border: none; background: transparent; }
-        .qty-btn:hover { background: #202020; }
-        .qty-num { width: 30px; text-align: center; font-size: 0.8rem; font-weight: 800; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
-
+        .qty-ctrl { display: flex; align-items: center; background: #151515; border: 1px solid var(--border); border-radius: 0.5rem; }
+        .qty-btn { padding: 5px 12px; color: #fff; font-weight: bold; cursor: pointer; border: none; background: transparent; }
         .input-eremby { background: var(--card); border: 1px solid var(--border); border-radius: 0.75rem; padding: 15px; width: 100%; color: #fff; font-size: 0.8rem; outline: none; }
-        .input-eremby:focus { border-color: var(--accent); }
-
         .hidden { display: none !important; }
+        #modal-login { background: rgba(0,0,0,0.9); backdrop-blur: 10px; }
     </style>
 </head>
 <body>
@@ -43,66 +30,67 @@
                 <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/20">
                     <i class="fa-solid fa-bolt text-white"></i>
                 </div>
-                <span class="text-2xl font-black italic uppercase tracking-tighter italic">Azure <span class="text-blue-600">Digital</span></span>
+                <span class="text-2xl font-black italic uppercase tracking-tighter">Azure <span class="text-blue-600">Digital</span></span>
             </div>
             <div class="flex items-center gap-4">
                 <button onclick="showView('cart')" class="bg-white text-black px-5 py-2 rounded-xl font-black text-[0.7rem] uppercase flex items-center gap-2">
                     <i class="fa-solid fa-cart-shopping"></i> Carrinho (<span id="cart-count">0</span>)
                 </button>
+                <div id="user-area">
+                    <button onclick="openLogin()" class="bg-zinc-900 border border-zinc-800 px-5 py-2 rounded-xl font-black text-[0.7rem] uppercase hover:bg-zinc-800 transition">Entrar</button>
+                </div>
             </div>
         </div>
     </nav>
 
+    <div id="modal-login" class="fixed inset-0 z-[100] flex items-center justify-center hidden p-6">
+        <div class="card w-full max-w-md p-10 text-center relative">
+            <button onclick="closeLogin()" class="absolute top-6 right-6 text-zinc-600 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h2 class="text-4xl font-black italic uppercase mb-2">ENTRAR</h2>
+            <p class="text-zinc-500 text-xs mb-10">Acesse sua conta para gerenciar seus pedidos.</p>
+            
+            <input type="email" id="login-email" placeholder="seuemail@gmail.com" class="input-eremby mb-4 text-center">
+            <button onclick="doLogin()" class="btn-buy !bg-blue-600 !text-white !py-4">Acessar Agora</button>
+            <p class="text-[10px] text-zinc-600 mt-6 uppercase font-bold">Entrega automática garantida</p>
+        </div>
+    </div>
+
     <div id="view-home">
         <div class="max-w-7xl mx-auto px-6 py-12">
-            <h1 class="text-6xl font-black italic uppercase tracking-tighter mb-2">EREMBY <span class="text-blue-600">STORE</span></h1>
-            <p class="text-zinc-500 text-sm mb-10">Entrega automática e imediata via e-mail.</p>
-            
+            <h1 class="text-6xl font-black italic uppercase tracking-tighter mb-2 leading-none">EREMBY <span class="text-blue-600">STORE</span></h1>
+            <p class="text-zinc-500 text-sm mb-10">Sua plataforma premium de produtos digitais.</p>
             <div class="flex flex-wrap gap-3 mb-12">
                 <button class="tab active" onclick="filter('Todos', this)">Todos</button>
                 <button class="tab" onclick="filter('Streaming', this)">Streaming</button>
                 <button class="tab" onclick="filter('IA Tools', this)">IA Tools</button>
-                <button class="tab" onclick="filter('Games', this)">Games</button>
             </div>
-
-            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                </div>
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"></div>
         </div>
     </div>
 
     <div id="view-cart" class="hidden">
         <div class="max-w-7xl mx-auto px-6 py-16">
-            <div class="mb-10">
-                <h2 class="text-3xl font-black uppercase italic italic">Finalizar Pedido</h2>
-                <p class="text-zinc-500 text-xs uppercase font-bold tracking-widest">Passo Final</p>
-            </div>
-
+            <h2 class="text-3xl font-black uppercase italic mb-10">Meu Carrinho</h2>
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-4 space-y-6">
-                    <div class="card p-8">
-                        <p class="text-[0.6rem] font-black text-zinc-500 uppercase tracking-widest mb-6">Método de Pagamento</p>
-                        <div class="flex items-center gap-4 p-4 bg-blue-600/5 border border-blue-600/20 rounded-xl mb-6">
-                            <i class="fa-brands fa-pix text-emerald-400 text-xl"></i>
-                            <span class="text-sm font-bold uppercase">Pagar com Pix</span>
-                        </div>
-                        <p class="text-[0.6rem] font-black text-zinc-500 uppercase tracking-widest mb-2">Seu E-mail</p>
-                        <input type="email" placeholder="onde quer receber o produto?" class="input-eremby">
+                <div class="lg:col-span-4 card p-8">
+                    <p class="text-[0.6rem] font-black text-zinc-500 mb-6 tracking-widest uppercase">Pagamento</p>
+                    <div class="flex items-center gap-4 p-4 bg-blue-600/5 border border-blue-600/20 rounded-xl mb-6">
+                        <i class="fa-brands fa-pix text-emerald-400 text-xl"></i>
+                        <span class="text-sm font-bold">Pix Automático</span>
                     </div>
+                    <input type="email" id="checkout-email" placeholder="E-mail para entrega" class="input-eremby">
                 </div>
-
                 <div class="lg:col-span-5 card p-8">
-                    <p class="text-[0.6rem] font-black text-zinc-500 uppercase tracking-widest mb-6">Itens no Carrinho</p>
-                    <div id="cart-items-list" class="space-y-4">
-                        </div>
+                    <p class="text-[0.6rem] font-black text-zinc-500 mb-6 tracking-widest uppercase">Itens</p>
+                    <div id="cart-items-list" class="space-y-4"></div>
                 </div>
-
                 <div class="lg:col-span-3 card p-8 h-fit">
-                    <p class="text-[0.6rem] font-black text-zinc-500 uppercase tracking-widest mb-6">Resumo</p>
+                    <p class="text-[0.6rem] font-black text-zinc-500 mb-6 tracking-widest uppercase">Resumo</p>
                     <div class="flex justify-between items-baseline pt-4 border-t border-[#111] mb-8">
-                        <span class="text-xs font-bold text-zinc-400">TOTAL:</span>
+                        <span class="text-xs font-bold text-zinc-400 uppercase">Total:</span>
                         <span id="total-price" class="text-3xl font-black italic text-blue-600">R$ 0,00</span>
                     </div>
-                    <button class="btn-buy" onclick="alert('Gerando código Pix...')">Concluir Compra</button>
+                    <button class="btn-buy" onclick="alert('Gerando Pix...')">Finalizar</button>
                 </div>
             </div>
         </div>
@@ -110,10 +98,9 @@
 
     <script>
         const products = [
-            { id: 1, name: "Youtube Premium 30 Dias", price: 1.50, cat: "Streaming", img: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" },
+            { id: 1, name: "Youtube Premium 30D", price: 1.50, cat: "Streaming", img: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" },
             { id: 2, name: "Google Gemini Advanced", price: 4.90, cat: "IA Tools", img: "https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_Gemini_logo.svg" },
-            { id: 3, name: "ChatGPT Plus Compartilhado", price: 2.30, cat: "IA Tools", img: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" },
-            { id: 4, name: "Xbox Game Pass 1 Mês", price: 9.90, cat: "Games", img: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Xbox_one_logo.svg" }
+            { id: 3, name: "ChatGPT Plus", price: 2.30, cat: "IA Tools", img: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" }
         ];
 
         let cart = [];
@@ -121,33 +108,24 @@
         function filter(cat, btn) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             btn.classList.add('active');
-            
             const grid = document.getElementById('product-grid');
             const data = cat === 'Todos' ? products : products.filter(p => p.cat === cat);
-            
             grid.innerHTML = data.map(p => `
-                <div class="card p-6 flex flex-col h-full">
-                    <div class="bg-[#050505] rounded-2xl p-6 h-32 flex items-center justify-center mb-5 border border-[#111]">
-                        <img src="${p.img}" class="max-h-full">
-                    </div>
+                <div class="card p-5 flex flex-col h-full">
+                    <div class="bg-black rounded-xl p-6 h-32 flex items-center justify-center mb-4 border border-zinc-900"><img src="${p.img}" class="max-h-full"></div>
                     <span class="text-[0.6rem] font-black text-blue-500 uppercase mb-1">${p.cat}</span>
-                    <h3 class="text-[0.8rem] font-bold mb-4 line-clamp-1">${p.name}</h3>
+                    <h3 class="text-[0.8rem] font-bold mb-4">${p.name}</h3>
                     <div class="mt-auto">
                         <p class="text-2xl font-black italic mb-4">R$ ${p.price.toFixed(2).replace('.', ',')}</p>
-                        <button onclick="addToCart(${p.id})" class="btn-buy">Adicionar</button>
+                        <button onclick="addToCart(${p.id})" class="btn-buy">Comprar</button>
                     </div>
-                </div>
-            `).join('');
+                </div>`).join('');
         }
 
         function addToCart(id) {
             const item = cart.find(i => i.id === id);
-            if(item) {
-                item.qty++;
-            } else {
-                const p = products.find(x => x.id === id);
-                cart.push({...p, qty: 1});
-            }
+            if(item) item.qty++;
+            else cart.push({...products.find(x => x.id === id), qty: 1});
             updateCart();
             showView('cart');
         }
@@ -159,33 +137,21 @@
         }
 
         function updateCart() {
-            let total = 0;
-            let count = 0;
+            let total = 0; let count = 0;
             const list = document.getElementById('cart-items-list');
-            
             list.innerHTML = cart.map((item, i) => {
-                total += (item.price * item.qty);
-                count += item.qty;
+                total += (item.price * item.qty); count += item.qty;
                 return `
-                <div class="flex justify-between items-center p-4 bg-[#080808] border border-[#151515] rounded-xl">
-                    <div class="flex items-center gap-3">
-                        <img src="${item.img}" class="w-8 h-8 object-contain">
-                        <div>
-                            <p class="text-[0.7rem] font-black uppercase">${item.name}</p>
-                            <p class="text-[0.6rem] text-zinc-500">R$ ${item.price.toFixed(2)}/un</p>
-                        </div>
+                <div class="flex justify-between items-center p-4 bg-black border border-zinc-900 rounded-xl">
+                    <div class="flex items-center gap-3"><img src="${item.img}" class="w-8 h-8">
+                        <div><p class="text-[0.7rem] font-black uppercase">${item.name}</p></div>
                     </div>
                     <div class="flex items-center gap-4">
-                        <div class="qty-ctrl">
-                            <button class="qty-btn" onclick="updateQty(${i}, -1)">-</button>
-                            <span class="qty-num">${item.qty}</span>
-                            <button class="qty-btn" onclick="updateQty(${i}, 1)">+</button>
-                        </div>
-                        <button onclick="updateQty(${i}, -999)" class="text-zinc-600 hover:text-red-500"><i class="fa-solid fa-trash-can"></i></button>
+                        <div class="qty-ctrl"><button class="qty-btn" onclick="updateQty(${i}, -1)">-</button><span class="text-[0.8rem] px-2">${item.qty}</span><button class="qty-btn" onclick="updateQty(${i}, 1)">+</button></div>
+                        <button onclick="updateQty(${i}, -99)" class="text-zinc-700 hover:text-red-500"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 </div>`;
             }).join('');
-
             document.getElementById('cart-count').innerText = count;
             document.getElementById('total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
         }
@@ -196,7 +162,39 @@
             window.scrollTo(0,0);
         }
 
-        window.onload = () => filter('Todos', document.querySelector('.tab'));
+        // FUNÇÕES DO MODAL (BOTAO DE ENTRAR)
+        function openLogin() { document.getElementById('modal-login').classList.remove('hidden'); }
+        function closeLogin() { document.getElementById('modal-login').classList.add('hidden'); }
+        
+        function doLogin() {
+            const email = document.getElementById('login-email').value;
+            if(email) {
+                const user = email.split('@')[0].toUpperCase();
+                localStorage.setItem('user', user);
+                checkUser();
+                closeLogin();
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            checkUser();
+        }
+
+        function checkUser() {
+            const user = localStorage.getItem('user');
+            const area = document.getElementById('user-area');
+            if(user) {
+                area.innerHTML = `<div class="flex items-center gap-2">
+                    <span class="bg-blue-600/10 border border-blue-600/20 px-4 py-2 rounded-xl text-blue-500 font-black text-[0.7rem] italic uppercase">${user}</span>
+                    <button onclick="logout()" class="text-zinc-600 hover:text-red-500 ml-1"><i class="fa-solid fa-power-off"></i></button>
+                </div>`;
+            } else {
+                area.innerHTML = `<button onclick="openLogin()" class="bg-zinc-900 border border-zinc-800 px-5 py-2 rounded-xl font-black text-[0.7rem] uppercase">Entrar</button>`;
+            }
+        }
+
+        window.onload = () => { filter('Todos', document.querySelector('.tab')); checkUser(); };
     </script>
 </body>
 </html>
