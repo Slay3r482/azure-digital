@@ -9,141 +9,81 @@
     <title>Azure Digital | Store</title>
     <style>
         body { background-color: #050505; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .glass-nav { background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid #111; width: 100%; }
         
-        /* NAVBAR FIXA */
-        .glass-nav { background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid #111; }
-
-        /* BANNER PRINCIPAL (IGUAL À FOTO) */
-        .hero-section { padding: 80px 0; }
-        .hero-title { font-size: 64px; font-weight: 900; font-style: italic; text-transform: uppercase; line-height: 0.9; }
-
-        /* ESTILO DOS CARDS NEXUS */
+        /* CARD ESTILO NEXUS */
         .nexus-card { 
             background: #0d0d0d; border: 1px solid #161616; border-radius: 1.5rem; 
             padding: 12px; display: flex; flex-direction: column; align-items: center; 
-            text-align: center; transition: 0.3s; position: relative; height: 100%;
+            text-align: center; transition: 0.3s; height: 100%;
         }
         .nexus-card:hover:not(.sold-out) { border-color: #333; transform: translateY(-5px); }
         .sold-out { opacity: 0.4; filter: grayscale(1); }
-
-        .product-image {
-            width: 100%; height: 110px; background-size: cover; background-position: center;
-            border-radius: 1rem; margin-bottom: 12px; border: 1px solid #1a1a1a; position: relative;
-        }
 
         .btn-comprar {
             background: #151515; color: #fff; width: 100%; padding: 12px; 
             border-radius: 0.8rem; font-size: 10px; font-weight: 900; 
             text-transform: uppercase; display: flex; align-items: center; 
-            justify-content: center; gap: 8px; margin-top: auto; transition: 0.2s;
+            justify-content: center; gap: 8px; margin-top: auto;
         }
         .btn-comprar:hover { background: #fff; color: #000; }
 
-        /* MODAL DE LOGIN (IGUAL À FOTO) */
+        /* MODAL */
         .modal-content { background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 2.5rem; padding: 40px; }
-        .input-dark { background: #121212; border: 1px solid #1a1a1a; border-radius: 1rem; padding: 15px; width: 100%; color: #fff; outline: none; }
+        .input-email { background: #121212; border: 1px solid #1a1a1a; border-radius: 1rem; padding: 18px; width: 100%; color: #fff; outline: none; }
     </style>
 </head>
 <body>
 
-    <nav class="glass-nav sticky top-0 z-50 py-4 px-8">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
+    <nav class="glass-nav sticky top-0 z-50 py-4 px-6">
+        <div class="w-full flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="w-8 h-8 bg-blue-600 rounded-lg shadow-[0_0_15px_rgba(37,99,235,0.4)]"></div>
                 <span class="font-black italic uppercase text-xl tracking-tighter">Azure <span class="text-blue-500">Digital</span></span>
             </div>
             
-            <div class="hidden md:flex flex-1 max-w-md mx-10">
+            <div class="hidden lg:flex flex-1 max-w-md mx-10">
                 <div class="relative w-full">
                     <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-zinc-600 text-sm"></i>
-                    <input type="text" placeholder="Pesquisar produto..." class="w-full bg-[#0d0d0d] border border-zinc-900 rounded-xl py-3 pl-12 pr-4 text-xs font-medium focus:border-blue-600 transition outline-none">
+                    <input type="text" placeholder="Pesquisar produto..." class="w-full bg-[#0d0d0d] border border-zinc-900 rounded-xl py-3 pl-12 pr-4 text-xs outline-none focus:border-blue-600">
                 </div>
             </div>
 
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-4" id="nav-auth-area">
                 <button class="bg-white text-black px-5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2">
                     <i class="fa-solid fa-bag-shopping"></i> Carrinho
                 </button>
-                <button onclick="document.getElementById('login-modal').classList.remove('hidden')" class="bg-zinc-800 hover:bg-zinc-700 px-6 py-2.5 rounded-xl font-black uppercase italic text-xs transition">Entrar</button>
+                <button id="btn-login-trigger" onclick="openModal()" class="bg-zinc-800 hover:bg-zinc-700 px-6 py-2.5 rounded-xl font-black uppercase italic text-xs transition">
+                    Entrar
+                </button>
             </div>
         </div>
     </nav>
 
-    <header class="max-w-7xl mx-auto px-8 hero-section">
-        <h1 class="hero-title mb-4">AZURE <span class="text-blue-600">DIGITAL!</span></h1>
-        <p class="text-zinc-500 font-medium max-w-lg text-sm leading-relaxed mb-8">
-            Sua loja premium de produtos digitais. Entrega 100% automática via Discord e E-mail.
-        </p>
-        <div class="flex gap-4">
-            <button class="bg-[#0d0d0d] border border-zinc-900 px-8 py-4 rounded-2xl font-bold text-xs flex items-center gap-3 hover:bg-zinc-900 transition">
-                <i class="fa-brands fa-discord text-blue-500 text-lg"></i> SUPORTE DISCORD
-            </button>
-            <button class="bg-blue-600 px-10 py-4 rounded-2xl font-black italic uppercase text-xs hover:bg-blue-500 transition shadow-[0_0_20px_rgba(37,99,235,0.3)]">CATÁLOGO</button>
-        </div>
-    </header>
-
-    <section class="max-w-7xl mx-auto px-8 pb-20">
-        <div class="mb-12 flex items-center gap-4">
-            <span class="w-1.5 h-8 bg-blue-600 rounded-full"></span>
-            <h2 class="text-2xl font-black italic uppercase tracking-tighter">Destaques</h2>
+    <main class="max-w-6xl mx-auto px-6 py-12">
+        <div class="mb-10 flex items-center gap-3">
+            <span class="w-1.5 h-6 bg-blue-600 rounded-full"></span>
+            <h2 class="text-xl font-black italic uppercase tracking-widest">Destaques</h2>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             <div class="nexus-card">
-                <div class="product-image" style="background-image: url('https://img.freepik.com/vetores-premium/logotipo-do-youtube-vermelho-e-branco-fundo-preto_960911-379.jpg');">
-                    <span class="badge-auto">⚡ Entrega Automática</span>
+                <div class="w-full h-28 bg-zinc-900 rounded-2xl mb-4 flex items-center justify-center">
+                    <i class="fa-brands fa-youtube text-4xl text-red-600"></i>
                 </div>
-                <div class="product-title"><span class="w-2 h-2 rounded-full bg-red-600"></span> YouTube Premium</div>
-                <div class="text-2xl font-black italic mb-1">R$ 1,50 <span class="text-xs text-zinc-600">+ 🪙</span></div>
-                <div class="flex gap-1 mb-4 opacity-50"><i class="fa-brands fa-cc-visa text-[10px]"></i><i class="fa-brands fa-cc-mastercard text-[10px]"></i></div>
+                <div class="text-[11px] font-bold text-zinc-400 mb-2 uppercase italic">YouTube Premium</div>
+                <div class="text-2xl font-black italic mb-4">R$ 1,50</div>
                 <button class="btn-comprar">Comprar <i class="fa-solid fa-bag-shopping"></i></button>
             </div>
-
-            <div class="nexus-card">
-                <div class="product-image" style="background-image: url('https://static.vecteezy.com/system/resources/previews/010/353/285/original/google-logo-on-black-background-free-vector.jpg');">
-                    <span class="badge-auto">⚡ Entrega Automática</span>
-                </div>
-                <div class="product-title"><span class="w-2 h-2 rounded-full bg-purple-500"></span> Google Veo 3</div>
-                <div class="text-2xl font-black italic mb-1">R$ 4,99 <span class="text-xs text-zinc-600">+ 🪙</span></div>
-                <div class="flex gap-1 mb-4 opacity-50"><i class="fa-brands fa-cc-visa text-[10px]"></i></div>
-                <button class="btn-comprar">Comprar <i class="fa-solid fa-bag-shopping"></i></button>
             </div>
-
-            <div class="nexus-card sold-out">
-                <div class="product-image" style="background-image: url('https://logodownload.org/wp-content/uploads/2023/02/chatgpt-logo-1.png');">
-                    <div class="absolute inset-0 flex items-center justify-center font-black text-[10px] tracking-widest text-white uppercase bg-black/60">ESGOTADO</div>
-                </div>
-                <div class="product-title"><span class="w-2 h-2 rounded-full bg-green-500"></span> Chat GPT Plus</div>
-                <div class="text-2xl font-black italic mb-1">R$ 2,30</div>
-                <button class="btn-comprar opacity-50 cursor-not-allowed">Comprar</button>
-            </div>
-            
-            </div>
-    </section>
-
-    <footer class="border-t border-zinc-900 py-10 px-8 bg-[#030303]">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-            <div class="text-center md:text-left">
-                <div class="font-black italic text-lg uppercase mb-2">Azure Digital</div>
-                <p class="text-zinc-600 text-xs">© 2026 Todos os direitos reservados.</p>
-            </div>
-            <div class="flex flex-col items-center gap-3">
-                <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Meios de Pagamento</span>
-                <div class="flex gap-4 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition">
-                    <i class="fa-brands fa-pix text-2xl"></i>
-                    <i class="fa-brands fa-cc-visa text-2xl"></i>
-                    <i class="fa-brands fa-cc-mastercard text-2xl"></i>
-                </div>
-            </div>
-        </div>
-    </footer>
+    </main>
 
     <div id="login-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6">
-        <div class="absolute inset-0 bg-black/90 backdrop-blur-sm" onclick="this.parentElement.classList.add('hidden')"></div>
-        <div class="modal-content w-full max-w-sm relative z-10">
-            <div class="text-center mb-10">
-                <h2 class="text-4xl font-black italic uppercase tracking-tighter mb-2">ENTRAR</h2>
-                <p class="text-zinc-500 text-xs font-medium">Faça login com seu endereço de e-mail</p>
+        <div class="absolute inset-0 bg-black/95 backdrop-blur-sm" onclick="closeModal()"></div>
+        <div class="modal-content w-full max-w-md relative z-10">
+            <div class="text-center mb-8">
+                <h2 class="text-5xl font-black italic uppercase tracking-tighter mb-2">ENTRAR</h2>
+                <p class="text-zinc-500 text-xs font-medium uppercase tracking-widest">Faça login com seu e-mail</p>
             </div>
 
             <div class="space-y-3 mb-8">
@@ -155,20 +95,68 @@
                 </button>
             </div>
 
-            <div class="flex items-center gap-4 mb-8">
+            <div class="flex items-center gap-4 mb-8 text-zinc-800">
                 <div class="h-[1px] bg-zinc-900 flex-1"></div>
-                <span class="text-[9px] font-black text-zinc-700 uppercase tracking-widest">ou continuar com</span>
+                <span class="text-[9px] font-black uppercase tracking-widest">OU CONTINUAR COM</span>
                 <div class="h-[1px] bg-zinc-900 flex-1"></div>
             </div>
 
             <div class="relative mb-6">
                 <i class="fa-regular fa-envelope absolute left-5 top-5 text-zinc-600"></i>
-                <input type="email" placeholder="exemplo@gmail.com" class="input-dark pl-14 text-sm font-bold">
+                <input type="email" id="user-email" placeholder="exemplo@gmail.com" class="input-email pl-14 text-sm font-bold">
             </div>
 
-            <button class="w-full bg-zinc-800 py-5 rounded-2xl font-black italic uppercase text-zinc-500 hover:bg-white hover:text-black transition tracking-widest">ENTRAR</button>
+            <button onclick="handleLogin()" class="w-full bg-zinc-800 py-5 rounded-2xl font-black italic uppercase text-zinc-500 hover:bg-white hover:text-black transition tracking-widest">
+                ENTRAR
+            </button>
         </div>
     </div>
 
+    <script>
+        // FUNÇÕES PARA O MODAL E PERSISTÊNCIA (SALVAR CONTA)
+        const modal = document.getElementById('login-modal');
+        const authArea = document.getElementById('nav-auth-area');
+
+        function openModal() { modal.classList.remove('hidden'); }
+        function closeModal() { modal.classList.add('hidden'); }
+
+        // Salvar e Carregar Login
+        function handleLogin() {
+            const email = document.getElementById('user-email').value;
+            if (email) {
+                const username = email.split('@')[0].toUpperCase();
+                localStorage.setItem('azure_user', username); // Salva no navegador
+                renderUser(username);
+                closeModal();
+            }
+        }
+
+        function renderUser(name) {
+            authArea.innerHTML = `
+                <button class="bg-white text-black px-5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2">
+                    <i class="fa-solid fa-bag-shopping"></i> Carrinho
+                </button>
+                <div class="flex items-center gap-2">
+                    <span class="bg-zinc-900 border border-zinc-800 px-4 py-2.5 rounded-xl font-black uppercase italic text-[10px] tracking-tighter">
+                        ${name}
+                    </span>
+                    <button onclick="logout()" class="text-zinc-600 hover:text-red-500 transition ml-1">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+            `;
+        }
+
+        function logout() {
+            localStorage.removeItem('azure_user');
+            window.location.reload();
+        }
+
+        // Verifica se já estava logado ao abrir o site
+        window.onload = () => {
+            const savedUser = localStorage.getItem('azure_user');
+            if (savedUser) renderUser(savedUser);
+        };
+    </script>
 </body>
 </html>
