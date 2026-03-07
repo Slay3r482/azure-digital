@@ -6,191 +6,222 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,700;1,900&display=swap" rel="stylesheet">
-    <title>Azure Digital | EREMBY</title>
+    <title>Azure Digital | EREMBY System</title>
     <style>
-        :root { --bg: #050505; --card: #0a0a0a; --border: #111; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        :root { --bg: #050505; --card: #080808; --border: #111; --blue: #2563eb; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; }
         .font-eremby { font-family: 'Inter', sans-serif; font-weight: 900; font-style: italic; text-transform: uppercase; }
         
-        /* Botão Carrinho com Bolinha */
-        .cart-pill { position: relative; background: #fff; color: #000; padding: 8px 18px; border-radius: 0.6rem; font-weight: 700; font-size: 13px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
-        .cart-dot { position: absolute; top: -6px; right: -6px; background: #fff; color: #000; border: 2px solid #050505; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 900; }
+        /* Navbar Custom */
+        .cart-pill { position: relative; background: #fff; color: #000; padding: 10px 22px; border-radius: 0.8rem; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .cart-dot { position: absolute; top: -5px; right: -5px; background: #fff; color: #000; border: 2px solid #050505; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; }
 
-        /* Estilo dos Cards */
-        .product-card { background: #080808; border: 1px solid #111; border-radius: 1.5rem; padding: 30px; text-align: center; }
-        .btn-comprar { background: #fff; color: #000; width: 100%; padding: 12px; border-radius: 0.8rem; font-weight: 900; text-transform: uppercase; font-size: 12px; margin-top: 15px; cursor: pointer; }
+        /* Sidebar Categorias */
+        .cat-btn { background: #080808; border: 1px solid #111; padding: 12px 20px; border-radius: 1rem; font-weight: 800; font-size: 12px; color: #555; text-transform: uppercase; transition: 0.3s; width: 100%; text-align: left; margin-bottom: 8px; }
+        .cat-btn.active { background: #fff; color: #000; border-color: #fff; }
 
-        /* Checkout em 3 Colunas */
-        .checkout-container { display: grid; grid-template-columns: 1fr 1fr 0.7fr; gap: 20px; }
-        @media (max-width: 1024px) { .checkout-container { grid-template-columns: 1fr; } }
-        .checkout-box { background: #080808; border: 1px solid #111; border-radius: 1rem; padding: 25px; }
-
-        /* Modal de Login */
-        .modal-overlay { background: rgba(0,0,0,0.95); backdrop-blur: 10px; position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; }
-        .modal-content { background: #080808; border: 1px solid #111; border-radius: 2rem; padding: 40px; width: 100%; max-w-[420px]; text-align: center; }
-        .input-email-eremby { background: #eef2ff; color: #000; border-radius: 1rem; padding: 18px; width: 100%; font-weight: 700; text-align: center; margin-bottom: 20px; outline: none; border: none; }
+        /* Checkout */
+        .checkout-grid { display: grid; grid-template-columns: 1fr 1.2fr 0.8fr; gap: 24px; }
+        @media (max-width: 1100px) { .checkout-grid { grid-template-columns: 1fr; } }
+        .box-eremby { background: #080808; border: 1px solid #111; border-radius: 1.5rem; padding: 30px; }
+        .input-eremby { background: #0d0d0d; border: 1px solid #161616; border-radius: 0.8rem; padding: 15px; width: 100%; color: #fff; font-size: 13px; outline: none; }
         
+        /* Modal Login */
+        .modal-bg { background: rgba(0,0,0,0.95); backdrop-blur: 12px; }
+        .input-login { background: #eef2ff; color: #000; border-radius: 1rem; padding: 20px; width: 100%; font-weight: 700; text-align: center; border: none; outline: none; }
+
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <nav class="bg-[#050505] border-b border-[#111] px-8 py-5 flex justify-between items-center sticky top-0 z-50">
-        <div class="flex items-center gap-3 cursor-pointer" onclick="showPage('home')">
-            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/20">
-                <i class="fa-solid fa-bolt text-white text-xl"></i>
+    <nav class="bg-[#050505] border-b border-[#111] px-10 py-6 flex justify-between items-center sticky top-0 z-[100]">
+        <div class="flex items-center gap-4 cursor-pointer" onclick="showView('home')">
+            <div class="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center shadow-xl shadow-blue-600/30">
+                <i class="fa-solid fa-bolt text-white text-2xl"></i>
             </div>
-            <span class="text-2xl font-eremby">Azure <span class="text-blue-600">Digital</span></span>
+            <span class="text-3xl font-eremby">Azure <span class="text-blue-600">Digital</span></span>
         </div>
-        <div class="flex items-center gap-5">
-            <div onclick="showPage('cart')" class="cart-pill">
-                <i class="fa-solid fa-bag-shopping"></i> Carrinho
-                <div id="cart-badge" class="cart-dot">0</div>
+        <div class="flex items-center gap-6">
+            <i class="fa-solid fa-headset text-zinc-500 text-xl cursor-pointer hover:text-white transition"></i>
+            <div onclick="showView('cart')" class="cart-pill">
+                <i class="fa-solid fa-bag-shopping"></i> CARRINHO
+                <div id="badge-count" class="cart-dot">0</div>
             </div>
-            <button onclick="toggleModal('login-modal', true)" class="bg-[#1a1a1a] px-5 py-2 rounded-lg font-bold text-sm text-white">Entrar</button>
+            <button onclick="toggleModal(true)" class="bg-[#111] px-6 py-2.5 rounded-xl font-black text-xs uppercase hover:bg-zinc-800">Entrar</button>
         </div>
     </nav>
 
-    <div id="login-modal" class="modal-overlay hidden">
-        <div class="modal-content relative">
-            <button onclick="toggleModal('login-modal', false)" class="absolute top-6 right-6 text-zinc-600"><i class="fa-solid fa-xmark"></i></button>
-            <h2 class="text-4xl font-eremby mb-1">ENTRAR</h2>
-            <p class="text-zinc-500 text-xs mb-8">Faça login com seu endereço de e-mail</p>
-            
-            <button class="w-full bg-[#0d0d0d] border border-[#161616] p-4 rounded-xl flex items-center justify-center gap-3 font-bold mb-3">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5"> Conectar com Google
-            </button>
-            <button class="w-full bg-[#0d0d0d] border border-[#161616] p-4 rounded-xl flex items-center justify-center gap-3 font-bold text-blue-500 mb-8">
-                <i class="fa-brands fa-discord text-xl"></i> Conectar com Discord
-            </button>
-            
-            <input type="email" placeholder="natanaelpereira1541@gmail.com" class="input-email-eremby">
-            <button class="w-full bg-[#1c1c1e] text-[#444] font-eremby py-4 rounded-2xl text-xl">ENTRAR</button>
+    <div id="view-home">
+        <div class="max-w-7xl mx-auto px-10 py-16">
+            <div class="w-full h-48 bg-gradient-to-r from-blue-900/20 to-zinc-900 border border-blue-900/30 rounded-[2.5rem] mb-16 p-12 flex items-center">
+                <div>
+                    <h2 class="text-5xl font-eremby italic">NOVIDADES <span class="text-blue-500">AZURE</span></h2>
+                    <p class="text-zinc-500 font-bold uppercase text-xs tracking-widest mt-2">Os melhores preços do mercado digital</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-12">
+                <aside class="w-full lg:w-64">
+                    <p class="text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-6">Categorias</p>
+                    <button class="cat-btn active" onclick="filter('Todos', this)">Todos os produtos</button>
+                    <button class="cat-btn" onclick="filter('Streaming', this)">Streaming</button>
+                    <button class="cat-btn" onclick="filter('IA Tools', this)">Ferramentas IA</button>
+                    <button class="cat-btn" onclick="filter('Games', this)">Games & Gift Cards</button>
+                </aside>
+
+                <div class="flex-1">
+                    <h1 id="cat-title" class="text-6xl font-eremby mb-12">TODOS</h1>
+                    <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"></div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <main id="page-home" class="max-w-7xl mx-auto px-8 py-16">
-        <h1 class="text-7xl font-eremby mb-10">DESTAQUES</h1>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="product-card">
-                <div class="w-full h-40 bg-zinc-950 rounded-3xl mb-6"></div>
-                <div class="flex items-center justify-center gap-2 mb-2">
-                    <div class="w-2 h-2 rounded-full bg-red-600"></div>
-                    <span class="text-[10px] font-black text-zinc-500 tracking-widest uppercase">Youtube Premium</span>
+    <div id="view-cart" class="hidden">
+        <div class="max-w-[1400px] mx-auto px-10 py-20">
+            <h2 class="text-5xl font-eremby mb-2">Carrinhos de compras</h2>
+            <p class="text-zinc-500 text-xs font-bold uppercase tracking-[0.3em] mb-12">Finalize seu pedido com segurança</p>
+
+            <div class="checkout-grid">
+                <div class="box-eremby">
+                    <p class="text-[10px] font-black text-zinc-600 uppercase mb-8">Pagamento</p>
+                    <div class="flex items-center gap-4 p-5 bg-blue-600/5 border border-blue-600/20 rounded-2xl mb-8">
+                        <i class="fa-brands fa-pix text-emerald-400 text-3xl"></i>
+                        <div>
+                            <p class="font-bold text-sm">Pix Automático</p>
+                            <p class="text-[10px] text-zinc-500 uppercase">Aprovação imediata</p>
+                        </div>
+                    </div>
+                    <label class="text-[10px] font-black text-zinc-500 uppercase block mb-3">E-mail para entrega</label>
+                    <input type="email" placeholder="onde você quer receber?" class="input-eremby mb-6">
                 </div>
-                <p class="font-eremby text-4xl">R$ 1,50</p>
-                <button onclick="add(1, 'Youtube Premium', 1.50)" class="btn-comprar">COMPRAR</button>
-            </div>
-            <div class="product-card">
-                <div class="w-full h-40 bg-zinc-950 rounded-3xl mb-6"></div>
-                <div class="flex items-center justify-center gap-2 mb-2">
-                    <div class="w-2 h-2 rounded-full bg-blue-600"></div>
-                    <span class="text-[10px] font-black text-zinc-500 tracking-widest uppercase">Google Veo 3</span>
+
+                <div class="box-eremby">
+                    <p class="text-[10px] font-black text-zinc-600 uppercase mb-8">Produtos (<span id="count-label">0</span>)</p>
+                    <div id="cart-list" class="space-y-4"></div>
+                    <div class="mt-8 flex gap-3">
+                        <input type="text" placeholder="Cupom de desconto" class="input-eremby flex-1">
+                        <button class="bg-zinc-900 px-6 rounded-xl font-bold text-xs uppercase">Aplicar</button>
+                    </div>
                 </div>
-                <p class="font-eremby text-4xl">R$ 4,99</p>
-                <button onclick="add(2, 'Google Veo 3', 4.99)" class="btn-comprar">COMPRAR</button>
-            </div>
-            <div class="product-card">
-                <div class="w-full h-40 bg-zinc-950 rounded-3xl mb-6"></div>
-                <div class="flex items-center justify-center gap-2 mb-2">
-                    <div class="w-2 h-2 rounded-full bg-green-600"></div>
-                    <span class="text-[10px] font-black text-zinc-500 tracking-widest uppercase">Chat GPT Plus</span>
+
+                <div class="box-eremby h-fit">
+                    <p class="text-[10px] font-black text-zinc-600 uppercase mb-8">Resumo</p>
+                    <div class="flex justify-between text-xs text-zinc-500 mb-3"><span>Subtotal</span><span id="sub-total">R$ 0,00</span></div>
+                    <div class="flex justify-between text-xs text-zinc-500 mb-8"><span>Descontos</span><span class="text-red-500">- R$ 0,00</span></div>
+                    <div class="flex justify-between pt-6 border-t border-zinc-900 mb-10">
+                        <span class="font-eremby text-2xl">TOTAL</span>
+                        <span id="final-total" class="font-eremby text-4xl text-blue-500">R$ 0,00</span>
+                    </div>
+                    <button class="w-full bg-white text-black font-black py-5 rounded-2xl uppercase text-sm shadow-xl" onclick="alert('Gerando Pix...')">PAGAR AGORA</button>
                 </div>
-                <p class="font-eremby text-4xl">R$ 2,30</p>
-                <button onclick="add(3, 'Chat GPT Plus', 2.30)" class="btn-comprar">COMPRAR</button>
             </div>
         </div>
-    </main>
+    </div>
 
-    <main id="page-cart" class="max-w-7xl mx-auto px-8 py-16 hidden">
-        <h2 class="text-4xl font-eremby mb-2">Carrinhos de compras</h2>
-        <p class="text-zinc-500 text-xs mb-10 tracking-widest uppercase">Gerencie seus produtos antes de pagar.</p>
-
-        <div class="checkout-container">
-            <div class="checkout-box">
-                <p class="text-[10px] font-black text-zinc-600 uppercase mb-8">Informações de pagamento</p>
-                <div class="flex items-center gap-4 p-5 bg-blue-600/5 border border-blue-600/20 rounded-2xl mb-6">
-                    <i class="fa-brands fa-pix text-emerald-400 text-2xl"></i>
-                    <span class="font-bold">Pix</span>
-                </div>
-                <input type="email" placeholder="Insira seu e-mail" class="w-full bg-[#050505] border border-[#111] p-4 rounded-xl mb-4 text-sm">
-                <input type="email" placeholder="Confirme seu e-mail" class="w-full bg-[#050505] border border-[#111] p-4 rounded-xl text-sm">
-            </div>
-
-            <div class="checkout-box">
-                <p class="text-[10px] font-black text-zinc-600 uppercase mb-8">Produtos no carrinho</p>
-                <div id="cart-items" class="space-y-4"></div>
-            </div>
-
-            <div class="checkout-box h-fit">
-                <p class="text-[10px] font-black text-zinc-600 uppercase mb-8">Resumo da compra</p>
-                <div class="flex justify-between text-xs text-zinc-500 mb-2"><span>Subtotal</span><span id="res-sub">R$ 0,00</span></div>
-                <div class="flex justify-between text-xs text-zinc-500 mb-8"><span>Método</span><span class="text-emerald-400 font-bold">Pix</span></div>
-                <div class="flex justify-between pt-5 border-t border-zinc-900 mb-8">
-                    <span class="font-eremby text-xl italic">TOTAL</span>
-                    <span id="res-total" class="font-eremby text-3xl text-blue-600">R$ 0,00</span>
-                </div>
-                <button class="w-full bg-white text-black font-black py-4 rounded-xl uppercase text-sm" onclick="alert('Gerando Pix...')">Gerar Pagamento</button>
-            </div>
+    <div id="modal-login" class="fixed inset-0 z-[200] modal-bg flex items-center justify-center hidden p-6">
+        <div class="bg-[#080808] border border-[#111] w-full max-w-[440px] p-12 rounded-[3rem] text-center relative">
+            <button onclick="toggleModal(false)" class="absolute top-8 right-8 text-zinc-600 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h2 class="text-5xl font-eremby mb-2">ENTRAR</h2>
+            <p class="text-zinc-500 text-sm mb-12 tracking-tight">Acesse sua conta com seu e-mail</p>
+            
+            <button class="w-full bg-[#0d0d0d] border border-[#161616] p-4 rounded-2xl flex items-center justify-center gap-4 font-bold text-sm mb-3">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5"> Entrar com Google
+            </button>
+            <button class="w-full bg-[#0d0d0d] border border-[#161616] p-4 rounded-2xl flex items-center justify-center gap-4 font-bold text-sm text-blue-500 mb-10">
+                <i class="fa-brands fa-discord text-2xl"></i> Entrar com Discord
+            </button>
+            
+            <input type="email" placeholder="exemplo@gmail.com" class="input-login">
+            <button class="w-full bg-[#1c1c1e] text-[#444] font-eremby py-5 rounded-2xl text-2xl mt-4">ENTRAR</button>
         </div>
-    </main>
+    </div>
 
     <script>
-        let carrinho = [];
+        const products = [
+            { id: 1, name: "Youtube Premium 30D", price: 1.50, cat: "Streaming", img: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" },
+            { id: 2, name: "Google Gemini Adv", price: 4.90, cat: "IA Tools", img: "https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_Gemini_logo.svg" },
+            { id: 3, name: "ChatGPT Plus Share", price: 2.30, cat: "IA Tools", img: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" },
+            { id: 4, name: "Xbox Game Pass Ultimate", price: 9.90, cat: "Games", img: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Xbox_one_logo.svg" }
+        ];
 
-        function toggleModal(id, show) {
-            document.getElementById(id).classList.toggle('hidden', !show);
-        }
+        let cart = [];
 
-        function showPage(page) {
-            document.getElementById('page-home').classList.toggle('hidden', page !== 'home');
-            document.getElementById('page-cart').classList.toggle('hidden', page !== 'cart');
+        function showView(v) {
+            document.getElementById('view-home').classList.toggle('hidden', v !== 'home');
+            document.getElementById('view-cart').classList.toggle('hidden', v !== 'cart');
             window.scrollTo(0,0);
         }
 
-        function add(id, name, price) {
-            const item = carrinho.find(p => p.id === id);
-            if(item) item.qtd++;
-            else carrinho.push({id, name, price, qtd: 1});
-            render();
-            showPage('cart');
-        }
+        function toggleModal(s) { document.getElementById('modal-login').classList.toggle('hidden', !s); }
 
-        function updateQty(idx, delta) {
-            carrinho[idx].qtd += delta;
-            if(carrinho[idx].qtd <= 0) carrinho.splice(idx, 1);
-            render();
-        }
-
-        function render() {
-            let total = 0;
-            let count = 0;
-            const container = document.getElementById('cart-items');
+        function filter(cat, btn) {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('cat-title').innerText = cat.toUpperCase();
             
-            container.innerHTML = carrinho.map((p, i) => {
-                total += (p.price * p.qtd);
-                count += p.qtd;
+            const grid = document.getElementById('product-grid');
+            const data = cat === 'Todos' ? products : products.filter(p => p.cat === cat);
+            
+            grid.innerHTML = data.map(p => `
+                <div class="bg-[#0a0a0a] border border-[#111] rounded-[2rem] p-8 text-center hover:border-blue-600 transition duration-300">
+                    <div class="w-full h-32 flex items-center justify-center mb-8 bg-black rounded-3xl p-6 border border-zinc-900/50">
+                        <img src="${p.img}" class="max-h-full opacity-80">
+                    </div>
+                    <div class="flex items-center justify-center gap-2 mb-2">
+                        <div class="w-2 h-2 rounded-full bg-blue-600"></div>
+                        <span class="text-[10px] font-black text-zinc-500 tracking-[0.2em] uppercase">${p.cat}</span>
+                    </div>
+                    <h3 class="font-eremby text-lg italic mb-6">${p.name}</h3>
+                    <p class="font-eremby text-4xl italic mb-8">R$ ${p.price.toFixed(2).replace('.', ',')}</p>
+                    <button onclick="add(${p.id})" class="w-full bg-white text-black font-eremby py-4 rounded-2xl text-xs">COMPRAR AGORA</button>
+                </div>
+            `).join('');
+        }
+
+        function add(id) {
+            const item = cart.find(i => i.id === id);
+            if(item) item.qty++;
+            else cart.push({...products.find(x => x.id === id), qty: 1});
+            update();
+            showView('cart');
+        }
+
+        function edit(i, d) {
+            cart[i].qty += d;
+            if(cart[i].qty <= 0) cart.splice(i, 1);
+            update();
+        }
+
+        function update() {
+            let t = 0; let c = 0;
+            const list = document.getElementById('cart-list');
+            list.innerHTML = cart.map((p, i) => {
+                t += (p.price * p.qty); c += p.qty;
                 return `
-                <div class="flex justify-between items-center p-4 bg-[#050505] border border-[#111] rounded-2xl">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-zinc-900 rounded-lg"></div>
-                        <span class="font-eremby text-[10px] italic">${p.name}</span>
+                <div class="flex justify-between items-center p-5 bg-[#050505] border border-[#111] rounded-2xl">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-zinc-900 rounded-xl p-2"><img src="${p.img}" class="max-h-full"></div>
+                        <span class="font-eremby text-xs">${p.name}</span>
                     </div>
                     <div class="flex items-center gap-4">
-                        <div class="flex bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden">
-                            <button class="px-2 py-1" onclick="updateQty(${i}, -1)">-</button>
-                            <span class="px-2 py-1 text-xs font-bold">${p.qtd}</span>
-                            <button class="px-2 py-1" onclick="updateQty(${i}, 1)">+</button>
+                        <div class="flex bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+                            <button class="px-3 py-1 text-zinc-500 font-bold" onclick="edit(${i},-1)">-</button>
+                            <span class="px-2 py-1 text-xs font-bold">${p.qty}</span>
+                            <button class="px-3 py-1 text-zinc-500 font-bold" onclick="edit(${i},1)">+</button>
                         </div>
-                        <span class="font-eremby text-xs">R$ ${(p.price * p.qtd).toFixed(2).replace('.', ',')}</span>
+                        <span class="font-eremby text-sm">R$ ${(p.price * p.qty).toFixed(2).replace('.', ',')}</span>
                     </div>
                 </div>`;
             }).join('');
-
-            document.getElementById('cart-badge').innerText = count;
-            document.getElementById('res-sub').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
-            document.getElementById('res-total').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            document.getElementById('badge-count').innerText = c;
+            document.getElementById('count-label').innerText = `${c} itens`;
+            document.getElementById('final-total').innerText = `R$ ${t.toFixed(2).replace('.', ',')}`;
+            document.getElementById('sub-total').innerText = `R$ ${t.toFixed(2).replace('.', ',')}`;
         }
+
+        window.onload = () => filter('Todos', document.querySelector('.cat-btn'));
     </script>
 </body>
 </html>
