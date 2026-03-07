@@ -28,9 +28,11 @@
             </div>
 
             <div class="flex items-center gap-4">
-                <button class="bg-white text-black px-4 py-2 rounded-lg font-bold flex items-center gap-2">
-                    <i class="fa-solid fa-bag-shopping"></i> Carrinho
-                </button>
+                <button onclick="toggleCarrinho()" class="bg-white text-black px-4 py-2 rounded-lg font-bold flex items-center gap-2 relative">
+    <i class="fa-solid fa-bag-shopping"></i> 
+    Carrinho 
+    <span id="cart-count" class="absolute -top-2 -right-2 bg-blue-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
+</button>
                 <button class="bg-zinc-800 px-4 py-2 rounded-lg font-medium">Entrar</button>
             </div>
         </div>
