@@ -5,115 +5,186 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <title>Azure Digital | Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>Azure Digital | MineGine Style</title>
     <style>
-        :root { --bg: #08090B; --header: #0D0E11; --border: #201e1e; --accent: #ffba09; }
-        body { background-color: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; }
+        :root { 
+            --bg: #050505; 
+            --card-bg: rgba(13, 14, 17, 0.7); 
+            --border: rgba(255, 255, 255, 0.05); 
+            --accent: #3b82f6; 
+        }
+        
+        body { 
+            background-color: var(--bg); 
+            color: #fff; 
+            font-family: 'Inter', sans-serif; 
+            margin: 0;
+            letter-spacing: -0.01em;
+        }
 
+        /* Fundo com a máscara da MineGine */
         .hero-mask {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            object-fit: cover; opacity: 0.3;
-            mask-image: linear-gradient(black, rgba(0,0,0,0.4), transparent);
-            -webkit-mask-image: linear-gradient(black, rgba(0,0,0,0.4), transparent);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: -1;
+            object-fit: cover; opacity: 0.35;
+            mask-image: linear-gradient(to bottom, black 0%, transparent 85%);
+            -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 85%);
         }
 
-        /* Barra de Pesquisa Centralizada */
-        .search-container {
-            background: #0D0E11; border: 1px solid var(--border); border-radius: 12px;
-            padding: 8px 16px; display: flex; align-items: center; gap: 12px; width: 100%; max-width: 400px;
+        /* Nav Estilo Premium */
+        .nav-glass {
+            background: rgba(5, 5, 5, 0.75);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border);
         }
-        .search-container input { background: transparent; border: none; outline: none; color: #8C8C8C; font-size: 13px; width: 100%; }
 
-        /* CATEGORIAS NO CENTRO (Igual ao modelo) */
-        .category-nav {
-            display: flex; justify-content: center; align-items: center; gap: 12px; margin-bottom: 40px; flex-wrap: wrap;
+        /* Pesquisa Estilo MineGine */
+        .search-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            max-width: 420px;
+            transition: 0.3s;
         }
-        .cat-pill {
-            background: rgba(13, 14, 17, 0.6); border: 1px solid var(--border);
-            padding: 10px 24px; border-radius: 99px; font-size: 11px; font-weight: 800;
-            text-transform: uppercase; letter-spacing: 1px; color: #8C8C8C; transition: 0.3s;
-        }
-        .cat-pill:hover, .cat-pill.active { background: #fff; color: #000; border-color: #fff; }
+        .search-box:focus-within { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); }
+        .search-box input { background: transparent; border: none; outline: none; color: #fff; font-size: 13px; width: 100%; }
 
-        /* CARDS COMPACTOS */
-        .card-nexus {
-            background: rgba(88, 88, 105, 0.08); border: 1px solid var(--border); border-radius: 12px;
-            padding: 14px; transition: 0.3s; backdrop-filter: blur(10px);
-            display: flex; flex-direction: column; width: 100%; max-width: 210px; margin: 0 auto;
+        /* Categorias em Pílulas (Igual ao site solicitado) */
+        .cat-pills-container {
+            display: flex; justify-content: center; gap: 8px; margin-bottom: 45px; flex-wrap: wrap;
         }
-        .card-nexus:hover { border-color: #585869; transform: translateY(-4px); }
+        .pill {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            padding: 10px 22px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #71717a;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .pill:hover, .pill.active {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+            transform: translateY(-2px);
+        }
 
-        .img-container {
-            background: #0D0E11; border-radius: 8px; width: 100%; aspect-ratio: 1/1;
-            display: flex; align-items: center; justify-content: center; margin-bottom: 12px;
+        /* Card Compacto MineGine */
+        .card-mine {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 18px;
+            transition: 0.4s;
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 195px; /* Tamanho exato para ficar elegante */
+            margin: 0 auto;
         }
-        .img-container img { width: 55%; object-fit: contain; }
+        .card-mine:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+        }
 
-        .btn-buy {
-            background: #fff; color: #000; width: 100%; padding: 10px; border-radius: 8px;
-            font-weight: 900; font-size: 11px; text-transform: uppercase; margin-top: 12px;
+        .img-box {
+            background: #000; border: 1px solid var(--border); border-radius: 14px;
+            width: 100%; aspect-ratio: 1/1;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 14px;
         }
+        .img-box img { width: 50%; opacity: 0.9; }
+
+        .price-text { font-size: 20px; font-weight: 900; font-style: italic; text-align: center; color: #fff; }
+
+        .btn-mine {
+            background: #fff; color: #000; width: 100%; padding: 12px;
+            border-radius: 10px; font-weight: 900; font-size: 11px;
+            text-transform: uppercase; margin-top: 14px; transition: 0.2s;
+        }
+        .btn-mine:hover { opacity: 0.85; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
     </style>
 </head>
 <body>
 
     <img src="https://cdn.ereemby.com/attachments/17715554716225022imagem.png" class="hero-mask">
 
-    <header class="sticky top-0 z-50 bg-[#0D0E11]/95 border-b border-[#201e1e] px-8 py-4">
+    <header class="sticky top-0 z-50 nav-glass px-8 py-5">
         <div class="max-w-[1400px] mx-auto flex justify-between items-center gap-6">
-            <div class="flex items-center gap-3 flex-shrink-0">
-                <img src="https://cdn.ereemby.com/attachments/17706209715176161imagem.jpeg" class="w-9 h-9 rounded-lg">
-                <span class="font-black text-sm uppercase italic">Azure Digital</span>
+            <div class="flex items-center gap-3">
+                <img src="https://cdn.ereemby.com/attachments/17706209715176161imagem.jpeg" class="w-9 h-9 rounded-xl">
+                <span class="font-black text-base italic uppercase tracking-tighter">Azure <span class="text-blue-500">Digital</span></span>
             </div>
 
             <div class="hidden md:flex flex-1 justify-center">
-                <div class="search-container">
-                    <i class="fa-solid fa-magnifying-glass text-[#8C8C8C] text-sm"></i>
-                    <input type="text" placeholder="Pesquisar produto...">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass text-zinc-600"></i>
+                    <input type="text" placeholder="Pesquisar na loja...">
                 </div>
             </div>
 
-            <div class="flex items-center gap-4 flex-shrink-0">
-                <div class="bg-white text-black px-5 py-2 rounded-lg font-black text-[11px] uppercase cursor-pointer flex items-center gap-2">
-                    <i class="fa-solid fa-bag-shopping"></i> Carrinho
+            <div class="flex items-center gap-4">
+                <div class="bg-white text-black px-5 py-2.5 rounded-xl font-black text-[11px] uppercase cursor-pointer flex items-center gap-2">
+                    <i class="fa-solid fa-cart-shopping"></i> Carrinho
                 </div>
+                <button class="bg-[#111] px-5 py-2.5 rounded-xl text-zinc-400 font-bold text-[11px] border border-white/5">LOGIN</button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-[1400px] mx-auto px-8 py-16">
+    <main class="max-w-[1400px] mx-auto px-8 py-14">
         
-        <div class="text-center mb-10">
-            <h1 class="text-5xl font-black italic uppercase tracking-tighter mb-8">Produtos</h1>
-            
-            <nav class="category-nav">
-                <button class="cat-pill active">Todos</button>
-                <button class="cat-pill">Streaming</button>
-                <button class="cat-pill">Discord</button>
-                <button class="cat-pill">Games</button>
-                <button class="cat-pill">Ferramentas</button>
-            </nav>
+        <nav class="cat-pills-container">
+            <button class="pill active">Todos</button>
+            <button class="pill">Streaming</button>
+            <button class="pill">Discord</button>
+            <button class="pill">Games</button>
+            <button class="pill">Apps</button>
+        </nav>
+
+        <div class="flex flex-col items-center mb-14">
+            <h1 class="text-5xl font-black italic uppercase tracking-tighter mb-2">Produtos</h1>
+            <div class="h-1 w-20 bg-blue-600 rounded-full"></div>
         </div>
         
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
             
-            <div class="card-nexus">
-                <div class="img-container">
+            <div class="card-mine">
+                <div class="img-box">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png">
                 </div>
-                <span class="text-[9px] text-zinc-500 font-bold uppercase text-center">Youtube Premium</span>
-                <p class="text-xl font-black italic mt-1 text-center">R$ 1,50</p>
-                <button class="btn-buy">Comprar</button>
+                <span class="text-[9px] text-zinc-500 font-black uppercase text-center mb-1">Youtube Premium</span>
+                <p class="price-text">R$ 1,50</p>
+                <button class="btn-mine">Comprar</button>
             </div>
 
-            <div class="card-nexus">
-                <div class="img-container">
-                    <i class="fa-brands fa-discord text-4xl text-indigo-500/40"></i>
+            <div class="card-mine">
+                <div class="img-box">
+                    <i class="fa-brands fa-discord text-5xl text-blue-600/30"></i>
                 </div>
-                <span class="text-[9px] text-zinc-500 font-bold uppercase text-center">Discord Nitro</span>
-                <p class="text-xl font-black italic mt-1 text-center">R$ 15,90</p>
-                <button class="btn-buy">Comprar</button>
+                <span class="text-[9px] text-zinc-500 font-black uppercase text-center mb-1">Discord Nitro</span>
+                <p class="price-text">R$ 15,90</p>
+                <button class="btn-mine">Comprar</button>
+            </div>
+
+            <div class="card-mine">
+                <div class="img-box">
+                    <i class="fa-solid fa-gamepad text-5xl text-zinc-700"></i>
+                </div>
+                <span class="text-[9px] text-zinc-500 font-black uppercase text-center mb-1">GTA V Premium</span>
+                <p class="price-text">R$ 45,00</p>
+                <button class="btn-mine">Comprar</button>
             </div>
 
         </div>
