@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <title>Azure Digital | Store</title>
     <style>
         :root { --bg: #050505; --card-bg: rgba(13, 14, 17, 0.7); --border: rgba(255, 255, 255, 0.05); }
@@ -18,31 +18,31 @@
             -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 85%);
         }
 
-        /* Efeito de Vidro (Glassmorphism) */
-        .glass { background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(15px); border: 1px solid var(--border); }
+        .glass { background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border); }
         
+        /* Card Estilo MineGine */
         .card-mine {
             background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px;
             padding: 18px; transition: 0.4s; backdrop-filter: blur(12px);
             width: 100%; max-width: 195px; margin: 0 auto;
+            display: flex; flex-direction: column;
         }
-        .card-mine:hover { border-color: rgba(255, 255, 255, 0.15); transform: translateY(-5px); }
-
-        /* Modal do Carrinho Lateral */
-        #cartSide {
-            position: fixed; top: 0; right: -400px; width: 350px; height: 100%;
-            background: #0D0E11; border-left: 1px solid var(--border);
-            z-index: 100; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 30px; box-shadow: -10px 0 30px rgba(0,0,0,0.5);
-        }
-        #cartSide.active { right: 0; }
+        .card-mine.hidden { display: none !important; }
 
         .pill {
             background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border);
             padding: 10px 22px; border-radius: 99px; font-size: 11px; font-weight: 700;
-            text-transform: uppercase; color: #71717a; transition: 0.3s;
+            text-transform: uppercase; color: #71717a; transition: 0.3s; cursor: pointer;
         }
         .pill.active { background: #fff; color: #000; border-color: #fff; }
+
+        #cartSide {
+            position: fixed; top: 0; right: -400px; width: 350px; height: 100%;
+            background: #0D0E11; border-left: 1px solid var(--border);
+            z-index: 100; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 30px;
+        }
+        #cartSide.active { right: 0; }
 
         .btn-mine { background: #fff; color: #000; width: 100%; padding: 12px; border-radius: 10px; font-weight: 900; font-size: 11px; text-transform: uppercase; margin-top: 14px; }
     </style>
@@ -61,15 +61,14 @@
             <div class="hidden md:flex flex-1 justify-center">
                 <div class="bg-white/5 border border-white/5 rounded-xl px-4 py-2 w-full max-w-md flex items-center gap-3">
                     <i class="fa-solid fa-magnifying-glass text-zinc-600"></i>
-                    <input type="text" placeholder="Pesquisar na loja..." class="bg-transparent outline-none text-xs w-full text-white">
+                    <input type="text" id="searchInput" oninput="filterAll()" placeholder="Pesquisar produto..." class="bg-transparent outline-none text-xs w-full text-white">
                 </div>
             </div>
 
             <div class="flex items-center gap-4">
-                <div onclick="toggleCart()" class="bg-white text-black px-5 py-2.5 rounded-xl font-black text-[11px] uppercase cursor-pointer flex items-center gap-2">
-                    <i class="fa-solid fa-cart-shopping"></i> Carrinho (<span id="cartCount">0</span>)
+                <div onclick="toggleCart()" class="bg-white text-black px-5 py-2.5 rounded-xl font-black text-[11px] uppercase cursor-pointer">
+                    Carrinho (<span id="cartCount">0</span>)
                 </div>
-                <button onclick="handleLogin()" id="loginBtn" class="bg-[#111] px-5 py-2.5 rounded-xl text-zinc-400 font-bold text-[11px] border border-white/5 uppercase">LOGIN</button>
             </div>
         </div>
     </header>
@@ -77,83 +76,100 @@
     <div id="cartSide">
         <div class="flex justify-between items-center mb-8">
             <h2 class="font-black italic text-xl uppercase">Meu Carrinho</h2>
-            <i onclick="toggleCart()" class="fa-solid fa-xmark cursor-pointer text-zinc-500 hover:text-white"></i>
+            <i onclick="toggleCart()" class="fa-solid fa-xmark cursor-pointer"></i>
         </div>
-        <div id="cartItems" class="text-zinc-500 text-sm italic">O carrinho está vazio.</div>
+        <div id="cartItems"></div>
         <div class="absolute bottom-10 left-0 w-full px-8">
-            <div class="border-t border-white/10 pt-4 mb-4 flex justify-between font-bold">
-                <span>Total:</span>
-                <span id="cartTotal">R$ 0,00</span>
-            </div>
-            <button onclick="alert('Indo para o checkout!')" class="btn-mine">Finalizar Compra</button>
+            <button class="btn-mine">Finalizar Compra</button>
         </div>
     </div>
 
     <main class="max-w-[1400px] mx-auto px-8 py-14">
         <nav class="flex justify-center gap-3 mb-12">
-            <button class="pill active">Todos</button>
-            <button class="pill">Discord</button>
-            <button class="pill">Streaming</button>
+            <button class="pill active" onclick="setCategory('todos', this)">Todos</button>
+            <button class="pill" onclick="setCategory('discord', this)">Discord</button>
+            <button class="pill" onclick="setCategory('streaming', this)">Streaming</button>
+            <button class="pill" onclick="setCategory('games', this)">Games</button>
         </nav>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-            <div class="card-mine">
+        <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+            
+            <div class="card-mine product-card" data-category="discord" data-name="discord nitro">
+                <div class="bg-black border border-white/5 rounded-xl aspect-square flex items-center justify-center mb-4 text-blue-500/30">
+                    <i class="fa-brands fa-discord text-5xl"></i>
+                </div>
+                <span class="text-[10px] text-zinc-500 font-black uppercase text-center mb-1">Discord Nitro</span>
+                <p class="text-xl font-black italic text-center">R$ 15,90</p>
+                <button onclick="addToCart('Discord Nitro', 15.90)" class="btn-mine">Adicionar</button>
+            </div>
+
+            <div class="card-mine product-card" data-category="streaming" data-name="youtube premium">
                 <div class="bg-black border border-white/5 rounded-xl aspect-square flex items-center justify-center mb-4">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" class="w-1/2">
                 </div>
-                <span class="text-[9px] text-zinc-500 font-black uppercase text-center mb-1">Youtube Premium</span>
+                <span class="text-[10px] text-zinc-500 font-black uppercase text-center mb-1">Youtube Premium</span>
                 <p class="text-xl font-black italic text-center">R$ 1,50</p>
                 <button onclick="addToCart('Youtube Premium', 1.50)" class="btn-mine">Adicionar</button>
             </div>
 
-            <div class="card-mine">
-                <div class="bg-black border border-white/5 rounded-xl aspect-square flex items-center justify-center mb-4 text-blue-500/30">
-                    <i class="fa-brands fa-discord text-5xl"></i>
+            <div class="card-mine product-card" data-category="games" data-name="gta v">
+                <div class="bg-black border border-white/5 rounded-xl aspect-square flex items-center justify-center mb-4 text-zinc-700">
+                    <i class="fa-solid fa-gamepad text-5xl"></i>
                 </div>
-                <span class="text-[9px] text-zinc-500 font-black uppercase text-center mb-1">Discord Nitro</span>
-                <p class="text-xl font-black italic text-center">R$ 15,90</p>
-                <button onclick="addToCart('Discord Nitro', 15.90)" class="btn-mine">Adicionar</button>
+                <span class="text-[10px] text-zinc-500 font-black uppercase text-center mb-1">GTA V Premium</span>
+                <p class="text-xl font-black italic text-center">R$ 45,00</p>
+                <button onclick="addToCart('GTA V', 45.00)" class="btn-mine">Adicionar</button>
             </div>
+
         </div>
     </main>
 
     <script>
-        let cart = [];
-        let total = 0;
+        let currentCategory = 'todos';
 
-        function toggleCart() {
-            document.getElementById('cartSide').classList.toggle('active');
+        // FUNÇÃO DE FILTRAGEM (CATEGORIA + PESQUISA)
+        function filterAll() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.product-card');
+
+            cards.forEach(card => {
+                const name = card.getAttribute('data-name').toLowerCase();
+                const category = card.getAttribute('data-category');
+
+                const matchesSearch = name.includes(searchTerm);
+                const matchesCategory = (currentCategory === 'todos' || category === currentCategory);
+
+                if (matchesSearch && matchesCategory) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
         }
 
+        function setCategory(cat, el) {
+            // Atualiza botões
+            document.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            
+            currentCategory = cat;
+            filterAll();
+        }
+
+        // FUNÇÕES DO CARRINHO
+        let cart = [];
+        function toggleCart() { document.getElementById('cartSide').classList.toggle('active'); }
+        
         function addToCart(name, price) {
             cart.push({name, price});
-            total += price;
-            updateCart();
-            if(!document.getElementById('cartSide').classList.contains('active')) toggleCart();
-        }
-
-        function updateCart() {
             document.getElementById('cartCount').innerText = cart.length;
-            document.getElementById('cartTotal').innerText = `R$ ${total.toFixed(2)}`;
-            
-            const itemsDiv = document.getElementById('cartItems');
-            if(cart.length > 0) {
-                itemsDiv.innerHTML = cart.map(item => `
-                    <div class="flex justify-between mb-4 text-white font-bold text-xs uppercase">
-                        <span>${item.name}</span>
-                        <span>R$ ${item.price.toFixed(2)}</span>
-                    </div>
-                `).join('');
-            }
+            updateCartUI();
+            toggleCart();
         }
 
-        function handleLogin() {
-            const user = prompt("Digite seu usuário:");
-            if(user) {
-                document.getElementById('loginBtn').innerText = user.substring(0, 10);
-                document.getElementById('loginBtn').classList.add('text-blue-500');
-                alert("Bem-vindo, " + user + "!");
-            }
+        function updateCartUI() {
+            const container = document.getElementById('cartItems');
+            container.innerHTML = cart.map(i => `<div class="flex justify-between mb-2 text-xs uppercase font-bold"><span>${i.name}</span><span>R$ ${i.price.toFixed(2)}</span></div>`).join('');
         }
     </script>
 </body>
