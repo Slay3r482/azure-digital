@@ -8,11 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <title>Azure Digital | Store</title>
     <style>
-        body { background-color: #080808; color: #fff; font-family: 'Inter', sans-serif; }
+        body { background-color: #050505; color: #fff; font-family: 'Inter', sans-serif; }
         
-        /* Estilo idêntico ao da imagem Nexus Prime */
+        /* CARD PADRÃO NEXUS PRIME */
         .nexus-card { 
-            background: #111111; 
+            background: #0d0d0d; 
             border: 1px solid #1a1a1a; 
             border-radius: 1.5rem; 
             padding: 12px;
@@ -21,27 +21,47 @@
             align-items: center;
             text-align: center;
             transition: 0.3s;
+            position: relative;
+            height: 100%;
         }
-        .nexus-card:hover { border-color: #333; transform: translateY(-3px); }
+        .nexus-card:hover:not(.sold-out) { border-color: #333; transform: translateY(-4px); }
 
-        /* Container da Imagem do Produto */
+        /* ESTADO ESGOTADO */
+        .sold-out { opacity: 0.5; cursor: not-allowed; }
+        .sold-out-badge {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-weight: 900;
+            font-size: 10px;
+            letter-spacing: 1px;
+            z-index: 10;
+            border: 1px solid #333;
+        }
+
+        /* IMAGEM DO PRODUTO */
         .product-image {
             width: 100%;
-            height: 120px;
+            height: 115px;
             background-size: cover;
             background-position: center;
             border-radius: 1rem;
             margin-bottom: 12px;
             position: relative;
+            border: 1px solid #1a1a1a;
         }
 
-        /* Badge de Entrega Automática (Exato igual à foto) */
+        /* BADGE ENTREGA AUTOMÁTICA */
         .badge-auto {
             position: absolute;
             top: 8px;
             right: 8px;
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid #333;
+            background: rgba(0,0,0,0.8);
+            border: 1px solid rgba(255,255,255,0.1);
             color: #fff;
             font-size: 7px;
             padding: 2px 8px;
@@ -50,32 +70,32 @@
             text-transform: uppercase;
         }
 
-        /* Título do Produto */
+        /* TÍTULO COM INDICADOR DE STATUS */
         .product-title {
             font-size: 11px;
             font-weight: 700;
-            color: #efefef;
-            margin-bottom: 8px;
+            color: #ccc;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
         }
 
-        /* Preço e Ícones de Pagamento */
-        .price-section { margin-bottom: 15px; }
-        .price-main { font-size: 22px; font-weight: 900; font-style: italic; }
-        .payment-icons { 
-            font-size: 9px; 
-            color: #888; 
+        /* PREÇO E ÍCONES */
+        .price-main { font-size: 20px; font-weight: 900; font-style: italic; }
+        .payment-info { 
+            font-size: 8px; 
+            color: #666; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             gap: 4px;
+            margin-bottom: 15px;
         }
 
-        /* Botão "VER DETALHES" (Padrão da Nexus) */
-        .btn-details {
-            background: #1a1a1a;
+        /* BOTÃO COMPRAR PADRONIZADO */
+        .btn-comprar {
+            background: #161616;
             color: #fff;
             width: 100%;
             padding: 10px;
@@ -83,26 +103,40 @@
             font-size: 10px;
             font-weight: 900;
             text-transform: uppercase;
-            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.2s;
+            margin-top: auto;
         }
-        .btn-details:hover { background: #252525; }
-
-        /* Botão "COMPRAR" (Caso o item esteja selecionado) */
-        .btn-buy-now {
-            background: #ffffff;
-            color: #000;
-            width: 100%;
-            padding: 10px;
-            border-radius: 0.8rem;
-            font-size: 10px;
-            font-weight: 900;
-            text-transform: uppercase;
-        }
+        .btn-comprar:hover:not(.btn-off) { background: #fff; color: #000; }
+        .btn-off { background: #111; color: #444; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
-    <main class="max-w-6xl mx-auto px-6 py-10">
+    <nav class="sticky top-0 z-50 bg-[#050505]/80 backdrop-blur-lg border-bottom border-[#1a1a1a] py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-7 h-7 bg-blue-600 rounded-lg"></div>
+                <span class="font-black italic uppercase text-lg tracking-tighter">Azure Digital</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="bg-white text-black px-4 py-2 rounded-xl font-bold text-xs flex items-center gap-2 italic">
+                    <i class="fa-solid fa-bag-shopping"></i> Carrinho
+                </button>
+                <button class="bg-zinc-800 px-4 py-2 rounded-xl font-black uppercase italic text-xs">Entrar</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-6 py-12">
+        <div class="mb-10 flex items-center gap-3">
+            <span class="w-1 h-6 bg-blue-600 rounded-full shadow-[0_0_10px_#2563eb]"></span>
+            <h2 class="text-xl font-black italic uppercase tracking-widest">Assinaturas</h2>
+        </div>
+        
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             
             <div class="nexus-card">
@@ -112,15 +146,13 @@
                 <div class="product-title">
                     <span class="w-2 h-2 rounded-full bg-red-500"></span> Youtube Premium
                 </div>
-                <div class="price-section">
-                    <div class="price-main text-white">R$ 1,50 <span class="text-sm font-normal text-zinc-500">+ 🪙</span></div>
-                    <div class="payment-icons">
-                        <i class="fa-brands fa-cc-mastercard text-orange-500"></i>
-                        <i class="fa-brands fa-cc-visa text-blue-500"></i>
-                        <span>À vista no PIX ou Cartão</span>
-                    </div>
+                <div class="price-main italic">R$ 1,50 <span class="text-xs font-bold text-zinc-600">+ 🪙</span></div>
+                <div class="payment-info">
+                    <i class="fa-brands fa-cc-mastercard"></i>
+                    <i class="fa-brands fa-cc-visa"></i>
+                    <span>À vista no PIX ou Cartão</span>
                 </div>
-                <button class="btn-details">Ver Detalhes</button>
+                <button class="btn-comprar">Comprar <i class="fa-solid fa-bag-shopping"></i></button>
             </div>
 
             <div class="nexus-card">
@@ -128,64 +160,57 @@
                     <span class="badge-auto">⚡ Entrega Automática</span>
                 </div>
                 <div class="product-title">
-                    <span class="w-2 h-2 rounded-full bg-purple-500"></span> Google Veo3
+                    <span class="w-2 h-2 rounded-full bg-blue-400"></span> Google Veo 3
                 </div>
-                <div class="price-section">
-                    <div class="price-main text-white">R$ 4,99 <span class="text-sm font-normal text-zinc-500">+ 🪙</span></div>
-                    <div class="payment-icons">
-                        <i class="fa-brands fa-cc-visa text-blue-500"></i>
-                        <span>À vista no PIX ou Cartão</span>
-                    </div>
+                <div class="price-main italic">R$ 4,99 <span class="text-xs font-bold text-zinc-600">+ 🪙</span></div>
+                <div class="payment-info">
+                    <i class="fa-brands fa-cc-visa"></i>
+                    <span>À vista no PIX ou Cartão</span>
                 </div>
-                <button class="btn-details">Ver Detalhes</button>
+                <button class="btn-comprar">Comprar <i class="fa-solid fa-bag-shopping"></i></button>
             </div>
 
-            <div class="nexus-card">
-                <div class="product-image flex items-center justify-center bg-zinc-900">
-                    <span class="font-black text-xs text-zinc-500 tracking-widest">ESGOTADO</span>
+            <div class="nexus-card sold-out">
+                <div class="product-image" style="background-image: url('https://logodownload.org/wp-content/uploads/2023/02/chatgpt-logo-1.png');">
+                    <div class="sold-out-badge">ESGOTADO</div>
                 </div>
                 <div class="product-title">
                     <span class="w-2 h-2 rounded-full bg-green-500"></span> Chat Gpt
                 </div>
-                <div class="price-section">
-                    <div class="price-main text-white">R$ 2,30 <i class="fa-solid fa-bolt text-blue-500 text-sm"></i></div>
-                    <div class="payment-icons">
-                        <i class="fa-brands fa-cc-mastercard text-orange-500"></i>
-                        <span>À vista no PIX ou Cartão</span>
-                    </div>
+                <div class="price-main italic">R$ 2,30 <i class="fa-solid fa-bolt text-blue-500 text-xs"></i></div>
+                <div class="payment-info">
+                    <span>Indisponível no momento</span>
                 </div>
-                <button class="btn-details">Ver Detalhes</button>
+                <button class="btn-comprar btn-off">Comprar <i class="fa-solid fa-bag-shopping"></i></button>
             </div>
 
             <div class="nexus-card">
-                <div class="product-image" style="background-image: url('https://yt3.googleusercontent.com/ytc/AIdro_miT8Rov_3pP-mS4H5Pz-4xW-kX9D7z-u-0K4O7=s900-c-k-c0x00ffffff-no-rj');">
+                <div class="product-image" style="background-image: url('https://yt3.googleusercontent.com/fLpxK56z-O-0E2z4E9vG_V0-fRzO6oXvM0b9vK6I7_U1fE=s900-c-k-c0x00ffffff-no-rj');">
+                    <span class="badge-auto">⚡ Entrega Automática</span>
                 </div>
                 <div class="product-title">
-                    <span class="w-2 h-2 rounded-full bg-green-400"></span> Premiere
+                    <span class="w-2 h-2 rounded-full bg-green-300"></span> Premiere
                 </div>
-                <div class="price-section">
-                    <div class="price-main text-white">R$ 2,30 <i class="fa-solid fa-bolt text-blue-500 text-sm"></i></div>
-                    <div class="payment-icons">
-                        <i class="fa-brands fa-cc-visa text-blue-500"></i>
-                        <span>À vista no PIX ou Cartão</span>
-                    </div>
+                <div class="price-main italic">R$ 2,30 <i class="fa-solid fa-bolt text-blue-500 text-xs"></i></div>
+                <div class="payment-info">
+                    <i class="fa-brands fa-cc-mastercard"></i>
+                    <span>À vista no PIX ou Cartão</span>
                 </div>
-                <button class="btn-buy-now">Comprar <i class="fa-solid fa-bag-shopping ml-2"></i></button>
+                <button class="btn-comprar">Comprar <i class="fa-solid fa-bag-shopping"></i></button>
             </div>
 
             <div class="nexus-card">
                 <div class="product-image" style="background-image: url('https://logowik.com/content/uploads/images/capcut-icon6105.jpg');">
                 </div>
                 <div class="product-title">
-                    <span class="w-2 h-2 rounded-full bg-purple-400"></span> CapCut PRO
+                    <span class="w-2 h-2 rounded-full bg-purple-500"></span> CapCut PRO
                 </div>
-                <div class="price-section">
-                    <div class="price-main text-white">R$ 2,20 <span class="text-sm font-normal text-zinc-500">+ 🪙</span></div>
-                    <div class="payment-icons">
-                        <span>À vista no PIX ou Cartão</span>
-                    </div>
+                <div class="price-main italic">R$ 2,20 <span class="text-xs font-bold text-zinc-600">+ 🪙</span></div>
+                <div class="payment-info">
+                    <i class="fa-brands fa-cc-visa text-blue-500"></i>
+                    <span>À vista no PIX ou Cartão</span>
                 </div>
-                <button class="btn-details">Ver Detalhes</button>
+                <button class="btn-comprar">Comprar <i class="fa-solid fa-bag-shopping"></i></button>
             </div>
 
         </div>
