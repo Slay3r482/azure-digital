@@ -88,5 +88,30 @@
             // Aqui chamaria sua rota do back-end /create-payment
         }
     </script>
+
+    <div id="cart-modal" class="fixed inset-0 z-[60] hidden">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="toggleCarrinho()"></div>
+    <div class="absolute right-0 top-0 h-full w-full max-w-md bg-[#0d0d0d] border-l border-zinc-800 p-6 flex flex-col">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold">Meu Carrinho</h2>
+            <button onclick="toggleCarrinho()" class="text-zinc-500 hover:text-white"><i class="fa-solid fa-xmark text-2xl"></i></button>
+        </div>
+
+        <div id="cart-items" class="flex-1 overflow-y-auto space-y-4">
+            <p class="text-zinc-500 text-center mt-10">Seu carrinho está vazio.</p>
+        </div>
+
+        <div class="border-t border-zinc-800 pt-6 mt-6">
+            <div class="flex justify-between text-lg font-bold mb-4">
+                <span>Total:</span>
+                <span id="cart-total">R$ 0,00</span>
+            </div>
+            <button onclick="finalizarCompra()" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-xl font-bold transition">
+                FINALIZAR COMPRA (PIX)
+            </button>
+        </div>
+    </div>
+</div>
+    
 </body>
 </html>
