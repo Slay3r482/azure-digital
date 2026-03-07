@@ -11,6 +11,7 @@
         :root { --bg: #050505; --card-bg: rgba(13, 14, 17, 0.7); --border: rgba(255, 255, 255, 0.05); }
         body { background-color: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; }
 
+        /* Fundo com Máscara MineGine */
         .hero-mask {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: -1;
             object-fit: cover; opacity: 0.35;
@@ -18,7 +19,9 @@
             -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 85%);
         }
 
-        /* MODAL DE LOGIN (Igual à imagem enviada) */
+        .glass { background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border); }
+        
+        /* Modal de Login (Igual à imagem) */
         #loginModal {
             display: none; position: fixed; inset: 0; z-index: 1000;
             background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
@@ -27,29 +30,31 @@
         .login-box {
             background: #0D0E11; border: 1px solid var(--border);
             width: 100%; max-width: 400px; padding: 40px; border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
         .input-group {
             background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border);
-            border-radius: 12px; padding: 15px; display: flex; align-items: center; gap: 15px;
-            margin-bottom: 20px;
+            border-radius: 12px; padding: 12px 18px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px;
         }
         .input-group input { background: transparent; border: none; outline: none; color: #fff; width: 100%; font-size: 14px; }
-        .input-group input::placeholder { color: #444; }
-        
-        .btn-entrar {
-            background: #444; color: #fff; width: 100%; padding: 14px;
-            border-radius: 12px; font-weight: 700; font-size: 16px;
-            transition: 0.3s; text-align: center; cursor: pointer;
-        }
+        .btn-entrar { background: #444; color: #fff; width: 100%; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; }
         .btn-entrar:hover { background: #555; }
 
-        /* Estilo dos Cards e Categorias */
+        /* Carrinho Lateral */
+        #cartSide {
+            position: fixed; top: 0; right: -400px; width: 350px; height: 100%;
+            background: #0D0E11; border-left: 1px solid var(--border);
+            z-index: 100; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 30px;
+        }
+        #cartSide.active { right: 0; }
+
+        /* Estilo dos Cards e Pílulas */
         .card-mine {
             background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px;
             padding: 18px; transition: 0.4s; backdrop-filter: blur(12px);
-            width: 100%; max-width: 200px; margin: 0 auto;
+            width: 100%; max-width: 195px; margin: 0 auto;
         }
+        .card-mine.hidden { display: none !important; }
+        
         .pill {
             background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border);
             padding: 10px 22px; border-radius: 99px; font-size: 11px; font-weight: 700;
@@ -62,63 +67,122 @@
 
     <img src="https://cdn.ereemby.com/attachments/17715554716225022imagem.png" class="hero-mask">
 
-    <header class="sticky top-0 z-50 bg-[#050505]/80 backdrop-blur-xl border-b border-white/5 px-8 py-5">
-        <div class="max-w-[1400px] mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3">
+    <header class="sticky top-0 z-50 glass px-8 py-5">
+        <div class="max-w-[1400px] mx-auto flex justify-between items-center gap-6">
+            <div class="flex items-center gap-3 flex-shrink-0">
                 <img src="https://cdn.ereemby.com/attachments/17706209715176161imagem.jpeg" class="w-9 h-9 rounded-xl">
                 <span class="font-black text-base italic uppercase">Azure Digital</span>
             </div>
+
+            <div class="hidden md:flex flex-1 justify-center">
+                <div class="bg-white/5 border border-white/5 rounded-xl px-4 py-2 w-full max-w-md flex items-center gap-3">
+                    <i class="fa-solid fa-magnifying-glass text-zinc-600"></i>
+                    <input type="text" id="searchInput" oninput="filterAll()" placeholder="Pesquisar produto..." class="bg-transparent outline-none text-xs w-full text-white">
+                </div>
+            </div>
+
             <div class="flex items-center gap-4">
-                <div class="bg-white text-black px-5 py-2.5 rounded-xl font-black text-[11px] uppercase cursor-pointer">Carrinho</div>
-                <button onclick="openLogin()" class="bg-[#111] px-5 py-2.5 rounded-xl text-zinc-400 font-bold text-[11px] border border-white/5">ENTRAR</button>
+                <div onclick="toggleCart()" class="bg-white text-black px-5 py-2.5 rounded-xl font-black text-[11px] uppercase cursor-pointer">
+                    Carrinho (<span id="cartCount">0</span>)
+                </div>
+                <button onclick="openLogin()" id="loginBtn" class="bg-[#111] px-5 py-2.5 rounded-xl text-zinc-400 font-bold text-[11px] border border-white/5">ENTRAR</button>
             </div>
         </div>
     </header>
 
     <div id="loginModal" onclick="closeLogin(event)">
         <div class="login-box" onclick="event.stopPropagation()">
-            <div class="mb-6 text-center">
-                <h2 class="text-2xl font-black italic uppercase">Acessar Conta</h2>
-            </div>
-            
+            <div class="mb-8 text-center"><h2 class="text-2xl font-black italic uppercase">Acessar Conta</h2></div>
             <div class="input-group">
                 <i class="fa-solid fa-envelope text-zinc-600"></i>
                 <div class="flex flex-col w-full">
                     <span class="text-[10px] text-blue-500 font-bold uppercase">Endereço de e-mail</span>
-                    <input type="email" placeholder="exemplo@gmail.com">
+                    <input type="email" id="emailInput" placeholder="exemplo@gmail.com">
                 </div>
             </div>
+            <button class="btn-entrar" onclick="confirmLogin()">Entrar</button>
+        </div>
+    </div>
 
-            <button class="btn-entrar" onclick="alert('Login realizado!')">Entrar</button>
+    <div id="cartSide">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="font-black italic text-xl uppercase">Meu Carrinho</h2>
+            <i onclick="toggleCart()" class="fa-solid fa-xmark cursor-pointer"></i>
+        </div>
+        <div id="cartItems" class="text-zinc-500 text-sm italic">Vazio.</div>
+        <div class="absolute bottom-10 left-0 w-full px-8">
+            <button class="btn-entrar" style="background: #fff; color: #000;">Finalizar</button>
         </div>
     </div>
 
     <main class="max-w-[1400px] mx-auto px-8 py-14">
         <nav class="flex justify-center gap-3 mb-12">
-            <button class="pill active">Todos</button>
-            <button class="pill">Discord</button>
-            <button class="pill">Streaming</button>
+            <button class="pill active" onclick="setCategory('todos', this)">Todos</button>
+            <button class="pill" onclick="setCategory('discord', this)">Discord</button>
+            <button class="pill" onclick="setCategory('streaming', this)">Streaming</button>
         </nav>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-            <div class="card-mine">
+        <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+            
+            <div class="card-mine product-card" data-category="streaming" data-name="youtube premium">
                 <div class="bg-black border border-white/5 rounded-xl aspect-square flex items-center justify-center mb-4">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" class="w-1/2">
                 </div>
                 <span class="text-[9px] text-zinc-500 font-black uppercase text-center mb-1">Youtube Premium</span>
                 <p class="text-xl font-black italic text-center">R$ 1,50</p>
-                <button class="bg-white text-black w-full py-2 rounded-lg font-black text-[10px] mt-4">COMPRAR</button>
+                <button onclick="addToCart('Youtube', 1.50)" class="bg-white text-black w-full py-2 rounded-lg font-black text-[10px] mt-4 uppercase">Adicionar</button>
             </div>
+
+            <div class="card-mine product-card" data-category="discord" data-name="discord nitro">
+                <div class="bg-black border border-white/5 rounded-xl aspect-square flex items-center justify-center mb-4 text-blue-500/30">
+                    <i class="fa-brands fa-discord text-5xl"></i>
+                </div>
+                <span class="text-[9px] text-zinc-500 font-black uppercase text-center mb-1">Discord Nitro</span>
+                <p class="text-xl font-black italic text-center">R$ 15,90</p>
+                <button onclick="addToCart('Nitro', 15.90)" class="bg-white text-black w-full py-2 rounded-lg font-black text-[10px] mt-4 uppercase">Adicionar</button>
+            </div>
+
         </div>
     </main>
 
     <script>
-        function openLogin() {
-            document.getElementById('loginModal').style.display = 'flex';
+        let currentCategory = 'todos';
+        let cart = [];
+
+        function filterAll() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.product-card');
+            cards.forEach(card => {
+                const matchesSearch = card.getAttribute('data-name').toLowerCase().includes(searchTerm);
+                const matchesCategory = (currentCategory === 'todos' || card.getAttribute('data-category') === currentCategory);
+                card.classList.toggle('hidden', !(matchesSearch && matchesCategory));
+            });
         }
 
-        function closeLogin(e) {
-            document.getElementById('loginModal').style.display = 'none';
+        function setCategory(cat, el) {
+            document.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            currentCategory = cat;
+            filterAll();
+        }
+
+        function openLogin() { document.getElementById('loginModal').style.display = 'flex'; }
+        function closeLogin() { document.getElementById('loginModal').style.display = 'none'; }
+        
+        function confirmLogin() {
+            const email = document.getElementById('emailInput').value;
+            if(email) {
+                document.getElementById('loginBtn').innerText = email.split('@')[0].toUpperCase();
+                closeLogin();
+            }
+        }
+
+        function toggleCart() { document.getElementById('cartSide').classList.toggle('active'); }
+        function addToCart(name, price) {
+            cart.push({name, price});
+            document.getElementById('cartCount').innerText = cart.length;
+            document.getElementById('cartItems').innerHTML = cart.map(i => `<div class='flex justify-between mb-2 text-[10px] font-bold uppercase'><span>${i.name}</span><span>R$ ${i.price.toFixed(2)}</span></div>`).join('');
+            if(!document.getElementById('cartSide').classList.contains('active')) toggleCart();
         }
     </script>
 </body>
