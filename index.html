@@ -6,169 +6,140 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,700;1,900&display=swap" rel="stylesheet">
-    <title>Azure Digital | EREMBY System</title>
+    <title>Azure Digital | EREMBY</title>
     <style>
-        :root { --bg: #050505; --card: #080808; --border: #111; --blue: #2563eb; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        :root { --bg: #050505; --card: #080808; --border: #111; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; }
         .font-eremby { font-family: 'Inter', sans-serif; font-weight: 900; font-style: italic; text-transform: uppercase; }
-        
-        /* NAVBAR */
-        .search-container { background: #080808; border: 1px solid #111; border-radius: 0.8rem; padding: 12px 20px; width: 450px; display: flex; align-items: center; gap: 12px; }
-        .search-container input { background: transparent; border: none; outline: none; color: #fff; width: 100%; font-size: 14px; }
-        
-        .cart-pill { position: relative; background: #fff; color: #000; padding: 10px 24px; border-radius: 0.8rem; font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .cart-dot { position: absolute; top: -6px; right: -6px; background: #fff; color: #000; border: 3px solid #050505; min-width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; }
 
-        /* REDES SOCIAIS FLUTUANTES */
-        .social-sidebar { position: fixed; right: 20px; top: 50%; transform: translateY(-50%); background: #080808; border: 1px solid #111; border-radius: 1.5rem; padding: 15px; display: flex; flex-direction: column; gap: 20px; z-index: 100; }
-        .social-sidebar i { font-size: 20px; color: #fff; cursor: pointer; transition: 0.3s; opacity: 0.8; }
-        .social-sidebar i:hover { color: var(--blue); opacity: 1; }
+        /* Categorias Idênticas ao Eremby */
+        .cat-list { display: flex; flex-direction: column; gap: 8px; }
+        .cat-item { 
+            background: #080808; 
+            border: 1px solid #111; 
+            padding: 16px 24px; 
+            border-radius: 1rem; 
+            font-weight: 900; 
+            font-size: 11px; 
+            color: #444; 
+            text-transform: uppercase; 
+            text-align: left;
+            transition: 0.2s;
+        }
+        .cat-item.active { 
+            background: #fff; 
+            color: #000; 
+            border-color: #fff; 
+        }
 
-        /* SUPORTE WIDGET */
-        .support-widget { position: fixed; bottom: 30px; left: 30px; background: #080808; border: 1px solid #111; border-radius: 1.2rem; padding: 12px 20px; display: flex; align-items: center; gap: 12px; z-index: 100; box-shadow: 0 0 30px rgba(255,255,255,0.05); }
-        .support-icon { width: 35px; height: 35px; background: #fff; color: #000; border-radius: 0.8rem; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        /* Cards de Produto (Fiel ao Azure) */
+        .product-card { 
+            background: #080808; 
+            border: 1px solid #111; 
+            border-radius: 2.5rem; 
+            padding: 40px; 
+            text-align: center;
+        }
+        .product-img-box { 
+            background: #050505; 
+            border: 1px solid #111; 
+            border-radius: 2rem; 
+            height: 250px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin-bottom: 30px; 
+            overflow: hidden;
+        }
+        .product-img-box img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            opacity: 0.9;
+        }
+        .btn-buy {
+            background: #fff;
+            color: #000;
+            width: 100%;
+            padding: 18px;
+            border-radius: 1.2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 13px;
+            margin-top: 25px;
+        }
 
-        /* PRODUTOS */
-        .product-card { background: #080808; border: 1px solid #111; border-radius: 2.5rem; padding: 40px; text-align: center; }
-        .product-img-box { background: #050505; border: 1px solid #111; border-radius: 2rem; width: 100%; height: 240px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; }
-        .product-img-box img { max-width: 140px; opacity: 0.9; }
-
-        /* CHECKOUT */
-        .status-bar { background: #080808; border: 1px solid #111; border-radius: 1.5rem; padding: 30px 40px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .pix-main-box { background: #080808; border: 1px solid #111; border-radius: 2.5rem; padding: 60px; text-align: center; }
-
-        .hidden { display: none !important; }
+        /* Widgets Flutuantes */
+        .social-bar { position: fixed; right: 25px; top: 50%; transform: translateY(-50%); background: #080808; border: 1px solid #111; border-radius: 1.5rem; padding: 18px; display: flex; flex-direction: column; gap: 25px; z-index: 100; }
+        .support-box { position: fixed; bottom: 30px; left: 30px; background: #080808; border: 1px solid #111; border-radius: 1rem; padding: 12px 20px; display: flex; align-items: center; gap: 12px; z-index: 100; }
     </style>
 </head>
 <body>
 
-    <div class="social-sidebar">
-        <i class="fa-brands fa-discord"></i>
-        <i class="fa-brands fa-instagram"></i>
-        <i class="fa-brands fa-tiktok"></i>
+    <div class="social-bar">
+        <i class="fa-brands fa-discord text-xl opacity-50 hover:opacity-100 cursor-pointer"></i>
+        <i class="fa-brands fa-instagram text-xl opacity-50 hover:opacity-100 cursor-pointer"></i>
+        <i class="fa-brands fa-tiktok text-xl opacity-50 hover:opacity-100 cursor-pointer"></i>
     </div>
 
-    <div class="support-widget">
-        <div class="support-icon"><i class="fa-solid fa-chart-line"></i></div>
-        <div class="text-[11px] font-bold">
-            <span class="text-zinc-500">Suporte online:</span> <span class="text-white">Resposta em menos de 5 min.</span>
-        </div>
+    <div class="support-box">
+        <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-black"><i class="fa-solid fa-chart-line"></i></div>
+        <div class="text-[10px] font-bold"><span class="text-zinc-600">Suporte online:</span> <span>Resposta em menos de 5 min.</span></div>
     </div>
 
     <nav class="bg-[#050505] border-b border-[#111] px-12 py-6 flex justify-between items-center sticky top-0 z-[100]">
-        <div class="flex items-center gap-4 cursor-pointer" onclick="show('home')">
-            <div class="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center">
-                <i class="fa-solid fa-bolt text-white text-2xl"></i>
-            </div>
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-600/30"><i class="fa-solid fa-bolt text-2xl"></i></div>
             <span class="text-3xl font-eremby italic">Azure <span class="text-blue-600">Digital</span></span>
         </div>
-
-        <div class="search-container">
-            <i class="fa-solid fa-magnifying-glass text-zinc-600"></i>
-            <input type="text" placeholder="Pesquisar produto">
+        <div class="bg-[#080808] border border-[#111] px-6 py-3 rounded-xl w-[450px] flex items-center gap-4">
+            <i class="fa-solid fa-magnifying-glass text-zinc-700"></i>
+            <input type="text" placeholder="Pesquisar produto" class="bg-transparent border-none outline-none text-sm w-full">
         </div>
-
         <div class="flex items-center gap-6">
-            <i class="fa-solid fa-headset text-zinc-500 text-2xl cursor-pointer"></i>
-            <div onclick="show('cart')" class="cart-pill">
+            <div class="relative bg-white text-black px-6 py-3 rounded-xl font-black text-sm flex items-center gap-3 cursor-pointer">
                 <i class="fa-solid fa-bag-shopping"></i> Carrinho
-                <div id="badge" class="cart-dot">0</div>
+                <div class="absolute -top-2 -right-2 bg-white text-black border-4 border-[#050505] w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-black">0</div>
             </div>
-            <button class="bg-[#1a1a1a] px-8 py-3 rounded-xl font-black text-xs uppercase text-white">Entrar</button>
+            <button class="bg-[#1a1a1a] px-8 py-3 rounded-xl font-black text-xs uppercase">Entrar</button>
         </div>
     </nav>
 
-    <div id="view-home">
-        <div class="max-w-[1500px] mx-auto px-12 py-16">
-            <div class="bg-[#0c0e14] border border-[#1a1d26] rounded-[3rem] p-16 mb-16">
-                <h2 class="text-7xl font-eremby italic mb-4">NOVIDADES <span class="text-blue-500">AZURE</span></h2>
-                <p class="text-zinc-500 font-bold uppercase text-xs tracking-[0.4em]">Os melhores preços do mercado digital</p>
-            </div>
+    <main class="max-w-[1600px] mx-auto px-12 py-16">
+        <div class="bg-[#0c0e14] border border-[#1a1d26] rounded-[3rem] p-20 mb-20">
+            <h2 class="text-7xl font-eremby italic mb-4">NOVIDADES <span class="text-blue-500">AZURE</span></h2>
+            <p class="text-zinc-600 font-bold uppercase text-sm tracking-[0.5em]">Os melhores preços do mercado digital</p>
+        </div>
 
-            <div class="flex gap-16">
-                <aside class="w-72 flex-shrink-0">
-                    <p class="text-[11px] font-black text-zinc-700 uppercase tracking-widest mb-8">Categorias</p>
-                    <button class="w-full bg-white text-black py-4 rounded-2xl font-black text-xs uppercase mb-3 text-left px-8">Todos os produtos</button>
-                    <button class="w-full bg-[#080808] border border-[#111] text-zinc-600 py-4 rounded-2xl font-black text-xs uppercase mb-3 text-left px-8">Streaming</button>
-                </aside>
+        <div class="flex gap-20">
+            <aside class="w-80">
+                <p class="text-[10px] font-black text-zinc-700 uppercase tracking-widest mb-8">Categorias</p>
+                <div class="cat-list">
+                    <button class="cat-item active">Todos os produtos</button>
+                    <button class="cat-item">Streaming</button>
+                    <button class="cat-item">Ferramentas IA</button>
+                    <button class="cat-item">Games & Gift Cards</button>
+                </div>
+            </aside>
 
-                <div class="flex-1">
-                    <h1 class="text-7xl font-eremby mb-16 italic">TODOS</h1>
-                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
-                        <div class="product-card">
-                            <div class="product-img-box">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png">
-                            </div>
-                            <div class="flex items-center justify-center gap-3 mb-3">
-                                <div class="w-2.5 h-2.5 rounded-full bg-red-600"></div>
-                                <span class="text-xs font-black text-zinc-500 tracking-widest uppercase italic">Youtube Premium</span>
-                            </div>
-                            <p class="font-eremby text-5xl italic mb-10">R$ 1,50</p>
-                            <button onclick="comprar()" class="w-full bg-white text-black font-eremby py-5 rounded-2xl text-sm">COMPRAR</button>
+            <div class="flex-1">
+                <h1 class="text-7xl font-eremby mb-20 italic">TODOS</h1>
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12">
+                    <div class="product-card">
+                        <div class="product-img-box">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" alt="Youtube">
                         </div>
+                        <div class="flex items-center justify-center gap-3 mb-3">
+                            <div class="w-2.5 h-2.5 rounded-full bg-red-600"></div>
+                            <span class="text-xs font-black text-zinc-500 tracking-widest uppercase italic">Youtube Premium</span>
+                        </div>
+                        <p class="font-eremby text-5xl italic">R$ 1,50</p>
+                        <button class="btn-buy">Comprar</button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <div id="view-pay" class="hidden">
-        <div class="max-w-6xl mx-auto px-12 py-20">
-            <div class="flex items-center gap-3 text-zinc-600 text-[11px] uppercase font-black mb-8">
-                <span>Inicio</span> <i class="fa-solid fa-chevron-right text-[8px]"></i> <span class="text-white">Pagamento</span>
-            </div>
-            
-            <h2 class="text-4xl font-eremby italic mb-2">Aguardando pagamento</h2>
-            <p class="text-zinc-600 text-xs mb-12">7, Mar 2026 17:03</p>
-
-            <div class="status-bar">
-                <div>
-                    <p class="text-[10px] font-black text-zinc-700 uppercase mb-2">Produtos</p>
-                    <p class="text-sm font-black italic uppercase"><span class="text-orange-500">1x</span> Youtube Premium</p>
-                </div>
-                <div>
-                    <p class="text-[10px] font-black text-zinc-700 uppercase mb-2">Total</p>
-                    <p class="text-2xl font-black text-yellow-500">R$ 1,50</p>
-                </div>
-                <div>
-                    <p class="text-[10px] font-black text-zinc-700 uppercase mb-2">Email</p>
-                    <p class="text-sm font-black text-zinc-400">natanaelpereira1541@gmail.com</p>
-                </div>
-                <div>
-                    <p class="text-[10px] font-black text-zinc-700 uppercase mb-2">Metodo</p>
-                    <p class="text-sm font-black flex items-center gap-2 uppercase italic"><i class="fa-brands fa-pix text-emerald-400 text-xl"></i> Pix</p>
-                </div>
-            </div>
-
-            <div class="pix-main-box">
-                <p class="text-zinc-600 text-[11px] uppercase font-black mb-3 italic">Tempo restante</p>
-                <p class="text-3xl font-eremby italic mb-10">24:00:42</p>
-                
-                <div class="bg-white w-56 h-56 mx-auto mb-10 p-4 rounded-2xl flex items-center justify-center shadow-2xl">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=AZURE_PAYMENT" class="w-full">
-                </div>
-
-                <div class="max-w-xl mx-auto">
-                    <p class="text-zinc-600 text-[11px] uppercase font-black mb-6 italic">Ou pague com</p>
-                    <div class="bg-[#050505] border border-[#111] p-5 rounded-xl font-mono text-[11px] text-zinc-700 overflow-hidden mb-6 text-left">
-                        00020126850014br.gov.bcb.pix2563pix.onlyup.com.br/qr/v3/at/105d00ac...
-                    </div>
-                    <button class="w-full bg-white text-black font-black py-5 rounded-2xl uppercase text-xs" onclick="alert('Código copiado!')">Copiar Código Pix</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function show(v) {
-            document.getElementById('view-home').classList.toggle('hidden', v !== 'home');
-            document.getElementById('view-pay').classList.toggle('hidden', v !== 'pay');
-            window.scrollTo(0,0);
-        }
-        function comprar() {
-            document.getElementById('badge').innerText = "1";
-            show('pay');
-        }
-    </script>
 </body>
 </html>
