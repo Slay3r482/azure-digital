@@ -6,51 +6,70 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <title>Azure Digital | Pagamento</title>
+    <title>Azure Digital | Checkout</title>
     <style>
         body { background-color: #050505; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        .nexus-box { background: #0d0d0d; border: 1px solid #161616; border-radius: 1rem; padding: 20px; }
-        .input-dark { background: #121212; border: 1px solid #1a1a1a; border-radius: 0.8rem; padding: 12px; width: 100%; color: #fff; outline: none; }
-        .btn-white { background: #fff; color: #000; padding: 14px; border-radius: 0.8rem; font-weight: 900; text-transform: uppercase; font-size: 12px; width: 100%; transition: 0.3s; }
-        .btn-white:hover { background: #ccc; }
+        .nexus-box { background: #0d0d0d; border: 1px solid #161616; border-radius: 1.2rem; padding: 20px; }
+        .input-dark { background: #121212; border: 1px solid #1a1a1a; border-radius: 1rem; padding: 15px; width: 100%; color: #fff; outline: none; }
+        .btn-white { background: #fff; color: #000; padding: 14px; border-radius: 0.8rem; font-weight: 900; text-transform: uppercase; font-size: 12px; width: 100%; transition: 0.3s; cursor: pointer; }
+        .btn-white:hover { background: #e5e5e5; transform: scale(1.02); }
         .hidden { display: none !important; }
         
-        /* Estilo do QR Code */
-        .qr-container { border: 2px solid #eab308; padding: 15px; border-radius: 1.5rem; background: white; width: 220px; height: 220px; margin: 0 auto; position: relative; }
-        .qr-corner { position: absolute; width: 30px; height: 30px; border: 4px solid #eab308; }
+        /* QR Code Style */
+        .qr-container { border: 2px solid #eab308; padding: 15px; border-radius: 1.5rem; background: white; width: 220px; height: 220px; margin: 0 auto; }
+        
+        /* Qty Selector */
+        .qty-selector { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 0.8rem; display: flex; align-items: center; overflow: hidden; }
+        .qty-btn { padding: 5px 12px; color: #555; transition: 0.2s; }
+        .qty-btn:hover { color: #fff; background: #151515; }
     </style>
 </head>
 <body>
 
-    <nav class="sticky top-0 z-50 py-4 px-6 bg-[#050505]/90 backdrop-blur-md border-b border-zinc-900">
+    <nav class="sticky top-0 z-50 py-4 px-6 bg-[#050505]/95 backdrop-blur-md border-b border-zinc-900">
         <div class="w-full flex justify-between items-center">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="location.reload()">
-                <div class="w-8 h-8 bg-blue-600 rounded-lg"></div>
+            <div class="flex items-center gap-3 cursor-pointer" onclick="showView('home')">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg shadow-[0_0_15px_rgba(37,99,235,0.4)]"></div>
                 <span class="font-black italic uppercase text-xl tracking-tighter">Azure <span class="text-blue-500">Digital</span></span>
             </div>
-            <div id="auth-area" class="flex items-center gap-4">
-                <button onclick="showView('cart')" class="bg-white text-black px-5 py-2 rounded-xl font-bold text-xs flex items-center gap-2">
-                    <i class="fa-solid fa-bag-shopping"></i> Carrinho <span id="cart-count" class="bg-black text-white px-2 py-0.5 rounded-md text-[10px]">0</span>
+            
+            <div class="flex items-center gap-4">
+                <button onclick="showView('cart')" class="bg-white text-black px-5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2">
+                    <i class="fa-solid fa-bag-shopping"></i> Carrinho <span id="cart-badge" class="bg-black text-white px-2 py-0.5 rounded-md text-[10px]">0</span>
                 </button>
+                <div id="auth-section">
+                    <button onclick="openModal()" class="bg-zinc-800 px-6 py-2.5 rounded-xl font-black uppercase italic text-xs">Entrar</button>
+                </div>
             </div>
         </div>
     </nav>
 
-    <section id="cart-view" class="max-w-7xl mx-auto px-6 py-12">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <div class="lg:col-span-9 space-y-6">
+    <main id="home-view" class="max-w-7xl mx-auto px-6 py-12">
+        <div class="mb-12"><h1 class="text-5xl font-black italic uppercase tracking-tighter">DESTAQUES</h1></div>
+        <div id="product-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-5"></div>
+    </main>
+
+    <section id="cart-view" class="hidden max-w-7xl mx-auto px-6 py-12">
+        <div class="mb-10">
+            <h1 class="text-2xl font-bold">Carrinhos de compras</h1>
+            <p class="text-zinc-500 text-sm">Nesta página, você encontra os produtos adicionados ao seu carrinho.</p>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-4 space-y-6">
                 <div class="nexus-box">
-                    <h3 class="font-bold text-sm mb-6 uppercase tracking-widest text-zinc-500">Produtos no carrinho</h3>
-                    <div id="cart-list" class="space-y-4"></div>
+                    <h3 class="text-xs font-black uppercase mb-6 text-zinc-500">Informações de pagamento</h3>
+                    <div class="flex items-center gap-3 mb-6 p-4 border border-blue-600/30 bg-blue-600/5 rounded-xl">
+                        <i class="fa-brands fa-pix text-[#00bdae] text-xl"></i><span class="text-sm font-bold">Pix</span>
+                    </div>
+                    <input type="email" id="checkout-email" placeholder="Informe o seu e-mail" class="input-dark text-xs mb-4">
+                    <input type="email" placeholder="Confirme o seu e-mail" class="input-dark text-xs">
                 </div>
             </div>
+            <div class="lg:col-span-5"><div class="nexus-box"><h3 class="text-xs font-black uppercase mb-6 text-zinc-500">Produtos no carrinho</h3><div id="cart-items" class="space-y-4"></div></div></div>
             <div class="lg:col-span-3">
                 <div class="nexus-box">
-                    <h3 class="font-bold text-sm mb-6 uppercase tracking-widest text-zinc-500">Resumo</h3>
-                    <div class="flex justify-between text-xl font-black italic mb-6">
-                        <span>TOTAL</span>
-                        <span id="cart-total">R$ 0,00</span>
-                    </div>
+                    <h3 class="text-xs font-black uppercase mb-6 text-zinc-500">Resumo da compra</h3>
+                    <div class="flex justify-between text-xl font-black italic mb-8"><span>TOTAL</span><span id="total-val">R$ 0,00</span></div>
                     <button onclick="generatePayment()" class="btn-white">Gerar pagamento</button>
                 </div>
             </div>
@@ -58,104 +77,117 @@
     </section>
 
     <section id="payment-view" class="hidden max-w-4xl mx-auto px-6 py-12">
-        <div class="mb-8">
-            <div class="text-xs text-zinc-500 mb-1">Início > <span class="text-white">Pagamento</span></div>
-            <h1 class="text-2xl font-bold">Aguardando pagamento</h1>
-            <p id="payment-date" class="text-zinc-600 text-[10px] mt-1"></p>
+        <div class="mb-8"><h1 class="text-2xl font-bold">Aguardando pagamento</h1><p id="pay-date" class="text-zinc-600 text-[10px]"></p></div>
+        <div class="nexus-box grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 text-[11px] font-bold">
+            <div><p class="text-zinc-500 uppercase mb-1">Produtos</p><p id="pay-p-name"></p></div>
+            <div><p class="text-zinc-500 uppercase mb-1">Total</p><p id="pay-p-total" class="text-yellow-500"></p></div>
+            <div><p class="text-zinc-500 uppercase mb-1">Email</p><p id="pay-p-email" class="truncate"></p></div>
+            <div><p class="text-zinc-500 uppercase mb-1">Método</p><p class="text-[#00bdae]">Pix</p></div>
         </div>
-
-        <div class="nexus-box grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 text-xs">
-            <div>
-                <p class="text-zinc-500 mb-1 uppercase font-bold">Produtos</p>
-                <p id="pay-prod-name" class="font-bold"></p>
-            </div>
-            <div>
-                <p class="text-zinc-500 mb-1 uppercase font-bold">Total</p>
-                <p id="pay-total" class="text-yellow-500 font-bold"></p>
-            </div>
-            <div>
-                <p class="text-zinc-500 mb-1 uppercase font-bold">Email</p>
-                <p id="pay-email" class="truncate font-medium"></p>
-            </div>
-            <div>
-                <p class="text-zinc-500 mb-1 uppercase font-bold">Método</p>
-                <p class="flex items-center gap-1 font-bold"><i class="fa-brands fa-pix text-[#00bdae]"></i> Pix</p>
-            </div>
-        </div>
-
         <div class="nexus-box text-center py-12">
-            <p class="text-[10px] text-zinc-500 uppercase tracking-[0.2em] mb-2 font-black">Tempo restante</p>
-            <div class="text-2xl font-bold mb-8">24:00:00</div>
-
-            <div class="relative inline-block mb-10">
-                <div class="qr-container">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=AZURE_PAYMENT_SAMPLE" alt="QR Code" class="w-full h-full">
-                </div>
-            </div>
-
-            <div class="max-w-md mx-auto">
-                <p class="text-[10px] text-zinc-500 uppercase mb-4">Ou pague com Pix copia e cola</p>
-                <div class="flex items-center bg-[#121212] border border-zinc-900 rounded-xl p-3 gap-3 mb-4">
-                    <i class="fa-solid fa-copy text-zinc-700"></i>
-                    <input type="text" id="pix-code" readonly value="00020126850014br.gov.bcb.pix..." class="bg-transparent border-none text-[10px] w-full text-zinc-400 outline-none">
-                </div>
-                <button onclick="copyPix()" class="bg-white text-black px-8 py-3 rounded-xl font-black uppercase text-[10px]">Copiar Código Pix</button>
+            <p class="text-[10px] text-zinc-500 uppercase font-black mb-8">Tempo restante: 24:00:00</p>
+            <div class="qr-container mb-10"><img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=AZURE_PIX_PAY" class="w-full"></div>
+            <div class="max-w-xs mx-auto">
+                <input type="text" id="pix-code" value="00020126850014br.gov.bcb.pix.azure.digital" readonly class="input-dark text-[10px] text-center mb-4">
+                <button onclick="copyPix()" class="btn-white">Copiar Código Pix</button>
             </div>
         </div>
     </section>
 
+    <div id="login-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6 bg-black/90 backdrop-blur-sm">
+        <div class="nexus-box w-full max-w-md p-10 !rounded-[2.5rem]">
+            <div class="text-center mb-10"><h2 class="text-4xl font-black italic uppercase italic">ENTRAR</h2><p class="text-zinc-600 text-xs">Faça login com seu e-mail</p></div>
+            <input type="email" id="login-email" placeholder="exemplo@gmail.com" class="input-dark mb-6 text-sm font-bold">
+            <button onclick="doLogin()" class="btn-white !bg-zinc-800 !text-white hover:!bg-white hover:!text-black">ENTRAR</button>
+            <button onclick="closeModal()" class="w-full mt-4 text-xs text-zinc-600">Cancelar</button>
+        </div>
+    </div>
+
     <script>
+        const products = [
+            { id: 1, name: "YouTube Premium", price: 1.50, color: "bg-red-600" },
+            { id: 2, name: "Google Veo 3", price: 4.99, color: "bg-blue-400" },
+            { id: 3, name: "Chat GPT Plus", price: 2.30, color: "bg-green-500" }
+        ];
+
         let cart = JSON.parse(localStorage.getItem('azure_cart')) || [];
-        const user = localStorage.getItem('azure_user') || "visitante@gmail.com";
+
+        function renderHome() {
+            document.getElementById('product-grid').innerHTML = products.map(p => `
+                <div class="nexus-box flex flex-col items-center">
+                    <div class="w-full h-24 bg-zinc-900 rounded-xl mb-4"></div>
+                    <div class="text-[10px] font-bold text-zinc-500 uppercase mb-1"><span class="w-2 h-2 rounded-full inline-block ${p.color} mr-1"></span> ${p.name}</div>
+                    <div class="text-xl font-black italic mb-4">R$ ${p.price.toFixed(2).replace('.', ',')}</div>
+                    <button onclick="addToCart(${p.id})" class="btn-white !text-[10px] !py-3">COMPRAR</button>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(id) {
+            const item = cart.find(i => i.id === id);
+            if(item) item.quantity++;
+            else cart.push({...products.find(p => p.id === id), quantity: 1});
+            save(); showView('cart');
+        }
+
+        function updateQty(idx, delta) {
+            cart[idx].quantity += delta;
+            if(cart[idx].quantity <= 0) cart.splice(idx, 1);
+            save();
+        }
+
+        function save() {
+            localStorage.setItem('azure_cart', JSON.stringify(cart));
+            updateUI();
+        }
 
         function updateUI() {
-            const list = document.getElementById('cart-list');
-            let total = 0;
-            
-            list.innerHTML = cart.map((item, idx) => {
-                total += (item.price * item.quantity);
+            const list = document.getElementById('cart-items');
+            let total = 0; let count = 0;
+            list.innerHTML = cart.map((item, i) => {
+                total += (item.price * item.quantity); count += item.quantity;
                 return `
-                    <div class="flex justify-between items-center p-4 bg-zinc-900/50 border border-zinc-900 rounded-xl">
-                        <span class="font-bold text-xs">${item.quantity}x ${item.name}</span>
-                        <span class="font-black italic">R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</span>
+                    <div class="flex justify-between items-center p-4 bg-zinc-900/30 border border-zinc-900 rounded-xl">
+                        <div class="text-[11px] font-bold italic">${item.name}</div>
+                        <div class="flex items-center gap-4">
+                            <div class="qty-selector"><button onclick="updateQty(${i}, -1)" class="qty-btn">-</button><span class="px-2 text-xs font-bold">${item.quantity}</span><button onclick="updateQty(${i}, 1)" class="qty-btn">+</button></div>
+                            <div class="text-sm font-black italic">R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</div>
+                        </div>
                     </div>
                 `;
             }).join('');
-
-            document.getElementById('cart-total').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
-            document.getElementById('cart-count').innerText = cart.length;
+            document.getElementById('total-val').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            document.getElementById('cart-badge').innerText = count;
         }
 
         function generatePayment() {
-            if(cart.length === 0) return alert("Carrinho vazio!");
-            
-            // Troca de tela
-            document.getElementById('cart-view').classList.add('hidden');
-            document.getElementById('payment-view').classList.remove('hidden');
-
-            // Preenche dados da tela de pagamento
-            const now = new Date();
-            document.getElementById('payment-date').innerText = now.toLocaleString('pt-BR');
-            document.getElementById('pay-prod-name').innerText = `${cart[0].quantity}x ${cart[0].name}${cart.length > 1 ? '...' : ''}`;
-            document.getElementById('pay-total').innerText = document.getElementById('cart-total').innerText;
-            document.getElementById('pay-email').innerText = user;
+            if(cart.length === 0) return;
+            document.getElementById('pay-date').innerText = new Date().toLocaleString();
+            document.getElementById('pay-p-name').innerText = cart[0].name + (cart.length > 1 ? '...' : '');
+            document.getElementById('pay-p-total').innerText = document.getElementById('total-val').innerText;
+            document.getElementById('pay-p-email').innerText = localStorage.getItem('azure_user') || 'visitante@gmail.com';
+            showView('payment');
         }
 
-        function copyPix() {
-            const copyText = document.getElementById("pix-code");
-            copyText.select();
-            document.execCommand("copy");
-            alert("Código Pix copiado!");
+        function showView(v) {
+            ['home-view', 'cart-view', 'payment-view'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            document.getElementById(v + '-view').classList.remove('hidden');
         }
 
-        function showView(view) {
-            if(view === 'cart') {
-                document.getElementById('payment-view').classList.add('hidden');
-                document.getElementById('cart-view').classList.remove('hidden');
-            }
+        function doLogin() {
+            const email = document.getElementById('login-email').value;
+            if(email) { localStorage.setItem('azure_user', email); location.reload(); }
         }
 
-        window.onload = updateUI;
+        function copyPix() { document.getElementById('pix-code').select(); document.execCommand('copy'); alert('Copiado!'); }
+        function openModal() { document.getElementById('login-modal').classList.remove('hidden'); }
+        function closeModal() { document.getElementById('login-modal').classList.add('hidden'); }
+
+        window.onload = () => {
+            renderHome(); updateUI();
+            const user = localStorage.getItem('azure_user');
+            if(user) document.getElementById('auth-section').innerHTML = `<span class="bg-zinc-900 px-4 py-2 rounded-xl text-[10px] font-bold">${user.split('@')[0].toUpperCase()}</span>`;
+        };
     </script>
 </body>
 </html>
