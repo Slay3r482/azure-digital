@@ -1,0 +1,12 @@
+body{
+background:#0b0b0b;
+color:white;
+font-family:sans-serif;
+}
+
+.product{
+background:#151515;
+padding:20px;
+margin:20px;
+border-radius:10px;
+}
